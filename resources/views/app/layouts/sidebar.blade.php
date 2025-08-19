@@ -1,6 +1,12 @@
 @php
-    $listMenu = json_decode(file_get_contents(base_path('public/menu/admin.json')), true);
+    $level = auth()->user()->level->nama;
+
+    $level = strtolower($level);
+
+    $menuFile = base_path("public/menu/{$level}.json");
+    $listMenu = json_decode(file_get_contents($menuFile), true);
 @endphp
+
 
 
 <aside id="layout-menu" class="layout-menu menu-vertical menu">

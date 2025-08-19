@@ -1,0 +1,66 @@
+[{
+        "nama": "Dashboard",
+        "icon": "bx-home-smile",
+        "url": "/app/dashboard"
+    },
+    {
+        "nama": "Karyawan",
+        "icon": "bx-user",
+        "url": "/app/karyawan"
+    },
+    {
+        "nama": "Presensi",
+        "icon": "bx-basket",
+        "url": "/app/program-pangan",
+        "children": [{
+            "nama": "Kelompok Pangan",
+            "icon": "bx-group",
+            "url": "/app/kelompok-pangan"
+        }, {
+            "nama": "Bahan Pangan",
+            "icon": "bx-leaf",
+            "url": "/app/bahan-pangan"
+        }]
+    },
+    {
+        "nama": "Rab",
+        "icon": "bx-user-check",
+        "url": "/app/pemanfaat",
+        "children": [{
+            "nama": "Kelompok Pemanfaat",
+            "icon": "bx-group",
+            "url": "/app/kelompok-pemanfaat"
+        }, {
+            "nama": "Data Pemanfaat",
+            "icon": "bx-data",
+            "url": "/app/data-pemanfaat"
+        }, {
+            "nama": "Nama Pemanfaat",
+            "icon": "bx-id-card",
+            "url": "/app/nama-pemanfaat"
+        }]
+    },
+    {
+        "nama": "Jurnal Transaksi",
+        "icon": "bx-user-check",
+        "url": "/app/pemanfaat",
+        "children": [{
+            "nama": "Kelompok Pemanfaat",
+            "icon": "bx-group",
+            "url": "/app/kelompok-pemanfaat"
+        }, {
+            "nama": "Data Pemanfaat",
+            "icon": "bx-data",
+            "url": "/app/data-pemanfaat"
+        }, {
+            "nama": "Nama Pemanfaat",
+            "icon": "bx-id-card",
+            "url": "/app/nama-pemanfaat"
+        }]
+    },
+    {
+        "nama": "Laporan",
+        "icon": "bx-calendar",
+        "url": "/app/periode-masak"
+    }
+]
