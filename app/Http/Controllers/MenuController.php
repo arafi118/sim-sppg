@@ -12,7 +12,8 @@ class MenuController extends Controller
      */
     public function index()
     {
-        //
+        $title = 'Master Menu';
+        return view('app.menu.index', compact('title'));
     }
 
     /**
@@ -20,7 +21,8 @@ class MenuController extends Controller
      */
     public function create()
     {
-        //
+        $title = 'Tambah Menu';
+        return view('app.menu.create', compact('title'));
     }
 
     /**

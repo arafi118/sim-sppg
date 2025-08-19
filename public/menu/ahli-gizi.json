@@ -9,10 +9,6 @@
     "icon": "bx-food-menu",
     "url": "/app/menu"
 }, {
-    "nama": "Resep",
-    "icon": "bx-list-ol",
-    "url": "/app/resep"
-}, {
     "nama": "Rancang Menu",
     "icon": "bx-add-to-queue",
     "url": "/app/rancang-menu"
