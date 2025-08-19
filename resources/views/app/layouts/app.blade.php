@@ -1,7 +1,7 @@
 <!doctype html>
 
 <html lang="en" class=" layout-navbar-fixed layout-menu-fixed layout-compact " dir="ltr" data-skin="default"
-    data-assets-path="/assets/" data-template="vertical-menu-template" data-bs-theme="light">
+    data-assets-path="/assets/" data-template="vertical-menu-template" data-bs-theme="dark">
 
 <head>
     <meta charset="utf-8" />
@@ -27,6 +27,9 @@
     <link rel="stylesheet" href="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
     <link rel="stylesheet" href="/assets/vendor/fonts/flag-icons.css" />
     <link rel="stylesheet" href="/assets/vendor/libs/apex-charts/apex-charts.css" />
+    <link rel="stylesheet" href="/assets/vendor/libs/select2/select2.css" />
+    <link rel="stylesheet" href="/assets/vendor/libs/animate-css/animate.css" />
+    <link rel="stylesheet" href="/assets/vendor/libs/sweetalert2/sweetalert2.css" />
 
     <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr@1.9.1/dist/pickr.min.js"></script>
     <script src="/assets/vendor/js/helpers.js"></script>
@@ -118,6 +121,9 @@
     <script src="https://cdn.jsdelivr.net/npm/i18n-js@4.5.1/dist/browser/index.min.js"></script>
     <script src="/assets/vendor/js/menu.js"></script>
     <script src="/assets/vendor/libs/apex-charts/apexcharts.js"></script>
+    <script src="/assets/vendor/libs/select2/select2.js"></script>
+    <script src="/assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
+    <script src="/assets/js/form-select.js"></script>
     <script src="/assets/js/main.js"></script>
 
     @yield('script')
