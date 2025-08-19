@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Level;
+use App\Models\DataPemanfaat;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,21 +12,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('nama_pemanfaats', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreignIdFor(Level::class);
-            $table->string('nik');
+            $table->foreignIdFor(DataPemanfaat::class);
             $table->string('nama');
+            $table->string('tempat_lahir');
             $table->date('tanggal_lahir');
-            $table->enum('jenis_kelamin', ['L', 'P'])->default('L');
-            $table->text('alamat');
-            $table->string('telpon');
-            $table->string('id_sidik_jari');
-            $table->date('tanggal_masuk');
-            $table->string('gaji');
             $table->string('status');
-            $table->string('username');
-            $table->string('password');
             $table->timestamps();
         });
     }
@@ -36,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('nama_pemanfaats');
     }
 };
