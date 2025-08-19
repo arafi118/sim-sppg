@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\KelompokPanganController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,4 +26,8 @@ Route::post('/auth', [AuthController::class, 'auth']);
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
+
+    Route::resource('karyawan', UserController::class);
+
+    Route::resource('karyawan', KelompokPanganController::class);
 });

@@ -1,5 +1,5 @@
 @php
-    $listMenu = json_decode(file_get_contents(base_path('public/menu/ahli-gizi.json')), true);
+    $listMenu = json_decode(file_get_contents(base_path('public/menu/admin.json')), true);
 @endphp
 
 
