@@ -12,7 +12,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $title = 'Karyawan';
+        $users = User::all();
+        return view('app.karyawan.index', compact('title', 'users'));
     }
 
     /**

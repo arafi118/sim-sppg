@@ -1,1 +1,45 @@
-[]
+[{
+    "nama": "Dashboard",
+    "icon": "bx-home-smile",
+    "url": "/app/dashboard"
+}, {
+    "nama": "Master Data"
+}, {
+    "nama": "Karyawan",
+    "icon": "bx-user",
+    "url": "/app/karyawan"
+}, {
+    "nama": "Program Pangan",
+    "icon": "bx-basket",
+    "url": "/app/program-pangan",
+    "children": [{
+        "nama": "Kelompok Pangan",
+        "icon": "bx-group",
+        "url": "/app/kelompok-pangan"
+    }, {
+        "nama": "Bahan Pangan",
+        "icon": "bx-leaf",
+        "url": "/app/bahan-pangan"
+    }]
+}, {
+    "nama": "Pemanfaat",
+    "icon": "bx-user-check",
+    "url": "/app/pemanfaat",
+    "children": [{
+        "nama": "Kelompok Pemanfaat",
+        "icon": "bx-group",
+        "url": "/app/kelompok-pemanfaat"
+    }, {
+        "nama": "Data Pemanfaat",
+        "icon": "bx-data",
+        "url": "/app/data-pemanfaat"
+    }, {
+        "nama": "Nama Pemanfaat",
+        "icon": "bx-id-card",
+        "url": "/app/nama-pemanfaat"
+    }]
+}, {
+    "nama": "Periode Masak",
+    "icon": "bx-calendar",
+    "url": "/app/periode-masak"
+}]
