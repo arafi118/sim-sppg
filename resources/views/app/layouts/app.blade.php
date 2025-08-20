@@ -30,6 +30,7 @@
         <link rel="stylesheet" href="/assets/vendor/libs/select2/select2.css" />
         <link rel="stylesheet" href="/assets/vendor/libs/animate-css/animate.css" />
         <link rel="stylesheet" href="/assets/vendor/libs/sweetalert2/sweetalert2.css" />
+        <link rel="stylesheet" href="/assets/vendor/libs/flatpickr/flatpickr.css" />
         <link rel="stylesheet" href="/assets/vendor/libs/datatables/datatables-bootstrap5.css" />
         <link rel="stylesheet" href="/assets/vendor/libs/datatables/responsive-bootstrap5.css" />
 
@@ -126,6 +127,7 @@
         <script src="/assets/vendor/libs/apex-charts/apexcharts.js"></script>
         <script src="/assets/vendor/libs/select2/select2.js"></script>
         <script src="/assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
+        <script src="/assets/vendor/libs/flatpickr/flatpickr.js"></script>
         <script src="/assets/vendor/libs/datatables/datatables-bootstrap5.js"></script>
         {{-- <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script> --}}

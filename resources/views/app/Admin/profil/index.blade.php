@@ -112,66 +112,68 @@
 
 @section('script')
     <script>
-        $(document).ready(function() {
-            $('.select2').select2({
-                theme: 'bootstrap4'
-            });
+        $(document).on('change', '.select2', function() {
+            const selectedOption = $(this).find('option:selected');
+            const bahanData = JSON.parse(selectedOption.val());
 
-            function ajaxSubmit(form) {
-                $('small').html('');
-                $('.is-invalid').removeClass('is-invalid');
+            var inputGroup = $(this).closest('.bahan').next('.jumlah');
+            inputGroup.find('span.input-group-text').text(bahanData.satuan);
+        });
 
-                let id = form.data('id'); // ambil id sesuai form
-                let formData = form.serialize();
+        function ajaxSubmit(form) {
+            $('small').html('');
+            $('.is-invalid').removeClass('is-invalid');
 
-                $.ajax({
-                    url: '/app/profile/' + id,
-                    type: 'POST', // POST + _method=PUT
-                    data: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(result) {
-                        if (result.success) {
-                            Swal.fire({
-                                title: result.msg,
-                                icon: 'success',
-                                toast: true,
-                                position: 'top-end',
-                                timer: 1500,
-                                showConfirmButton: false
-                            });
-                            setTimeout(() => location.reload(), 1500);
-                        }
-                    },
-                    error: function(xhr) {
-                        const res = xhr.responseJSON;
+            let id = form.data('id'); // ambil id sesuai form
+            let formData = form.serialize();
+
+            $.ajax({
+                url: '/app/profile/' + id,
+                type: 'POST', // POST + _method=PUT
+                data: formData,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(result) {
+                    if (result.success) {
                         Swal.fire({
-                            title: 'Cek input Anda!',
-                            icon: 'error',
+                            title: result.msg,
+                            icon: 'success',
                             toast: true,
                             position: 'top-end',
-                            timer: 3000,
+                            timer: 1500,
                             showConfirmButton: false
                         });
-                        if (res && res.errors) {
-                            $.each(res.errors, function(key, messages) {
-                                $('#' + key).addClass('is-invalid');
-                                $('#msg_' + key).html(messages[0]);
-                            });
-                        }
+                        setTimeout(() => location.reload(), 1500);
                     }
-                });
-            }
+                },
+                error: function(xhr) {
+                    const res = xhr.responseJSON;
+                    Swal.fire({
+                        title: 'Cek input Anda!',
+                        icon: 'error',
+                        toast: true,
+                        position: 'top-end',
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+                    if (res && res.errors) {
+                        $.each(res.errors, function(key, messages) {
+                            $('#' + key).addClass('is-invalid');
+                            $('#msg_' + key).html(messages[0]);
+                        });
+                    }
+                }
+            });
+        }
 
-            $('#SimpanUser').click(function(e) {
-                e.preventDefault();
-                ajaxSubmit($('#FormUpdateUser'));
-            });
-            $('#SimpanProfil').click(function(e) {
-                e.preventDefault();
-                ajaxSubmit($('#FormUpdateProfil'));
-            });
+        $('#SimpanUser').click(function(e) {
+            e.preventDefault();
+            ajaxSubmit($('#FormUpdateUser'));
+        });
+        $('#SimpanProfil').click(function(e) {
+            e.preventDefault();
+            ajaxSubmit($('#FormUpdateProfil'));
         });
     </script>
 @endsection

@@ -17,4 +17,8 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Level::class, 'level_id');
     }
+    public function presensi()
+    {
+        return $this->hasMany(Presensi::class, 'user_id');
+    }
 }
