@@ -6,6 +6,12 @@
         @method('PUT')
 
         <div class="card">
+            <div class="card-header">
+                <div class="card-title mb-0">
+                    <p class="card-subtitle">Edit Menu</p>
+                    <h5 class="mt-1 me-2">{{ $menu->nama }}</h5>
+                </div>
+            </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-12">
@@ -75,16 +81,23 @@
                             </div>
                         @endforeach
                     </div>
-                    <div class="mb-0 d-flex justify-content-end">
-                        <button type="button" class="btn btn-outline-primary" data-repeater-create>
-                            <i class="icon-base bx bx-plus me-1"></i>
-                            <span class="align-middle">Tambahkan Bahan</span>
-                        </button>
+                    <div class="mb-0 d-flex justify-content-between align-items-center">
+                        <a href="/app/menu" class="btn btn-outline-secondary">
+                            <i class="icon-base bx bx-left-arrow-alt me-1"></i>
+                            <span class="align-middle">Kembali</span>
+                        </a>
 
-                        <button type="button" id="simpanMenu" class="btn btn-primary ms-2">
-                            <i class="icon-base bx bx-cloud-upload me-1"></i>
-                            <span class="align-middle">Simpan</span>
-                        </button>
+                        <div d-flex>
+                            <button type="button" class="btn btn-outline-primary" data-repeater-create>
+                                <i class="icon-base bx bx-plus me-1"></i>
+                                <span class="align-middle">Tambahkan Bahan</span>
+                            </button>
+
+                            <button type="button" id="simpanMenu" class="btn btn-primary ms-2">
+                                <i class="icon-base bx bx-cloud-upload me-1"></i>
+                                <span class="align-middle">Simpan</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

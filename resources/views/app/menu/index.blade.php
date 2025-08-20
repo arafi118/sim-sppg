@@ -2,6 +2,13 @@
 
 @section('content')
     <div class="card">
+        <div class="card-header pb-0">
+            <div class="d-flex justify-content-end">
+                <a href="/app/menu/create" class="btn btn-primary">
+                    <i class="bx bx-plus"></i> Tambah Menu
+                </a>
+            </div>
+        </div>
         <div class="card-datatable">
             <table class="dt-responsive-child table table-bordered">
                 <thead>
