@@ -12,7 +12,10 @@ class BahanPanganController extends Controller
      */
     public function index()
     {
-        //
+        $bahanPangan = BahanPangan::all();
+
+        $title = 'Bahan Pangan';
+        return view('app.Admin.BahanPangan.index', compact('bahanPangan', 'title'));
     }
 
     /**

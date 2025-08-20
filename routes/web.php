@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BahanPanganController;
 use App\Http\Controllers\KelompokPanganController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\MenuController;
@@ -35,11 +36,15 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::resource('/menu', MenuController::class);
 
     //admin
-    Route::resource('/karyawan', UserController::class);
-
     Route::resource('/profile', ProfilController::class);
 
-    //Pelaporan
+    Route::resource('/karyawan', UserController::class);
+
+    Route::resource('/bahan-pangan', BahanPanganController::class);
+
+    Route::resource('/kelompok-pangan', KelompokPanganController::class);
+
+       //Pelaporan
     Route::get('/laporan', [PelaporanController::class, 'index']);
     Route::get('/pelaporan/preview', [PelaporanController::class, 'preview']);
     Route::get('/pelaporan/sub_laporan/{file}', [PelaporanController::class, 'subLaporan']);
