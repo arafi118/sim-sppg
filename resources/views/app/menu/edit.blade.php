@@ -31,6 +31,7 @@
                         @foreach ($menu->resep as $resep)
                             @php
                                 $nomor = $loop->iteration;
+                                $satuan = '-';
                             @endphp
                             <div data-repeater-item>
                                 <div class="row">
@@ -53,6 +54,9 @@
 
                                                             $selected =
                                                                 $bp->id == $resep->bahan_pangan_id ? 'selected' : '';
+                                                            if ($selected) {
+                                                                $satuan = $bp->satuan;
+                                                            }
                                                         @endphp
                                                         <option value="{{ $bahan }}" {{ $selected }}>
                                                             {{ $bp->nama }} ({{ $bp->satuan }})
@@ -68,7 +72,7 @@
                                             <input type="number" class="form-control"
                                                 id="form-repeater-{{ $nomor }}-2" name="jumlah"
                                                 value="{{ $resep->gramasi }}">
-                                            <span class="input-group-text">-</span>
+                                            <span class="input-group-text">{{ $satuan }}</span>
                                         </div>
                                     </div>
                                     <div class="col-lg-2 col-12 d-flex align-items-end mb-6">
