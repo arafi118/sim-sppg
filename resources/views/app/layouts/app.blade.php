@@ -1,6 +1,6 @@
 <!doctype html>
 < <html lang="en" class=" layout-navbar-fixed layout-menu-fixed layout-compact " dir="ltr" data-skin="default"
-    data-assets-path="/assets/" data-template="vertical-menu-template" data-bs-theme="dark">
+    data-assets-path="/assets/" data-template="vertical-menu-template" data-bs-theme="system">
 
     <head>
         <meta charset="utf-8" />
