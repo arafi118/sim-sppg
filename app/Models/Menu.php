@@ -9,6 +9,8 @@ class Menu extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     public function resep()
     {
         return $this->hasMany(Resep::class);

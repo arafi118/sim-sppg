@@ -1,7 +1,7 @@
 @extends('app.layouts.app')
 
 @section('content')
-    <form action="/app/menu" method="post">
+    <form action="/app/menu" method="post" id="formMenu">
         @csrf
 
         <div class="card">
@@ -14,82 +14,65 @@
                                 placeholder="Nama Menu">
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-12 form-repeater">
-                        <div data-repeater-list="group-a">
-                            <div data-repeater-item>
-                                <div class="row">
-                                    <div class="mb-6 col-lg-6 col-xl-3 col-12 mb-0">
-                                        <label for="form-repeater-1-1" class="form-label">Basic</label>
-                                        <select id="form-repeater-1-1" class="select2 form-select form-select-lg"
-                                            data-allow-clear="true">
-                                            <option value="AK">Alaska</option>
-                                            <option value="HI">Hawaii</option>
-                                            <option value="CA">California</option>
-                                            <option value="NV">Nevada</option>
-                                            <option value="OR">Oregon</option>
-                                            <option value="WA">Washington</option>
-                                            <option value="AZ">Arizona</option>
-                                            <option value="CO">Colorado</option>
-                                            <option value="ID">Idaho</option>
-                                            <option value="MT">Montana</option>
-                                            <option value="NE">Nebraska</option>
-                                            <option value="NM">New Mexico</option>
-                                            <option value="ND">North Dakota</option>
-                                            <option value="UT">Utah</option>
-                                            <option value="WY">Wyoming</option>
-                                            <option value="AL">Alabama</option>
-                                            <option value="AR">Arkansas</option>
-                                            <option value="IL">Illinois</option>
-                                            <option value="IA">Iowa</option>
-                                            <option value="KS">Kansas</option>
-                                            <option value="KY">Kentucky</option>
-                                            <option value="LA">Louisiana</option>
-                                            <option value="MN">Minnesota</option>
-                                            <option value="MS">Mississippi</option>
-                                            <option value="MO">Missouri</option>
-                                            <option value="OK">Oklahoma</option>
-                                            <option value="SD">South Dakota</option>
-                                            <option value="TX">Texas</option>
-                                            <option value="TN">Tennessee</option>
-                                            <option value="WI">Wisconsin</option>
-                                            <option value="CT">Connecticut</option>
-                                            <option value="DE">Delaware</option>
-                                            <option value="FL">Florida</option>
-                                            <option value="GA">Georgia</option>
-                                            <option value="IN">Indiana</option>
-                                            <option value="ME">Maine</option>
-                                            <option value="MD">Maryland</option>
-                                            <option value="MA">Massachusetts</option>
-                                            <option value="MI">Michigan</option>
-                                            <option value="NH">New Hampshire</option>
-                                            <option value="NJ">New Jersey</option>
-                                            <option value="NY">New York</option>
-                                            <option value="NC">North Carolina</option>
-                                            <option value="OH">Ohio</option>
-                                            <option value="PA">Pennsylvania</option>
-                                            <option value="RI">Rhode Island</option>
-                                            <option value="SC">South Carolina</option>
-                                            <option value="VT">Vermont</option>
-                                            <option value="VA">Virginia</option>
-                                            <option value="WV">West Virginia</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-6 col-lg-12 col-xl-2 col-12 d-flex align-items-end mb-0">
-                                        <button type="button" class="btn btn-label-danger" data-repeater-delete>
-                                            <i class="icon-base bx bx-x me-1"></i>
-                                        </button>
+                <div class="divider">
+                    <div class="divider-text">Bahan - Bahan</div>
+                </div>
+                <div class="col-12 form-repeater">
+                    <div data-repeater-list="bahan">
+                        <div data-repeater-item>
+                            <div class="row">
+                                <div class="col-lg-7 col-12 mb-6 bahan">
+                                    <label for="form-repeater-1-1" class="form-label">Nama Bahan</label>
+                                    <select id="form-repeater-1-1" name="nama_bahan"
+                                        class="select2 form-select form-select-lg" data-allow-clear="true">
+                                        <option value="">-- Pilih Bahan --</option>
+                                        @foreach ($kelompokPangan as $kp)
+                                            @php
+                                                if (count($kp->bahanPangan) == 0) {
+                                                    continue;
+                                                }
+                                            @endphp
+                                            <optgroup label="{{ $kp->nama }}">
+                                                @foreach ($kp->bahanPangan as $bp)
+                                                    @php
+                                                        $bahan = json_encode($bp);
+                                                    @endphp
+                                                    <option value="{{ $bahan }}">
+                                                        {{ $bp->nama }} ({{ $bp->satuan }})
+                                                    </option>
+                                                @endforeach
+                                            </optgroup>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-lg-3 col-12 mb-6 jumlah">
+                                    <label for="form-repeater-1-2" class="form-label">Jumlah</label>
+                                    <div class="input-group input-group-merge">
+                                        <input type="number" class="form-control" id="form-repeater-1-2" name="jumlah">
+                                        <span class="input-group-text">-</span>
                                     </div>
                                 </div>
-                                <hr />
+                                <div class="col-lg-2 col-12 d-flex align-items-end mb-6">
+                                    <button type="button" class="btn btn-label-danger w-100" data-repeater-delete>
+                                        <i class="icon-base bx bx-x me-1"></i>
+                                    </button>
+                                </div>
                             </div>
+                            <hr />
                         </div>
-                        <div class="mb-0">
-                            <button type="button" class="btn btn-primary" data-repeater-create>
-                                <i class="icon-base bx bx-plus me-1"></i>
-                                <span class="align-middle">Add</span>
-                            </button>
-                        </div>
+                    </div>
+                    <div class="mb-0 d-flex justify-content-end">
+                        <button type="button" class="btn btn-outline-primary" data-repeater-create>
+                            <i class="icon-base bx bx-plus me-1"></i>
+                            <span class="align-middle">Tambahkan Bahan</span>
+                        </button>
+
+                        <button type="button" id="simpanMenu" class="btn btn-primary ms-2">
+                            <i class="icon-base bx bx-cloud-upload me-1"></i>
+                            <span class="align-middle">Simpan</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -136,7 +119,7 @@
                         title: "Hapus input?",
                         icon: "warning",
                         showCancelButton: true,
-                        confirmButtonText: "Yes, delete it!",
+                        confirmButtonText: "Ya, Hapus",
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $(this).slideUp(e);
@@ -145,5 +128,27 @@
                 },
             });
         }
+
+        $(document).on('change', '.bahan select', function() {
+            const selectedOption = $(this).find('option:selected');
+            const bahanData = JSON.parse(selectedOption.val());
+
+            var inputGroup = $(this).closest('.bahan').next('.jumlah');
+            inputGroup.find('span.input-group-text').text(bahanData.satuan);
+        });
+
+        $(document).on('click', '#simpanMenu', function() {
+            Swal.fire({
+                title: "Simpan Menu?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Ya, Simpan",
+                cancelButtonText: "Tidak"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#formMenu').submit();
+                }
+            })
+        });
     </script>
 @endsection

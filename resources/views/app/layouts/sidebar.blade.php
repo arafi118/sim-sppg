@@ -1,7 +1,7 @@
 @php
     $level = auth()->user()->level->nama;
 
-    $level = strtolower($level);
+    $level = str_replace(' ', '-', strtolower($level));
 
     $menuFile = base_path("public/menu/{$level}.json");
     $listMenu = json_decode(file_get_contents($menuFile), true);

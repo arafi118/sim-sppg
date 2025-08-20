@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class KelompokPangan extends Model
 {
     use HasFactory;
+
+    public function bahanPangan()
+    {
+        return $this->hasMany(BahanPangan::class, 'kelompok_pangan_id');
+    }
 }
