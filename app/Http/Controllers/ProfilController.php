@@ -12,7 +12,9 @@ class ProfilController extends Controller
      */
     public function index()
     {
-        //
+        $title = 'Profil';
+        $profil = Profil::first();
+        return view('app.admin.profil.index', compact('title', 'profil'));
     }
 
     /**

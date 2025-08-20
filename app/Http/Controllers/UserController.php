@@ -14,7 +14,7 @@ class UserController extends Controller
     {
         $title = 'Karyawan';
         $users = User::all();
-        return view('app.karyawan.index', compact('title', 'users'));
+        return view('app.admin.karyawan.index', compact('title', 'users'));
     }
 
     /**

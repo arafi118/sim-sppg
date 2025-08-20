@@ -1,3 +1,8 @@
+@php
+    $nama = auth()->user()->nama;
+    $level = auth()->user()->level->nama;
+@endphp
+
 <nav class="layout-navbar container-xxl navbar-detached navbar navbar-expand-xl align-items-center bg-navbar-theme"
     id="layout-navbar">
     <div class="layout-menu-toggle navbar-nav align-items-xl-center me-4 me-xl-0   d-xl-none ">
@@ -18,39 +23,6 @@
         </div>
         <!-- /Search -->
         <ul class="navbar-nav flex-row align-items-center ms-md-auto">
-            <!-- Language -->
-            <li class="nav-item dropdown-language dropdown me-2 me-xl-0">
-                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
-                    <i class="icon-base bx bx-globe icon-md"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li>
-                        <a class="dropdown-item" href="javascript:void(0);" data-language="en"
-                            data-text-direction="ltr">
-                            <span>English</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="javascript:void(0);" data-language="fr"
-                            data-text-direction="ltr">
-                            <span>French</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="javascript:void(0);" data-language="ar"
-                            data-text-direction="rtl">
-                            <span>Arabic</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="javascript:void(0);" data-language="de"
-                            data-text-direction="ltr">
-                            <span>German</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <!--/ Language -->
 
             <!-- Style Switcher -->
             <li class="nav-item dropdown me-2 me-xl-0">
@@ -422,8 +394,8 @@
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <h6 class="mb-0">John Doe</h6>
-                                    <small class="text-body-secondary">Admin</small>
+                                    <h6 class="mb-0">{{ $nama }}</h6>
+                                    <small class="text-body-secondary">{{ $level }}</small>
                                 </div>
                             </div>
                         </a>
@@ -432,7 +404,7 @@
                         <div class="dropdown-divider my-1"></div>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="pages-profile-user.html"> <i
+                        <a class="dropdown-item" href="/app/profile"> <i
                                 class="icon-base bx bx-user icon-md me-3"></i><span>My Profile</span>
                         </a>
                     </li>
@@ -445,22 +417,8 @@
                         <a class="dropdown-item" href="pages-account-settings-billing.html">
                             <span class="d-flex align-items-center align-middle">
                                 <i class="flex-shrink-0 icon-base bx bx-credit-card icon-md me-3"></i><span
-                                    class="flex-grow-1 align-middle">Billing Plan</span>
-                                <span class="flex-shrink-0 badge rounded-pill bg-danger">4</span>
+                                    class="flex-grow-1 align-middle">TS/Invoice</span>
                             </span>
-                        </a>
-                    </li>
-                    <li>
-                        <div class="dropdown-divider my-1"></div>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="pages-pricing.html"> <i
-                                class="icon-base bx bx-dollar icon-md me-3"></i><span>Pricing</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="pages-faq.html"> <i
-                                class="icon-base bx bx-help-circle icon-md me-3"></i><span>FAQ</span>
                         </a>
                     </li>
                     <li>
@@ -473,9 +431,6 @@
                     </li>
                 </ul>
             </li>
-            <!--/ User -->
-
         </ul>
     </div>
-
 </nav>
