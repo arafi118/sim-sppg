@@ -12,7 +12,10 @@ class KelompokPanganController extends Controller
      */
     public function index()
     {
-        //
+        $kelompokPangan = KelompokPangan::all();
+
+        $title = 'Kelompok Pangan';
+        return view('app.Admin.KelompokPangan.index', compact('kelompokPangan', 'title'));
     }
 
     /**
