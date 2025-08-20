@@ -7,6 +7,8 @@ use App\Http\Controllers\KelompokPanganController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\MenuController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PelaporanController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +29,7 @@ Route::get('/auth', [AuthController::class, 'index']);
 Route::post('/auth', [AuthController::class, 'auth']);
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
+    
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
     Route::resource('/menu', MenuController::class);
@@ -35,4 +38,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::resource('/karyawan', UserController::class);
 
     Route::resource('/profile', ProfilController::class);
+
+    //Pelaporan
+    Route::get('/laporan', [PelaporanController::class, 'index']);
+    Route::get('/pelaporan/preview', [PelaporanController::class, 'preview']);
+    Route::get('/pelaporan/sub_laporan/{file}', [PelaporanController::class, 'subLaporan']);
+    Route::get('/pelaporan/simpan_saldo/{tahun}/{bulan?}', [PelaporanController::class, 'simpanSaldo']);
 });

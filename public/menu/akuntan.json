@@ -4,11 +4,6 @@
         "url": "/app/dashboard"
     },
     {
-        "nama": "Karyawan",
-        "icon": "bx-user",
-        "url": "/app/karyawan"
-    },
-    {
         "nama": "Presensi",
         "icon": "bx-basket",
         "url": "/app/program-pangan",
@@ -61,6 +56,6 @@
     {
         "nama": "Laporan",
         "icon": "bx-calendar",
-        "url": "/app/periode-masak"
+        "url": "/app/laporan"
     }
 ]
