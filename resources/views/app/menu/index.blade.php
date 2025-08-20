@@ -168,10 +168,13 @@
                     $.ajax({
                         url: `/app/menu/${id}`,
                         type: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
                         success: function(response) {
                             Swal.fire(
-                                'Deleted!',
-                                'Menu has been deleted.',
+                                'Berhasil!',
+                                result.message || 'Menu berhasil dihapus.',
                                 'success'
                             );
                             c.ajax.reload();
@@ -179,7 +182,8 @@
                         error: function(xhr) {
                             Swal.fire(
                                 'Error!',
-                                'There was an error deleting the menu.',
+                                xhr.responseJSON.message ||
+                                'Terjadi kesalahan saat menghapus menu.',
                                 'error'
                             );
                         }
