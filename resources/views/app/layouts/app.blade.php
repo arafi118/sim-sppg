@@ -1,6 +1,5 @@
 <!doctype html>
-
-<html lang="en" class=" layout-navbar-fixed layout-menu-fixed layout-compact " dir="ltr" data-skin="default"
+<html lang="en" class="layout-navbar-fixed layout-menu-fixed layout-compact" dir="ltr" data-skin="default"
     data-assets-path="/assets/" data-template="vertical-menu-template" data-bs-theme="dark">
 
 <head>
@@ -12,9 +11,7 @@
     <meta name="description" content="SIM SPPG | Sistem Informasi Manajemen Satuan Pelayanan Pemenuhan Gizi" />
     <meta property="og:description" content="SIM SPPG | Sistem Informasi Manajemen Satuan Pelayanan Pemenuhan Gizi" />
 
-
     <link rel="icon" type="image/x-icon" href="/assets/img/favicon/favicon.ico" />
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -32,17 +29,20 @@
     <link rel="stylesheet" href="/assets/vendor/libs/sweetalert2/sweetalert2.css" />
     <link rel="stylesheet" href="/assets/vendor/libs/datatables/datatables-bootstrap5.css" />
     <link rel="stylesheet" href="/assets/vendor/libs/datatables/responsive-bootstrap5.css" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css">
 
     <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr@1.9.1/dist/pickr.min.js"></script>
     <script src="/assets/vendor/js/helpers.js"></script>
     <script src="/assets/js/config.js"></script>
+
+    @yield('style')
 </head>
 
 <body>
-    <!-- Layout wrapper -->
-    <div class="layout-wrapper layout-content-navbar  ">
+    <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
-            <!-- Menu -->
             @include('app.layouts.sidebar')
 
             <div class="menu-mobile-toggler d-xl-none rounded-1">
@@ -53,21 +53,14 @@
                 </a>
             </div>
 
-            <!-- Layout container -->
             <div class="layout-page">
-                <!-- Navbar -->
                 @include('app.layouts.navbar')
-                <!-- / Navbar -->
 
-                <!-- Content wrapper -->
                 <div class="content-wrapper">
-                    <!-- Content -->
                     <div class="container-xxl flex-grow-1 container-p-y">
                         @yield('content')
                     </div>
-                    <!-- / Content -->
 
-                    <!-- Footer -->
                     <footer class="content-footer footer bg-footer-theme">
                         <div class="container-xxl">
                             <div
@@ -76,46 +69,38 @@
                                     ©
                                     <script>
                                         document.write(new Date().getFullYear());
-                                    </script>
-                                    , made with ❤️ by <a href="https://themeselection.com" target="_blank"
+                                    </script>, made with ❤️ by
+                                    <a href="https://themeselection.com" target="_blank"
                                         class="footer-link">ThemeSelection</a>
                                 </div>
                                 <div class="d-none d-lg-inline-block">
-
                                     <a href="https://themeselection.com/license/" class="footer-link me-4"
                                         target="_blank">License</a>
                                     <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More
                                         Themes</a>
-
                                     <a href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/documentation/"
                                         target="_blank" class="footer-link me-6">Documentation</a>
-
-
                                     <a href="https://themeselection.com/support/" target="_blank"
                                         class="footer-link d-none d-sm-inline-block">Support</a>
-
                                 </div>
                             </div>
                         </div>
                     </footer>
-                    <!-- / Footer -->
+
                     <div class="content-backdrop fade"></div>
                 </div>
-                <!-- Content wrapper -->
             </div>
-            <!-- / Layout page -->
         </div>
         <div class="layout-overlay layout-menu-toggle"></div>
         <div class="drag-target"></div>
     </div>
-    <!-- / Layout wrapper -->
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/assets/vendor/libs/jquery/jquery.js"></script>
     <script src="/assets/vendor/libs/popper/popper.js"></script>
     <script src="/assets/vendor/js/bootstrap.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@algolia/autocomplete-js@1.19.2/dist/umd/index.production.js"
         integrity="sha256-pJWTMvqlBlMBxdkM5bI1ScIVC7LFJoCplF0qQtcL62s=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr@1.9.1/dist/pickr.min.js"></script>
     <script src="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.js"
         integrity="sha512-qRj8N7fxOHxPkKjnQ9EJgLJ8Ng1OK7seBn1uk8wkqaXpa7OA13LO6txQ7+ajZonyc9Ts4K/ugXljevkFTUGBcw=="
@@ -126,10 +111,17 @@
     <script src="/assets/vendor/libs/select2/select2.js"></script>
     <script src="/assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
     <script src="/assets/vendor/libs/datatables/datatables-bootstrap5.js"></script>
-    {{-- <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script> --}}
     <script src="/assets/js/form-select.js"></script>
     <script src="/assets/js/main.js"></script>
+
+    @if (session('success'))
+        <script>
+            toastMixin.fire({
+                icon: 'success',
+                title: '{{ session('success') }}'
+            });
+        </script>
+    @endif
 
     @yield('script')
 </body>
