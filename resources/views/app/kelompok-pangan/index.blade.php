@@ -13,7 +13,7 @@
             <table id="kelompokP" class="dt-responsive-child table table-bordered">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>kode</th>
                         <th>Nama</th>
                         <th>Aksi</th>
                     </tr>
@@ -42,10 +42,9 @@
                     url: "/app/kelompok-pangan",
                 },
                 columns: [{
-                        data: 'id',
+                        data: row => Math.random().toString(36).substring(2, 6).toUpperCase(),
                         name: 'id'
-                    },
-                    {
+                    }, {
                         data: 'nama',
                         name: 'nama'
                     },
