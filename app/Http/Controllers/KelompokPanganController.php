@@ -15,7 +15,7 @@ class KelompokPanganController extends Controller
         $kelompokPangan = KelompokPangan::all();
 
         $title = 'Kelompok Pangan';
-        return view('app.Admin.KelompokPangan.index', compact('kelompokPangan', 'title'));
+        return view('app.kelompok-pangan.index', compact('kelompokPangan', 'title'));
     }
 
     /**

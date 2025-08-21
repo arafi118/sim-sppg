@@ -14,9 +14,10 @@ class PelaporanController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {   $title = 'Pelaporan';
+    {
+        $title = 'Pelaporan';
         $laporan = JenisLaporan::where([['file', '!=', '0']])->orderBy('urut', 'ASC')->get();
-        return view('app.akuntan.pelaporan.index', compact('title', 'laporan'));
+        return view('app.pelaporan.index', compact('title', 'laporan'));
     }
 
     public function preview(Request $request)
@@ -26,12 +27,12 @@ class PelaporanController extends Controller
 
         return $this->$laporan($data);
     }
-    private function cover(array $data) 
+    private function cover(array $data)
     {
         $data['judul'] = 'Laporan Keuangan';
         $data['tgl']   = now()->format('d-m-Y');
 
-        $view = view('app.akuntan.pelaporan.views.cover', $data)->render();
+        $view = view('app.pelaporan.views.cover', $data)->render();
 
         $pdf = PDF::loadHTML($view)->setOptions([
             'margin-top'    => 20,

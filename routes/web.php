@@ -9,7 +9,7 @@ use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\MenuController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PelaporanController;
-
+use App\Http\Controllers\RancanganController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,10 +30,10 @@ Route::get('/auth', [AuthController::class, 'index']);
 Route::post('/auth', [AuthController::class, 'auth']);
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
-    
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
     Route::resource('/menu', MenuController::class);
+    Route::resource('/rancang-menu', RancanganController::class);
 
     //admin
     Route::resource('/profile', ProfilController::class);
@@ -44,9 +44,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
 
     Route::resource('/kelompok-pangan', KelompokPanganController::class);
 
-       //Pelaporan
+    //Pelaporan
     Route::get('/laporan', [PelaporanController::class, 'index']);
     Route::get('/pelaporan/preview', [PelaporanController::class, 'preview']);
-    Route::get('/pelaporan/sub_laporan/{file}', [PelaporanController::class, 'subLaporan']);
-    Route::get('/pelaporan/simpan_saldo/{tahun}/{bulan?}', [PelaporanController::class, 'simpanSaldo']);
+    Route::get('/pelaporan/sub-laporan/{file}', [PelaporanController::class, 'subLaporan']);
+    Route::get('/pelaporan/simpan-saldo/{tahun}/{bulan?}', [PelaporanController::class, 'simpanSaldo']);
 });

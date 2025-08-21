@@ -15,7 +15,7 @@ class BahanPanganController extends Controller
         $bahanPangan = BahanPangan::all();
 
         $title = 'Bahan Pangan';
-        return view('app.Admin.BahanPangan.index', compact('bahanPangan', 'title'));
+        return view('app.bahan-pangan.index', compact('bahanPangan', 'title'));
     }
 
     /**

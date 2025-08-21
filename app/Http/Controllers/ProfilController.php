@@ -25,7 +25,7 @@ class ProfilController extends Controller
         $mitra = Mitra::all();
         $user = User::with('level')->find(auth()->user()->id);
 
-        return view('app.admin.profil.index', compact('title', 'user', 'mitra', 'profil'));
+        return view('app.profil.index', compact('title', 'user', 'mitra', 'profil'));
     }
 
     /**

@@ -25,7 +25,7 @@ class UserController extends Controller
             return DataTables::of($data)->make(true);
         }
 
-        return view('app.admin.karyawan.index', ['title' => 'Karyawan']);
+        return view('app.karyawan.index', ['title' => 'Karyawan']);
     }
 
 
@@ -37,7 +37,7 @@ class UserController extends Controller
         $title = 'Tambah Karyawan';
         $levels = Level::all();
 
-        return view('app.admin.karyawan.create', compact('title', 'levels'));
+        return view('app.karyawan.create', compact('title', 'levels'));
     }
 
     /**
@@ -116,7 +116,7 @@ class UserController extends Controller
         $title = 'Edit Karyawan';
         $levels = Level::all();
 
-        return view('app.admin.karyawan.edit', compact('title', 'karyawan', 'levels'));
+        return view('app.karyawan.edit', compact('title', 'karyawan', 'levels'));
     }
 
     /**
