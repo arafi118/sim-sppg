@@ -83,10 +83,10 @@
                         render: function(data) {
                             return `<div class="d-inline-flex gap-1">
                                 <a href="/app/karyawan/${data.id}/edit" class="btn btn-sm btn-primary" title="Edit">
-                                    <i class="bx bx-edit"></i>
+                                    Edit
                                 </a>
                                 <button class="btn btn-sm btn-danger btn-delete" data-id="${data.id}" title="Hapus">
-                                    <i class="bx bx-trash"></i>
+                                    Hapus
                                 </button>
                             </div>`;
                         }
