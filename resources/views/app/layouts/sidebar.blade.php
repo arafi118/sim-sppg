@@ -112,7 +112,21 @@
 
         @foreach ($listMenu as $menu)
             @if (isset($menu['url']))
-                <li class="menu-item">
+                @php
+                    $menuActive = '';
+                    $path = '/' . request()->path();
+                    if (str_starts_with($path, $menu['url'])) {
+                        $menuActive = 'active';
+                    } elseif (isset($menu['children'])) {
+                        foreach ($menu['children'] as $child) {
+                            if (str_starts_with($path, $child['url'])) {
+                                $menuActive = 'active open';
+                                break;
+                            }
+                        }
+                    }
+                @endphp
+                <li class="menu-item {{ $menuActive }}">
                     <a href="{{ isset($menu['children']) ? 'javascript:void(0)' : $menu['url'] }}"
                         class="menu-link {{ isset($menu['children']) ? 'menu-toggle' : '' }}">
                         <i class="menu-icon icon-base bx {{ $menu['icon'] }}"></i>
@@ -122,7 +136,13 @@
                     @if (isset($menu['children']))
                         <ul class="menu-sub">
                             @foreach ($menu['children'] as $child)
-                                <li class="menu-item">
+                                @php
+                                    $childActive = '';
+                                    if (str_starts_with($path, $child['url'])) {
+                                        $childActive = 'active';
+                                    }
+                                @endphp
+                                <li class="menu-item {{ $childActive }}">
                                     <a href="{{ $child['url'] }}" class="menu-link">
                                         <div data-i18n="{{ $child['nama'] }}">{{ $child['nama'] }}</div>
                                     </a>

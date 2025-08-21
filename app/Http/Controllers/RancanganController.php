@@ -12,7 +12,8 @@ class RancanganController extends Controller
      */
     public function index()
     {
-        //
+        $title = 'Rancangan Menu';
+        return view('app.rancang-menu.index', compact('title'));
     }
 
     /**
