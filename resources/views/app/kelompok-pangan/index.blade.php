@@ -35,7 +35,7 @@
         let cl;
 
         if (tb) {
-            cl = new DataTable(tb, {
+            cl = setDataTable(tb, {
                 processing: true,
                 serverSide: true,
                 ajax: {
@@ -67,83 +67,8 @@
                         }
                     }
                 ],
-                layout: {
-                    topStart: {
-                        rowClass: "row mx-3 my-0 justify-content-between",
-                        features: [{
-                            pageLength: {
-                                menu: [7, 10, 25, 50, 100],
-                                text: "Show_MENU_entries"
-                            }
-                        }]
-                    },
-                    topEnd: {
-                        search: {
-                            placeholder: ""
-                        }
-                    },
-                    bottomStart: {
-                        rowClass: "row mx-3 justify-content-between",
-                        features: ["info"]
-                    },
-                    bottomEnd: {
-                        paging: {
-                            firstLast: false
-                        }
-                    }
-                },
-                scrollX: true,
-                language: {
-                    paginate: {
-                        next: '<i class="icon-base bx bx-chevron-right scaleX-n1-rtl icon-sm"></i>',
-                        previous: '<i class="icon-base bx bx-chevron-left scaleX-n1-rtl icon-sm"></i>'
-                    }
-                }
             });
         }
-
-        setTimeout(() => {
-            [{
-                    sel: ".dt-buttons .btn",
-                    rm: "btn-secondary"
-                },
-                {
-                    sel: ".dt-search .form-control",
-                    rm: "form-control-sm",
-                    add: "ms-4"
-                },
-                {
-                    sel: ".dt-length .form-select",
-                    rm: "form-select-sm"
-                },
-                {
-                    sel: ".dt-layout-table",
-                    rm: "row mt-2"
-                },
-                {
-                    sel: ".dt-layout-end",
-                    add: "mt-0"
-                },
-                {
-                    sel: ".dt-layout-end .dt-search",
-                    add: "mt-md-6 mt-0"
-                },
-                {
-                    sel: ".dt-layout-full",
-                    rm: "col-md col-12",
-                    add: "table-responsive"
-                }
-            ].forEach(({
-                sel,
-                rm,
-                add
-            }) => {
-                document.querySelectorAll(sel).forEach(el => {
-                    rm?.split(" ").forEach(cls => el.classList.remove(cls));
-                    add?.split(" ").forEach(cls => el.classList.add(cls));
-                });
-            });
-        }, 100);
 
         $('#btnTambah').click(() => {
             const form = $('#FormKelompokPangan');

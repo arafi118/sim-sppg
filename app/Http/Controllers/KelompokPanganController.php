@@ -25,7 +25,6 @@ class KelompokPanganController extends Controller
         return view('app.kelompok-Pangan.index', ['title' => 'Kelompok Pangan']);
     }
 
-
     /**
      * Show the form for creating a new resource.
      */

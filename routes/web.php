@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
 
     Route::resource('/karyawan', UserController::class);
 
+    Route::get('/bahan-pangan/list', [BahanPanganController::class, 'list']);
     Route::resource('/bahan-pangan', BahanPanganController::class);
 
     Route::resource('/kelompok-pangan', KelompokPanganController::class);
