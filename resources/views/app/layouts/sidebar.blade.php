@@ -74,42 +74,6 @@
 
     <div class="menu-inner-shadow"></div>
     <ul class="menu-inner py-1">
-        <!-- Dashboards -->
-        {{-- <li class="menu-item active open">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon icon-base bx bx-home-smile"></i>
-                <div data-i18n="Dashboards">Dashboards</div>
-                <div class="badge text-bg-danger rounded-pill ms-auto">5</div>
-            </a>
-            <ul class="menu-sub">
-                <li class="menu-item active">
-                    <a href="dashboards-analytics.html" class="menu-link">
-                        <div data-i18n="Analytics">Analytics</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="dashboards-crm.html" class="menu-link">
-                        <div data-i18n="CRM">CRM</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="app-ecommerce-dashboard.html" class="menu-link">
-                        <div data-i18n="eCommerce">eCommerce</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="app-logistics-dashboard.html" class="menu-link">
-                        <div data-i18n="Logistics">Logistics</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="app-academy-dashboard.html" class="menu-link">
-                        <div data-i18n="Academy">Academy</div>
-                    </a>
-                </li>
-            </ul>
-        </li> --}}
-
         @foreach ($listMenu as $menu)
             @if (isset($menu['url']))
                 @php
