@@ -43,4 +43,86 @@ class PelaporanController extends Controller
 
         return $pdf->inline();
     }
+
+    private function penggunaan_anggaran(array $data) 
+    {
+        $data['title'] = 'Laporan Penggunaan Anggaran';
+        $data['tgl']   = now()->format('d-m-Y');
+
+        $view = view('app.pelaporan.views.penggunaan_anggaran', $data)->render();
+
+        $pdf = PDF::loadHTML($view)->setOptions([
+            'margin-top'    => 20,
+            'margin-bottom' => 20,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+        ]);
+
+        return $pdf->inline();
+    }
+
+
+    private function surat_pernyataan(array $data) 
+    {
+        $data['title'] = 'Surat Pernyataan Tanggung Jawab';
+        $data['tgl']   = now()->format('d-m-Y');
+
+        $view = view('app.pelaporan.views.surat_pernyataan', $data)->render();
+
+        $pdf = PDF::loadHTML($view)->setOptions([
+            'margin-top'    => 20,
+            'margin-bottom' => 20,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+        ]);
+
+        return $pdf->inline();
+    }
+    private function tanda_terima(array $data) 
+    {
+        $data['title'] = 'Bukti Tanda Terima';
+        $data['tgl']   = now()->format('d-m-Y');
+
+        $view = view('app.pelaporan.views.tanda_terima', $data)->render();
+
+        $pdf = PDF::loadHTML($view)->setOptions([
+            'margin-top'    => 20,
+            'margin-bottom' => 20,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+        ]);
+
+        return $pdf->inline();
+    }
+     private function berita_acara(array $data) 
+    {
+        $data['title'] = 'Berita Acara';
+        $data['tgl']   = now()->format('d-m-Y');
+
+        $view = view('app.pelaporan.views.berita_acara', $data)->render();
+
+        $pdf = PDF::loadHTML($view)->setOptions([
+            'margin-top'    => 20,
+            'margin-bottom' => 20,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+        ]);
+
+        return $pdf->inline();
+    }
+         private function daftar_nominatif(array $data) 
+    {
+        $data['title'] = 'Berita Acara';
+        $data['tgl']   = now()->format('d-m-Y');
+
+        $view = view('app.pelaporan.views.daftar_nominatif', $data)->render();
+
+        $pdf = PDF::loadHTML($view)->setOptions([
+            'margin-top'    => 20,
+            'margin-bottom' => 20,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+        ]);
+        return $pdf->inline();
+    }
 }

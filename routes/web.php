@@ -5,6 +5,10 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BahanPanganController;
 use App\Http\Controllers\KelompokPanganController;
+use App\Http\Controllers\KelompokPemanfaatController;
+use App\Http\Controllers\DataPemanfaatController;
+use App\Http\Controllers\NamaPemanfaatController;
+use App\Http\Controllers\PeriodeMasakController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\MenuController;
 use Illuminate\Support\Facades\Route;
@@ -42,9 +46,20 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
 
     Route::resource('/karyawan', UserController::class);
 
+    Route::get('/bahan-pangan/list', [BahanPanganController::class, 'list']);
     Route::resource('/bahan-pangan', BahanPanganController::class);
 
     Route::resource('/kelompok-pangan', KelompokPanganController::class);
+
+    Route::resource('/kelompok-pemanfaat', KelompokPemanfaatController::class);
+
+    Route::get('/data-pemanfaat/list', [DataPemanfaatController::class, 'list']);
+    Route::resource('/data-pemanfaat', DataPemanfaatController::class);
+
+    Route::get('/nama-pemanfaat/list', [NamaPemanfaatController::class, 'list']);
+    Route::resource('/nama-pemanfaat', NamaPemanfaatController::class);
+
+    Route::resource('/periode-masak', PeriodeMasakController::class);
 
     //Pelaporan
     Route::get('/laporan', [PelaporanController::class, 'index']);

@@ -3,7 +3,7 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <form action="/app/pelaporan/preview" method="GET" class="row g-3">
+            <form action="/app/pelaporan/preview" method="GET" class="row g-3" target="_blank">
                 <div class="col-md-4">
                     <label for="tahun" class="form-label">Tahunan</label>
                     <select name="tahun" class="form-select select2">
