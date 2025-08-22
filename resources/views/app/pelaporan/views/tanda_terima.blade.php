@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Bukti Tanda Terima</title>
+    <title>{{ $title }}</title>
     <style>
         * {
             font-family: 'Arial', sans-serif;
