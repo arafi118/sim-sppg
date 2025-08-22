@@ -39,7 +39,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
 
     Route::resource('/menu', MenuController::class);
 
-    Route::get('/menu/rancang-menu/get-periode/{tanggal}', [RancanganController::class, 'getPeriode']);
+    Route::get('/rancang-menu/get-periode/{tanggal}', [RancanganController::class, 'getPeriode']);
     Route::resource('/rancang-menu', RancanganController::class);
 
     //admin

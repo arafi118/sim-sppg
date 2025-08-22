@@ -173,7 +173,7 @@
             const timestamp = Math.floor(new Date(tanggal).getTime() / 1000);
 
             if (timestamp < waktu_awal || timestamp > waktu_akhir) {
-                $.get(`/app/menu/rancang-menu/get-periode/${tanggal}`, function(data) {
+                $.get(`/app/rancang-menu/get-periode/${tanggal}`, function(data) {
                     if (data.success) {
                         $('#periode_id').val(data.periode.id);
                         $('#card-title').text(data.title);
@@ -239,7 +239,7 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: xhr.responseJSON.message ||
+                                text: xhr.responseJSON.error ||
                                     'Terjadi kesalahan saat menyimpan.'
                             });
                         }

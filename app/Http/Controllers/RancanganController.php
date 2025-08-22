@@ -20,12 +20,37 @@ class RancanganController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $periode = PeriodeMasak::with('')->orderBy('tanggal_awal', 'desc')->get();
-            return datatables()->of($periode)->get();
+            $tanggal_awal = request()->get('tanggal_awal', date('Y-m-d'));
+            $tanggal_akhir = request()->get('tanggal_akhir', date('Y-m-d', strtotime('+14 days')));
+
+            $rancanganMenu = Rancangan::select('rancangans.*', 'periode_masaks.periode_ke', 'periode_masaks.tanggal_awal', 'periode_masaks.tanggal_akhir')
+                ->join('periode_masaks', 'rancangans.periode_masak_id', '=', 'periode_masaks.id')
+                ->with(['kelompokPemanfaat', 'rancanganMenu.menu.resep.bahanPangan'])
+                ->where([
+                    ['periode_masaks.tanggal_awal', '>=', $tanggal_awal],
+                    ['periode_masaks.tanggal_akhir', '<=', $tanggal_akhir]
+                ])
+                ->orderBy('tanggal', 'desc')
+                ->get();
+
+            return datatables()->of($rancanganMenu)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $btn = '<a href="/app/rancang-menu/' . $row->id . '/edit" class="btn btn-sm btn-primary">Edit</a>';
+                    $btn .= '<button type="button" class="btn btn-sm btn-danger btn-hapus ms-2" data-id="' . $row->id . '">Hapus</button>';
+
+                    return $btn;
+                })
+                ->make(true);
         }
 
+        $periode = PeriodeMasak::where([
+            ['tanggal_awal', '<=', date('Y-m-d')],
+            ['tanggal_akhir', '>=', date('Y-m-d')]
+        ])->first();
+
         $title = 'Rancangan Menu';
-        return view('app.rancang-menu.index', compact('title'));
+        return view('app.rancang-menu.index', compact('title', 'periode'));
     }
 
     /**
@@ -101,6 +126,14 @@ class RancanganController extends Controller
             $tanggal = $request->tanggal;
             $periode_id = $request->periode_id;
             $rancanganMenu = $request->rancangan;
+
+            $cekRancangan = Rancangan::where('periode_masak_id', $periode_id)
+                ->where('tanggal', $tanggal)
+                ->exists();
+
+            if ($cekRancangan) {
+                return response()->json(['error' => 'Rancangan menu untuk tanggal ini sudah ada'], 422);
+            }
 
             foreach ($rancanganMenu as $rm) {
                 $kelompokPemanfaat = explode('|', $rm['kelompok_pemanfaat']);
