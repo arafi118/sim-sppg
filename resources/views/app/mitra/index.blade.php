@@ -75,5 +75,51 @@
                 }
             ],
         });
+
+        $(document).on('click', '.btn-hapus', function() {
+            const id = $(this).data('id');
+            Swal.fire({
+                title: 'Hapus Mitra?',
+                text: "Data mitra akan dihapus permanen.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Hapus!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/app/mitra/${id}`,
+                        type: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire(
+                                    'Berhasil!',
+                                    result.message || 'mitra berhasil dihapus.',
+                                    'success'
+                                );
+                                table.ajax.reload();
+                            } else {
+                                Swal.fire(
+                                    'Gagal!',
+                                    response.message ||
+                                    'Terjadi kesalahan saat menghapus mitra.',
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function(xhr) {
+                            Swal.fire(
+                                'Error!',
+                                xhr.responseJSON.error ||
+                                'Terjadi kesalahan saat menghapus mitra.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        });
     </script>
 @endsection

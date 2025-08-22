@@ -82,6 +82,11 @@ class MitraController extends Controller
             'harga_beli' => str_replace(',', '', $data['harga_beli']),
         ]);
 
+        $hargaBahanTertinggi = Mitra::where('bahan_pangan_id', $data['nama_bahan'])->orderBy('harga_beli', 'desc')->first();
+        BahanPangan::where('id', $data['nama_bahan'])->update([
+            'harga_jual' => $hargaBahanTertinggi->harga_beli,
+        ]);
+
         return response()->json([
             'success' => true,
             'msg' => 'Data berhasil disimpan!',
@@ -144,6 +149,11 @@ class MitraController extends Controller
             'harga_beli' => str_replace(',', '', $data['harga_beli']),
         ]);
 
+        $hargaBahanTertinggi = Mitra::where('bahan_pangan_id', $data['nama_bahan'])->orderBy('harga_beli', 'desc')->first();
+        BahanPangan::where('id', $data['nama_bahan'])->update([
+            'harga_jual' => $hargaBahanTertinggi->harga_beli,
+        ]);
+
         return response()->json([
             'success' => true,
             'msg' => 'Data berhasil diperbarui!',
@@ -155,6 +165,16 @@ class MitraController extends Controller
      */
     public function destroy(Mitra $mitra)
     {
-        //
+        Mitra::destroy($mitra->id);
+
+        $hargaBahanTertinggi = Mitra::where('bahan_pangan_id', $mitra->bahan_pangan_id)->orderBy('harga_beli', 'desc')->first();
+        BahanPangan::where('id', $mitra->bahan_pangan_id)->update([
+            'harga_jual' => $hargaBahanTertinggi ? $hargaBahanTertinggi->harga_beli : 0,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => $mitra->nama . ' berhasil dihapus!',
+        ]);
     }
 }
