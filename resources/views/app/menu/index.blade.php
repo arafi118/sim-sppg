@@ -2,8 +2,13 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header pb-0">
-            <div class="d-flex justify-content-end">
+        <div class="row card-header flex-column flex-md-row pb-0">
+            <div class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
+                <h5 class="card-title mb-0 text-md-start text-center">
+                    Daftar Menu dan Resep
+                </h5>
+            </div>
+            <div class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto mt-0">
                 <a href="/app/menu/create" class="btn btn-primary">
                     <i class="bx bx-plus"></i> Tambah Menu
                 </a>
@@ -16,6 +21,7 @@
                         <th></th>
                         <th>#</th>
                         <th>Name</th>
+                        <th></th>
                     </tr>
                 </thead>
             </table>

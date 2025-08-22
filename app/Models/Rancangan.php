@@ -9,4 +9,19 @@ class Rancangan extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
+
+    public function periode()
+    {
+        return $this->belongsTo(PeriodeMasak::class, 'periode_masak_id');
+    }
+
+    public function kelompokPemanfaat()
+    {
+        return $this->belongsTo(KelompokPemanfaat::class, 'kelompok_pemanfaat_id');
+    }
+
+    public function rancanganMenu()
+    {
+        return $this->hasMany(RancanganMenu::class, 'rancangan_id');
+    }
 }
