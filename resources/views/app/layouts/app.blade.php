@@ -111,6 +111,10 @@
     </div>
     <!-- / Layout wrapper -->
 
+    <form action="/app/auth/logout" method="post" id="formLogout">
+        @csrf
+    </form>
+
     <script src="/assets/vendor/libs/jquery/jquery.js"></script>
     <script src="/assets/vendor/libs/popper/popper.js"></script>
     <script src="/assets/vendor/js/bootstrap.js"></script>
@@ -221,6 +225,24 @@
     </script>
 
     @yield('script')
+
+    <script>
+        $(document).on('click', '#logout', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Konfirmasi',
+                text: 'Apakah Anda yakin ingin keluar?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, keluar',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#formLogout').submit();
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

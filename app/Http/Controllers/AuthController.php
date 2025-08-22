@@ -32,4 +32,14 @@ class AuthController extends Controller
 
         return redirect('/auth')->with('error', 'Username atau password salah');
     }
+
+    public function logout()
+    {
+        Auth::logout();
+
+        session()->flush();
+        session()->regenerate();
+
+        return redirect('/auth')->with('success', 'Anda telah berhasil keluar');
+    }
 }

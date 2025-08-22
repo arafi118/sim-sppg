@@ -76,4 +76,6 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/pelaporan/preview', [PelaporanController::class, 'preview']);
     Route::get('/pelaporan/sub-laporan/{file}', [PelaporanController::class, 'subLaporan']);
     Route::get('/pelaporan/simpan-saldo/{tahun}/{bulan?}', [PelaporanController::class, 'simpanSaldo']);
+
+    Route::post('/auth/logout', [AuthController::class, 'logout']);
 });
