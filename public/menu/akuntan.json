@@ -21,23 +21,11 @@
     },
 
     {
-        "nama": "Rab",
-        "icon": "bx-user-check",
-        "url": "/app/pemanfaat",
-        "children": [{
-            "nama": "Kelompok Pemanfaat",
-            "icon": "bx-group",
-            "url": "/app/kelompok-pemanfaat"
-        }, {
-            "nama": "Data Pemanfaat",
-            "icon": "bx-data",
-            "url": "/app/data-pemanfaat"
-        }, {
-            "nama": "Nama Pemanfaat",
-            "icon": "bx-id-card",
-            "url": "/app/nama-pemanfaat"
-        }]
+        "nama": "RAB",
+        "icon": "bx-calculator",
+        "url": "/app/rab"
     },
+
     {
         "nama": "Jurnal Transaksi",
         "icon": "bx-user-check",

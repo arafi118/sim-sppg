@@ -10,6 +10,7 @@ use App\Http\Controllers\DataPemanfaatController;
 use App\Http\Controllers\NamaPemanfaatController;
 use App\Http\Controllers\PeriodeMasakController;
 use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\RabController;
 use App\Http\Controllers\MenuController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PelaporanController;
@@ -67,10 +68,14 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/upload-presensi', [PresensiController::class, 'create']);
     Route::post('/upload-presensi', [PresensiController::class, 'store']);
     Route::get('/hitung-pengajian', [PresensiController::class, 'hitung']);
-    
+
     //Pelaporan
     Route::get('/laporan', [PelaporanController::class, 'index']);
     Route::get('/pelaporan/preview', [PelaporanController::class, 'preview']);
     Route::get('/pelaporan/sub-laporan/{file}', [PelaporanController::class, 'subLaporan']);
     Route::get('/pelaporan/simpan-saldo/{tahun}/{bulan?}', [PelaporanController::class, 'simpanSaldo']);
+
+    //Rab
+    Route::get('/rab', [RabController::class, 'index']);
+    Route::post('/rab/generate', [RabController::class, 'generate']);
 });

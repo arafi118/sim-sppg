@@ -18,10 +18,12 @@ class PresensiController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
+  public function create()
+{
+    $title = "Upload Presensi";
+    return view('app.presensi.create', compact('title'));
+}
+
 
     /**
      * Store a newly created resource in storage.
