@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BahanPangan;
+use App\Models\KelompokPangan;
 use App\Models\Mitra;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class MitraController extends Controller
 {
@@ -12,7 +15,23 @@ class MitraController extends Controller
      */
     public function index()
     {
-        //
+        if (request()->ajax()) {
+            $mitra = Mitra::with('bahanPangan')->get();
+
+            return datatables()->of($mitra)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $btn = '<a href="/app/mitra/' . $row->id . '/edit" class="btn btn-sm btn-primary">Edit</a>';
+                    $btn .= '<button type="button" class="btn btn-sm btn-danger btn-hapus ms-2" data-id="' . $row->id . '">Hapus</button>';
+
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
+        $title = 'Daftar Mitra';
+        return view('app.mitra.index', compact('title'));
     }
 
     /**
@@ -20,7 +39,14 @@ class MitraController extends Controller
      */
     public function create()
     {
-        //
+        $kelompokPangan = KelompokPangan::with([
+            'bahanPangan' => function ($query) {
+                $query->orderBy('nama', 'asc');
+            }
+        ])->orderBy('nama', 'asc')->get();
+
+        $title = 'Tambah Mitra';
+        return view('app.mitra.create', compact('title', 'kelompokPangan'));
     }
 
     /**
@@ -28,7 +54,38 @@ class MitraController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->only([
+            "nama_bahan",
+            "harga_beli",
+            "nama_mitra",
+            "telpon",
+            "alamat",
+        ]);
+
+        $validate = Validator::make($data, [
+            'nama_bahan' => 'required',
+            'harga_beli' => 'required',
+            'nama_mitra' => 'required',
+            'telpon' => 'required',
+            'alamat' => 'required',
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json(['errors' => $validate->errors()]);
+        }
+
+        $mitra = Mitra::create([
+            'bahan_pangan_id' => $data['nama_bahan'],
+            'nama' => $data['nama_mitra'],
+            'alamat' => $data['alamat'],
+            'telpon' => $data['telpon'],
+            'harga_beli' => str_replace(',', '', $data['harga_beli']),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Data berhasil disimpan!',
+        ]);
     }
 
     /**
@@ -44,7 +101,14 @@ class MitraController extends Controller
      */
     public function edit(Mitra $mitra)
     {
-        //
+        $kelompokPangan = KelompokPangan::with([
+            'bahanPangan' => function ($query) {
+                $query->orderBy('nama', 'asc');
+            }
+        ])->orderBy('nama', 'asc')->get();
+
+        $title = 'Edit Mitra';
+        return view('app.mitra.edit', compact('title', 'mitra', 'kelompokPangan'));
     }
 
     /**
@@ -52,7 +116,38 @@ class MitraController extends Controller
      */
     public function update(Request $request, Mitra $mitra)
     {
-        //
+        $data = $request->only([
+            "nama_bahan",
+            "harga_beli",
+            "nama_mitra",
+            "telpon",
+            "alamat",
+        ]);
+
+        $validate = Validator::make($data, [
+            'nama_bahan' => 'required',
+            'harga_beli' => 'required',
+            'nama_mitra' => 'required',
+            'telpon' => 'required',
+            'alamat' => 'required',
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json(['errors' => $validate->errors()]);
+        }
+
+        Mitra::where('id', $mitra->id)->update([
+            'bahan_pangan_id' => $data['nama_bahan'],
+            'nama' => $data['nama_mitra'],
+            'alamat' => $data['alamat'],
+            'telpon' => $data['telpon'],
+            'harga_beli' => str_replace(',', '', $data['harga_beli']),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Data berhasil diperbarui!',
+        ]);
     }
 
     /**

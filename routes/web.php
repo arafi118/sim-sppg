@@ -11,6 +11,7 @@ use App\Http\Controllers\NamaPemanfaatController;
 use App\Http\Controllers\PeriodeMasakController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\MitraController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PelaporanController;
 use App\Http\Controllers\PresensiController;
@@ -42,6 +43,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/rancang-menu/get-periode/{tanggal}', [RancanganController::class, 'getPeriode']);
     Route::resource('/rancang-menu', RancanganController::class);
 
+    Route::resource('/mitra', MitraController::class);
+
     //admin
     Route::resource('/profile', ProfilController::class);
 
@@ -67,7 +70,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/upload-presensi', [PresensiController::class, 'create']);
     Route::post('/upload-presensi', [PresensiController::class, 'store']);
     Route::get('/hitung-pengajian', [PresensiController::class, 'hitung']);
-    
+
     //Pelaporan
     Route::get('/laporan', [PelaporanController::class, 'index']);
     Route::get('/pelaporan/preview', [PelaporanController::class, 'preview']);

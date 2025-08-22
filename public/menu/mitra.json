@@ -1,0 +1,11 @@
+[{
+    "nama": "Dashboard",
+    "icon": "bx-home-smile",
+    "url": "/app/dashboard"
+}, {
+    "nama": "Master Data"
+}, {
+    "nama": "Mitra",
+    "icon": "bx-broadcast",
+    "url": "/app/mitra"
+}]

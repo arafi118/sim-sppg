@@ -41,6 +41,7 @@ class RancanganController extends Controller
 
                     return $btn;
                 })
+                ->rawColumns(['action'])
                 ->make(true);
         }
 

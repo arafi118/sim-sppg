@@ -84,7 +84,7 @@
                             <span class="align-middle">Kembali</span>
                         </a>
 
-                        <div d-flex>
+                        <div class="d-flex">
                             <button type="button" class="btn btn-outline-primary" data-repeater-create>
                                 <i class="icon-base bx bx-plus me-1"></i>
                                 <span class="align-middle">Tambahkan Rancangan Menu</span>
