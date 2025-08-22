@@ -5,12 +5,12 @@
         <div class="card-header pb-0">
             <div class="d-flex justify-content-end">
                 <button id="btnTambah" class="btn btn-primary">
-                    <i class="bx bx-plus"></i> Tambah Menu
+                    <i class="bx bx-plus"></i> Tambah Kelompok Pemanfaat
                 </button>
             </div>
         </div>
         <div class="card-datatable">
-            <table id="kelompokP" class="dt-responsive-child table table-bordered">
+            <table id="kelompokF" class="dt-responsive-child table table-bordered">
                 <thead>
                     <tr>
                         <th>kode</th>
@@ -22,16 +22,16 @@
         </div>
     </div>
 
-    <form id="FormHapusKelompokPangan" method="post">
+    <form id="FormHapusKelompokPemanfaat" method="post">
         @method('DELETE')
         @csrf
     </form>
 
-    @include('app.Kelompok-Pangan.modal')
+    @include('app.Kelompok-Pemanfaat.modal')
 @endsection
 @section('script')
     <script>
-        const tb = document.querySelector("#kelompokP");
+        const tb = document.querySelector("#kelompokF");
         let cl;
 
         if (tb) {
@@ -39,7 +39,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "/app/kelompok-pangan",
+                    url: "/app/kelompok-pemanfaat",
                 },
                 columns: [{
                         data: row => Math.random().toString(36).substring(2, 6).toUpperCase(),
@@ -70,32 +70,32 @@
         }
 
         $('#btnTambah').click(() => {
-            const form = $('#FormKelompokPangan');
+            const form = $('#FormKelompokPemanfaat');
             form.trigger('reset');
-            form.find('input[name="id_MK"]').val('');
-            form.attr('action', '/app/kelompok-pangan');
+            form.find('input[name="id_KP"]').val('');
+            form.attr('action', '/app/kelompok-pemanfaat');
             form.find('input[name="_method"]').remove();
-            $('#formTitle').text("Tambah Kelompok Pangan").css('color', 'green');
-            const modal = new bootstrap.Modal(document.getElementById('MK-Pangan'));
+            $('#formTitle').text("Tambah Kelompok Pemanfaat").css('color', 'green');
+            const modal = new bootstrap.Modal(document.getElementById('KP-Pemanfaat'));
             modal.show();
         });
 
         $(document).on('click', '.btnEdit', function() {
             let d = $(this).data();
-            const form = $('#FormKelompokPangan');
-            $('#id_MK').val(d.id);
+            const form = $('#FormKelompokPemanfaat');
+            $('#id_KP').val(d.id);
             $('#nama').val(d.nama);
-            form.attr('action', `/app/kelompok-pangan/${d.id}`);
+            form.attr('action', `/app/kelompok-pemanfaat/${d.id}`);
             form.find('input[name="_method"]').remove();
             form.append('<input type="hidden" name="_method" value="PUT">');
-            $('#formTitle').text("Edit Kelompok Pangan").css('color', 'goldenrod');
-            const modal = new bootstrap.Modal(document.getElementById('MK-Pangan'));
+            $('#formTitle').text("Edit Kelompok Pemanfaat").css('color', 'goldenrod');
+            const modal = new bootstrap.Modal(document.getElementById('KP-Pemanfaat'));
             modal.show();
         });
 
-        $(document).on('click', '#SimpanKelompokPangan', function(e) {
+        $(document).on('click', '#SimpanKelompokPemanfaat', function(e) {
             e.preventDefault();
-            const form = $('#FormKelompokPangan');
+            const form = $('#FormKelompokPemanfaat');
             $('small').empty();
             $('.is-invalid').removeClass('is-invalid');
             const actionUrl = form.attr('action');
@@ -121,7 +121,7 @@
                             icon: 'success',
                             title: result.msg
                         });
-                        const modalEl = document.getElementById('MK-Pangan');
+                        const modalEl = document.getElementById('KP-Pemanfaat');
                         const modalInstance = bootstrap.Modal.getInstance(modalEl);
                         modalInstance.hide();
                         if (typeof table !== 'undefined') table.ajax.reload();
@@ -154,7 +154,7 @@
             let id = $(this).data('id');
             Swal.fire({
                 title: "Apakah Anda yakin?",
-                text: "Data Kelompok Pangan akan dihapus permanen!",
+                text: "Data Kelompok Pemanfaat akan dihapus permanen!",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonText: "Hapus",
@@ -162,8 +162,8 @@
                 reverseButtons: true
             }).then(res => {
                 if (res.isConfirmed) {
-                    let form = $('#FormHapusKelompokPangan');
-                    form.attr('action', `/app/kelompok-pangan/${id}`);
+                    let form = $('#FormHapusKelompokPemanfaat');
+                    form.attr('action', `/app/kelompok-pemanfaat/${id}`);
                     form.off('submit').on('submit', function(e) {
                         e.preventDefault();
                         $.ajax({

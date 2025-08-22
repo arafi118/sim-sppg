@@ -9,6 +9,8 @@ class KelompokPemanfaat extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     public function pemanfaat()
     {
         return $this->hasMany(DataPemanfaat::class, 'kelompok_pemanfaat_id');

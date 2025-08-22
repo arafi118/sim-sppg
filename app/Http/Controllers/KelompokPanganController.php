@@ -56,8 +56,8 @@ class KelompokPanganController extends Controller
         ]);
 
         return response()->json([
-            'success' => true,
-            'msg' => 'Kelompok pangan berhasil ditambahkan!',
+            'success'   => true,
+            'msg'       => 'Data berhasil disimpan!',
         ]);
     }
 
@@ -100,8 +100,8 @@ class KelompokPanganController extends Controller
         ]);
 
         return response()->json([
-            'success' => true,
-            'msg' => 'Kelompok pangan berhasil di Update!',
+            'success'   => true,
+            'msg'       => 'Data berhasil diperbarui!',
         ]);
     }
 

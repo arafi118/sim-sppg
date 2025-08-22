@@ -18,12 +18,10 @@ class ProfilController extends Controller
      */
     public function index()
     {
-        $title = 'Profil';
-        $profil = Profil::with(
-            'mitra'
-        )->first();
-        $mitra = Mitra::all();
-        $user = User::with('level')->find(auth()->user()->id);
+        $title  = 'Profil';
+        $profil = Profil::with('mitra')->first();
+        $mitra  = Mitra::all();
+        $user   = User::with('level')->find(auth()->user()->id);
 
         return view('app.profil.index', compact('title', 'user', 'mitra', 'profil'));
     }
@@ -74,40 +72,51 @@ class ProfilController extends Controller
             ]);
 
             $user = User::findOrFail($id);
+
             $user->username = $request->username;
             if ($request->password) {
                 $user->password = bcrypt($request->password);
             }
+
             $user->save();
 
-            return response()->json(['success' => true, 'msg' => 'User berhasil diperbarui!']);
+            return response()->json([
+                'success' => true,
+                'msg' => 'User berhasil diperbarui!'
+            ]);
         }
 
         if ($formType === 'profil') {
             $request->validate([
-                'mitra_id' => 'required',
-                'id_yayasan' => 'required',
-                'nama' => 'required',
-                'nama_mitra' => 'required',
-                'alamat' => 'required',
-                'telpon' => 'required',
-                'penanggung_jawab' => 'required',
+                'mitra_id'          => 'required',
+                'id_yayasan'        => 'required',
+                'nama'              => 'required',
+                'nama_mitra'        => 'required',
+                'alamat'            => 'required',
+                'telpon'            => 'required',
+                'penanggung_jawab'  => 'required',
             ]);
 
             $profil = Profil::findOrFail($id);
-            $profil->mitra_id = $request->mitra_id;
-            $profil->id_yayasan = $request->id_yayasan;
-            $profil->nama = $request->nama;
-            $profil->nama_mitra = $request->nama_mitra;
-            $profil->alamat = $request->alamat;
-            $profil->telpon = $request->telpon;
-            $profil->penanggung_jawab = $request->penanggung_jawab;
+            $profil->mitra_id           = $request->mitra_id;
+            $profil->id_yayasan         = $request->id_yayasan;
+            $profil->nama               = $request->nama;
+            $profil->nama_mitra         = $request->nama_mitra;
+            $profil->alamat             = $request->alamat;
+            $profil->telpon             = $request->telpon;
+            $profil->penanggung_jawab   = $request->penanggung_jawab;
             $profil->save();
 
-            return response()->json(['success' => true, 'msg' => 'Profil berhasil diperbarui!']);
+            return response()->json([
+                'success' => true,
+                'msg' => 'Profil berhasil diperbarui!'
+            ]);
         }
 
-        return response()->json(['success' => false, 'msg' => 'Form tidak dikenali']);
+        return response()->json([
+            'success' => false,
+            'msg' => 'Form tidak dikenali'
+        ]);
     }
 
 

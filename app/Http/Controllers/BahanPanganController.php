@@ -43,12 +43,11 @@ class BahanPanganController extends Controller
 
         return response()->json(
             $query->get()->map(fn ($item) => [
-                'id' => $item->id,
-                'nama' => $item->nama
+                'id'    => $item->id,
+                'nama'  => $item->nama
             ])
         );
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -70,14 +69,14 @@ class BahanPanganController extends Controller
             'harga_jual'
         ]);
 
-        $data['harga_jual'] = floatval(str_replace(',', '', str_replace('.00', '', $data['harga_jual'])));
-
         $rules = [
-            'kelompok_pangan_id' => 'required|exists:kelompok_pangans,id',
-            'nama' => 'required|string|max:255',
-            'satuan' => 'required|string|max:50',
-            'harga_jual' => 'required|numeric|min:0'
+            'kelompok_pangan_id'    => 'required',
+            'nama'                  => 'required',
+            'satuan'                => 'required',
+            'harga_jual'            => 'required'
         ];
+
+        $harga_jual = floatval(str_replace(',', '', str_replace('.00', '', $data['harga_jual'])));
 
         $validator = Validator::make($data, $rules);
 
@@ -85,11 +84,16 @@ class BahanPanganController extends Controller
             return response()->json($validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        BahanPangan::create($data);
+        BahanPangan::create([
+            'kelompok_pangan_id' => $data['kelompok_pangan_id'],
+            'nama'               => $data['nama'],
+            'satuan'             => $data['satuan'],
+            'harga_jual'         => $harga_jual
+        ]);
 
         return response()->json([
             'success' => true,
-            'msg' => 'Bahan Pangan berhasil disimpan.'
+            'msg' => 'Data berhasil disimpan!'
         ], Response::HTTP_CREATED);
     }
 
@@ -121,14 +125,14 @@ class BahanPanganController extends Controller
             'harga_jual'
         ]);
 
-        $data['harga_jual'] = floatval(str_replace(',', '', str_replace('.00', '', $data['harga_jual'])));
-
         $rules = [
-            'kelompok_pangan_id' => 'required|exists:kelompok_pangans,id',
-            'nama' => 'required|string|max:255',
-            'satuan' => 'required|string|max:50',
-            'harga_jual' => 'required|numeric|min:0'
+            'kelompok_pangan_id'    => 'required',
+            'nama'                  => 'required',
+            'satuan'                => 'required',
+            'harga_jual'            => 'required'
         ];
+
+        $haarga_jual = floatval(str_replace(',', '', str_replace('.00', '', $data['harga_jual'])));
 
         $validator = Validator::make($data, $rules);
 
@@ -136,12 +140,17 @@ class BahanPanganController extends Controller
             return response()->json($validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $bahanPangan->update($data);
+        $bahanPangan->update([
+            'kelompok_pangan_id' => $data['kelompok_pangan_id'],
+            'nama'               => $data['nama'],
+            'satuan'             => $data['satuan'],
+            'harga_jual'         => $haarga_jual
+        ]);
 
         return response()->json([
-            'success' => true,
-            'msg' => 'Bahan Pangan berhasil diperbarui.',
-            'data' => $bahanPangan
+            'success'   => true,
+            'msg'       => 'Data berhasil diperbarui.',
+            'data'      => $bahanPangan
         ], Response::HTTP_OK);
     }
 

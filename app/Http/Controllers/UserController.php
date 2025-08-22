@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 
-
 class UserController extends Controller
 {
     /**
@@ -28,13 +27,12 @@ class UserController extends Controller
         return view('app.karyawan.index', ['title' => 'Karyawan']);
     }
 
-
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        $title = 'Tambah Karyawan';
+        $title  = 'Tambah Karyawan';
         $levels = Level::all();
 
         return view('app.karyawan.create', compact('title', 'levels'));
@@ -80,23 +78,23 @@ class UserController extends Controller
             return response()->json($validate->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         $karyawan = User::create([
-            'level_id' => $request->level_id,
-            'nik' => $request->nik,
-            'nama' => $request->nama,
-            'tanggal_lahir' => $request->tanggal_lahir,
-            'tanggal_masuk' => $request->tanggal_masuk,
-            'gaji' => $gaji,
-            'alamat' => $request->alamat,
-            'telpon' => $request->telpon,
-            'jenis_kelamin' => $request->jenis_kelamin,
-            'id_sidik_jari' => 0,
-            'status' => 'aktif',
-            'username' => $request->username,
-            'password' => Hash::make($request->password),
+            'level_id'          => $request->level_id,
+            'nik'               => $request->nik,
+            'nama'              => $request->nama,
+            'tanggal_lahir'     => $request->tanggal_lahir,
+            'tanggal_masuk'     => $request->tanggal_masuk,
+            'gaji'              => $gaji,
+            'alamat'            => $request->alamat,
+            'telpon'            => $request->telpon,
+            'jenis_kelamin'     => $request->jenis_kelamin,
+            'id_sidik_jari'     => 0,
+            'status'            => 'aktif',
+            'username'          => $request->username,
+            'password'          => Hash::make($request->password),
         ]);
         return response()->json([
-            'success' => true,
-            'msg' => 'Karyawan berhasil ditambahkan!',
+            'success'   => true,
+            'msg'       => 'Karyawan berhasil ditambahkan!',
         ]);
     }
 
@@ -158,23 +156,23 @@ class UserController extends Controller
             return response()->json($validate->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         $karyawan->update([
-            'level_id' => $request->level_id,
-            'nik' => $request->nik,
-            'nama' => $request->nama,
+            'level_id'      => $request->level_id,
+            'nik'           => $request->nik,
+            'nama'          => $request->nama,
             'tanggal_lahir' => $request->tanggal_lahir,
             'tanggal_masuk' => $request->tanggal_masuk,
-            'gaji' => $gaji,
-            'alamat' => $request->alamat,
-            'telpon' => $request->telpon,
+            'gaji'          => $gaji,
+            'alamat'        => $request->alamat,
+            'telpon'        => $request->telpon,
             'jenis_kelamin' => $request->jenis_kelamin,
             'id_sidik_jari' => 0,
-            'status' => 'aktif',
-            'username' => $request->username,
-            'password' => Hash::make($request->password),
+            'status'        => 'aktif',
+            'username'      => $request->username,
+            'password'      => Hash::make($request->password),
         ]);
         return response()->json([
-            'success' => true,
-            'msg' => 'Karyawan berhasil di Update!',
+            'success'   => true,
+            'msg'       => 'Karyawan berhasil di Update!',
         ]);
     }
 
