@@ -107,5 +107,51 @@
                 table.ajax.url('/app/rancang-menu?tanggal_awal=' + startDate + '&tanggal_akhir=' + endDate).load();
             }
         });
+
+        $(document).on('click', '.btn-hapus', function() {
+            const id = $(this).data('id');
+            Swal.fire({
+                title: 'Hapus Rancangan Menu?',
+                text: "Semua rancangan menu dengan tanggal yang sama akan dihapus.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Hapus!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/app/rancang-menu/${id}`,
+                        type: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire(
+                                    'Berhasil!',
+                                    result.message || 'Rancangan menu berhasil dihapus.',
+                                    'success'
+                                );
+                                table.ajax.reload();
+                            } else {
+                                Swal.fire(
+                                    'Gagal!',
+                                    response.message ||
+                                    'Terjadi kesalahan saat menghapus rancangan menu.',
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function(xhr) {
+                            Swal.fire(
+                                'Error!',
+                                xhr.responseJSON.error ||
+                                'Terjadi kesalahan saat menghapus rancangan menu.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        });
     </script>
 @endsection

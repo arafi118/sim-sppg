@@ -176,7 +176,7 @@ class RancanganController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Rancangan $rancangan)
+    public function show(Rancangan $rancang_menu)
     {
         //
     }
@@ -184,24 +184,81 @@ class RancanganController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Rancangan $rancangan)
+    public function edit(Rancangan $rancang_menu)
     {
-        //
+        $rancang_menu = $rancang_menu->load(['periode', 'kelompokPemanfaat', 'rancanganMenu.menu']);
+        $menu = Menu::orderBy('nama', 'asc')->get();
+
+        $title = 'Edit Rancangan Menu';
+        return view('app.rancang-menu.edit', compact('title', 'rancang_menu', 'menu'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Rancangan $rancangan)
+    public function update(Request $request, Rancangan $rancang_menu)
     {
-        //
+        $data = $request->only([
+            'tanggal',
+            'menu',
+        ]);
+
+        $validate = Validator::make($data, [
+            'tanggal' => 'required|date',
+            'menu' => 'required',
+        ]);
+
+        if ($validate->fails()) {
+            return response()->json(['error' => $validate->errors()], 422);
+        }
+
+        $rancangan_menu = [];
+        $menu = json_decode($data['menu'], true);
+        foreach ($menu as $m) {
+            $rancangan_menu[] = [
+                'rancangan_id' => $rancang_menu->id,
+                'menu_id' => $m['id'],
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        if (count($rancangan_menu) > 0) {
+            RancanganMenu::where('rancangan_id', $rancang_menu->id)->delete();
+            RancanganMenu::insert($rancangan_menu);
+        }
+
+        $rancang_menu->update([
+            'tanggal' => $data['tanggal'],
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Rancangan menu berhasil disimpan.',
+        ], 201);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Rancangan $rancangan)
+    public function destroy(Rancangan $rancang_menu)
     {
-        //
+        $rancangan = Rancangan::where('tanggal', $rancang_menu->tanggal)
+            ->where('periode_masak_id', $rancang_menu->periode_masak_id)
+            ->get();
+
+        if (count($rancangan) > 0) {
+            RancanganMenu::whereIn('rancangan_id', $rancangan->pluck('id')->toArray())->delete();
+            Rancangan::whereIn('id', $rancangan->pluck('id')->toArray())->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Rancangan menu berhasil dihapus.',
+            ], 200);
+        }
+
+        return response()->json([
+            'error' => 'Rancangan menu tidak ditemukan.',
+        ], 404);
     }
 }
