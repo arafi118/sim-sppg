@@ -88,6 +88,13 @@ class NamaPemanfaatController extends Controller
             'status'            => $request->status,
         ]);
 
+        $Pemanfaat = DataPemanfaat::find($request->data_pemanfaat_id);
+        $data1 = $Pemanfaat->jumlah_pemanfaat + 1;
+
+        $Pemanfaat->update([
+            'jumlah_pemanfaat' => $data1
+        ]);
+
         return response()->json([
             'success' => true,
             'msg' => 'data berhasil disimpan!',
@@ -151,6 +158,12 @@ class NamaPemanfaatController extends Controller
      */
     public function destroy(NamaPemanfaat $namaPemanfaat)
     {
+        $Pemanfaat = DataPemanfaat::find($namaPemanfaat->data_pemanfaat_id);
+        $data1 = $Pemanfaat->jumlah_pemanfaat - 1;
+        $Pemanfaat->update([
+            'jumlah_pemanfaat' => $data1
+        ]);
+
         $namaPemanfaat->delete();
 
         return response()->json([

@@ -1,12 +1,3 @@
-@php
-    $tanggal_awal = date('Y-m-d');
-    $tanggal_akhir = date('Y-m-d', strtotime('+14 days'));
-    if ($periode) {
-        $tanggal_awal = $periode->tanggal_awal;
-        $tanggal_akhir = $periode->tanggal_akhir;
-    }
-@endphp
-
 @extends('app.layouts.app')
 
 @section('content')
@@ -15,31 +6,25 @@
             <div class="row flex-column flex-md-row">
                 <div class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
                     <h5 class="card-title mb-0 text-md-start text-center">
-                        Daftar Rancangan Menu
+                        Daftar Mitra
                     </h5>
                 </div>
                 <div class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto mt-0">
-                    <a href="/app/rancang-menu/create" class="btn btn-primary">
-                        <i class="bx bx-plus"></i> Tambah Rancangan Menu
+                    <a href="/app/mitra/create" class="btn btn-primary">
+                        <i class="bx bx-plus"></i> Tambah Mitra
                     </a>
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-center mt-3">
-                <div class="col-md-4 col-12">
-                    <input type="text" class="form-control" id="tanggal" />
                 </div>
             </div>
         </div>
         <div class="card-datatable">
-            <table class="table table-bordered" id="table-rancang-menu">
+            <table class="table table-bordered" id="table-mitra">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Periode Ke</th>
-                        <th>Tanggal</th>
-                        <th>Kelompok</th>
-                        <th>Jumlah</th>
+                        <th>Nama</th>
+                        <th>Telpon</th>
+                        <th>Bahan Pangan</th>
+                        <th>Harga Beli</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -50,21 +35,11 @@
 
 @section('script')
     <script>
-        $('#tanggal').flatpickr({
-            enableTime: false,
-            dateFormat: "Y-m-d",
-            mode: "range",
-            defaultDate: ["{{ $tanggal_awal }}", "{{ $tanggal_akhir }}"],
-            locale: {
-                rangeSeparator: " - "
-            }
-        })
-
-        var table = setDataTable('#table-rancang-menu', {
+        var table = setDataTable('#table-mitra', {
             processing: true,
             serverSide: true,
             ajax: {
-                url: '/app/rancang-menu?tanggal_awal={{ $tanggal_awal }}&tanggal_akhir={{ $tanggal_akhir }}',
+                url: '/app/mitra',
                 type: 'GET',
             },
             columns: [{
@@ -74,20 +49,23 @@
                     orderable: false
                 },
                 {
-                    data: 'periode_ke',
-                    name: 'periode_ke'
+                    data: 'nama',
+                    name: 'nama'
                 },
                 {
-                    data: 'tanggal',
-                    name: 'tanggal'
+                    data: 'telpon',
+                    name: 'telpon'
                 },
                 {
-                    data: 'kelompok_pemanfaat.nama',
-                    name: 'kelompok_pemanfaat.nama'
+                    data: 'bahan_pangan.nama',
+                    name: 'bahan_pangan.nama'
                 },
                 {
-                    data: 'jumlah',
-                    name: 'jumlah'
+                    data: 'harga_beli',
+                    name: 'harga_beli',
+                    render: function(data) {
+                        return 'Rp. ' + new Intl.NumberFormat('id-ID').format(data);
+                    }
                 },
                 {
                     data: 'action',
@@ -98,28 +76,18 @@
             ],
         });
 
-        $(document).on('change', '#tanggal', function() {
-            var dates = $(this).val().split(' - ');
-            if (dates.length === 2) {
-                var startDate = dates[0];
-                var endDate = dates[1];
-
-                table.ajax.url('/app/rancang-menu?tanggal_awal=' + startDate + '&tanggal_akhir=' + endDate).load();
-            }
-        });
-
         $(document).on('click', '.btn-hapus', function() {
             const id = $(this).data('id');
             Swal.fire({
-                title: 'Hapus Rancangan Menu?',
-                text: "Semua rancangan menu dengan tanggal yang sama akan dihapus.",
+                title: 'Hapus Mitra?',
+                text: "Data mitra akan dihapus permanen.",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Ya, Hapus!'
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: `/app/rancang-menu/${id}`,
+                        url: `/app/mitra/${id}`,
                         type: 'DELETE',
                         data: {
                             _token: '{{ csrf_token() }}'
@@ -128,7 +96,7 @@
                             if (response.success) {
                                 Swal.fire(
                                     'Berhasil!',
-                                    result.message || 'Rancangan menu berhasil dihapus.',
+                                    result.message || 'mitra berhasil dihapus.',
                                     'success'
                                 );
                                 table.ajax.reload();
@@ -136,7 +104,7 @@
                                 Swal.fire(
                                     'Gagal!',
                                     response.message ||
-                                    'Terjadi kesalahan saat menghapus rancangan menu.',
+                                    'Terjadi kesalahan saat menghapus mitra.',
                                     'error'
                                 );
                             }
@@ -145,7 +113,7 @@
                             Swal.fire(
                                 'Error!',
                                 xhr.responseJSON.error ||
-                                'Terjadi kesalahan saat menghapus rancangan menu.',
+                                'Terjadi kesalahan saat menghapus mitra.',
                                 'error'
                             );
                         }

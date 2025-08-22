@@ -12,6 +12,7 @@ use App\Http\Controllers\PeriodeMasakController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\RabController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\MitraController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PelaporanController;
 use App\Http\Controllers\PresensiController;
@@ -42,6 +43,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
 
     Route::get('/rancang-menu/get-periode/{tanggal}', [RancanganController::class, 'getPeriode']);
     Route::resource('/rancang-menu', RancanganController::class);
+
+    Route::resource('/mitra', MitraController::class);
 
     //admin
     Route::resource('/profile', ProfilController::class);
@@ -75,7 +78,5 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/pelaporan/sub-laporan/{file}', [PelaporanController::class, 'subLaporan']);
     Route::get('/pelaporan/simpan-saldo/{tahun}/{bulan?}', [PelaporanController::class, 'simpanSaldo']);
 
-    //Rab
-    Route::get('/rab', [RabController::class, 'index']);
-    Route::post('/rab/generate', [RabController::class, 'generate']);
+    Route::post('/auth/logout', [AuthController::class, 'logout']);
 });

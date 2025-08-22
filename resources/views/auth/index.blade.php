@@ -66,7 +66,7 @@
                                 <div class="input-group input-group-merge">
                                     <input type="password" id="password" class="form-control" name="password"
                                         placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                        aria-describedby="password" />
+                                        aria-describedby="password" autocomplete="off" />
                                     <span class="input-group-text cursor-pointer"><i
                                             class="icon-base bx bx-hide"></i></span>
                                 </div>

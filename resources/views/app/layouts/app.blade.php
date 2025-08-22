@@ -111,6 +111,10 @@
     </div>
     <!-- / Layout wrapper -->
 
+    <form action="/app/auth/logout" method="post" id="formLogout">
+        @csrf
+    </form>
+
     <script src="/assets/vendor/libs/jquery/jquery.js"></script>
     <script src="/assets/vendor/libs/popper/popper.js"></script>
     <script src="/assets/vendor/js/bootstrap.js"></script>
@@ -122,6 +126,9 @@
         integrity="sha512-qRj8N7fxOHxPkKjnQ9EJgLJ8Ng1OK7seBn1uk8wkqaXpa7OA13LO6txQ7+ajZonyc9Ts4K/ugXljevkFTUGBcw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/i18n-js@4.5.1/dist/browser/index.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"
+        integrity="sha512-Rdk63VC+1UYzGSgd3u2iadi0joUrcwX0IWp2rTh6KXFoAmgOjRS99Vynz1lJPT8dLjvo6JZOqpAHJyfCEZ5KoA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="/assets/vendor/js/menu.js"></script>
     <script src="/assets/vendor/libs/apex-charts/apexcharts.js"></script>
     <script src="/assets/vendor/libs/select2/select2.js"></script>
@@ -218,6 +225,24 @@
     </script>
 
     @yield('script')
+
+    <script>
+        $(document).on('click', '#logout', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Konfirmasi',
+                text: 'Apakah Anda yakin ingin keluar?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, keluar',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#formLogout').submit();
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
