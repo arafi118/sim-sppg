@@ -13,6 +13,7 @@ use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\MenuController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PelaporanController;
+use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\RancanganController;
 
 /*
@@ -61,6 +62,12 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
 
     Route::resource('/periode-masak', PeriodeMasakController::class);
 
+    //Presensi
+    Route::get('/presensi', [PresensiController::class, 'index']);
+    Route::get('/upload-presensi', [PresensiController::class, 'create']);
+    Route::post('/upload-presensi', [PresensiController::class, 'store']);
+    Route::get('/hitung-pengajian', [PresensiController::class, 'hitung']);
+    
     //Pelaporan
     Route::get('/laporan', [PelaporanController::class, 'index']);
     Route::get('/pelaporan/preview', [PelaporanController::class, 'preview']);

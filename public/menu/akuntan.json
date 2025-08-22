@@ -6,17 +6,20 @@
     {
         "nama": "Presensi",
         "icon": "bx-basket",
-        "url": "/app/program-pangan",
+        "url": "#",
         "children": [{
-            "nama": "Kelompok Pangan",
-            "icon": "bx-group",
-            "url": "/app/kelompok-pangan"
-        }, {
-            "nama": "Bahan Pangan",
-            "icon": "bx-leaf",
-            "url": "/app/bahan-pangan"
-        }]
+                "nama": "Upload Presensi",
+                "icon": "bx-group",
+                "url": "/app/upload-presensi"
+            },
+            {
+                "nama": "Hitung Penggajian",
+                "icon": "bx-leaf",
+                "url": "/app/hitung-pengajian"
+            }
+        ]
     },
+
     {
         "nama": "Rab",
         "icon": "bx-user-check",
