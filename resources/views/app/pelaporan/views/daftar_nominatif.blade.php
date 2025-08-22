@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Daftar Nominatif</title>
+    <title>{{ $title }}</title>
     <style>
         * {
             font-family: 'Arial', sans-serif;
@@ -38,16 +38,17 @@
 
     <table>
         <tr>
-            <th rowspan="2">No</th>
-            <th rowspan="2">Jenis Pekerjaan</th>
-            <th rowspan="2">Nama</th>
-            <th colspan="8">Februari</th>
-            <th rowspan="2">Honorium Sukarelawan</th>
-            <th rowspan="2">Dana Kesehatan</th>
-            <th rowspan="2">TK</th>
-            <th rowspan="2">PJ</th>
-            <th rowspan="2">Total Upah</th>
+            <th rowspan="2" style="width:3%; text-align:center;">No</th>
+            <th rowspan="2" style="width:12%;">Jenis Pekerjaan</th>
+            <th rowspan="2" style="width:12%;">Nama</th>
+            <th colspan="8" style="width:40%; text-align:center;">Februari</th>
+            <th rowspan="2" style="width:8%;">Honorium Sukarelawan</th>
+            <th rowspan="2" style="width:8%;">Dana Kesehatan</th>
+            <th rowspan="2" style="width:5%;">TK</th>
+            <th rowspan="2" style="width:5%;">PJ</th>
+            <th rowspan="2" style="width:10%;">Total Upah</th>
         </tr>
+
         <tr>
             <th>17</th>
             <th>18</th>

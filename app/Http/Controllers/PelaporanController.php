@@ -110,19 +110,57 @@ class PelaporanController extends Controller
 
         return $pdf->inline();
     }
-         private function daftar_nominatif(array $data) 
+    private function daftar_nominatif(array $data) 
     {
-        $data['title'] = 'Berita Acara';
+        $data['title'] = 'Daftar Nominatif';
         $data['tgl']   = now()->format('d-m-Y');
 
         $view = view('app.pelaporan.views.daftar_nominatif', $data)->render();
 
-        $pdf = PDF::loadHTML($view)->setOptions([
+        $pdf = PDF::loadHTML($view)
+            ->setPaper('a4', 'landscape')
+            ->setOptions([
+                'margin-top'    => 20,
+                'margin-bottom' => 20,
+                'margin-left'   => 25,
+                'margin-right'  => 20,
+            ]);
+
+        return $pdf->inline();
+    }
+    private function catatan_pengeluaran(array $data) 
+    {
+        $data['title'] = 'Catatan pengeluaran';
+        $data['tgl']   = now()->format('d-m-Y');
+
+        $view = view('app.pelaporan.views.catatan_pengeluaran', $data)->render();
+
+        $pdf = PDF::loadHTML($view)
+            ->setPaper('a4', 'landscape') 
+            ->setOptions([
+                'margin-top'    => 20,
+                'margin-bottom' => 20,
+                'margin-left'   => 25,
+                'margin-right'  => 20,
+            ]);
+
+        return $pdf->inline();
+    }
+    private function kuitansi(array $data) 
+    {
+        $data['title'] = 'Kuitansi';
+        $data['tgl']   = now()->format('d-m-Y');
+
+        $view = view('app.pelaporan.views.kuitansi', $data)->render();
+
+       $pdf = PDF::loadHTML($view)->setOptions([
             'margin-top'    => 20,
             'margin-bottom' => 20,
             'margin-left'   => 25,
             'margin-right'  => 20,
         ]);
+
         return $pdf->inline();
     }
+
 }
