@@ -15,7 +15,7 @@
                     <tr>
                         <th class="text-center" rowspan="2">Kelompok Pemanfaat</th>
                         <th class="text-center" rowspan="2">Nama Lembaga</th>
-                        <th class="text-center" colspan="3">Penangung Jawab</th>
+                        <th class="text-center" colspan="3">Penanggung Jawab</th>
                         <th class="text-center" rowspan="2">Aksi</th>
                     </tr>
                     <tr>
