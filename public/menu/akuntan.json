@@ -5,7 +5,7 @@
     },
     {
         "nama": "Presensi",
-        "icon": "bx-basket",
+        "icon": "bx-calendar-check",
         "url": "#",
         "children": [{
                 "nama": "Upload Presensi",
@@ -22,13 +22,13 @@
 
     {
         "nama": "RAB",
-        "icon": "bx-calculator",
+        "icon": "bx-file",
         "url": "/app/rab"
     },
 
     {
         "nama": "Jurnal Transaksi",
-        "icon": "bx-user-check",
+        "icon": "bx-money",
         "url": "/app/pemanfaat",
         "children": [{
             "nama": "Kelompok Pemanfaat",
@@ -46,7 +46,7 @@
     },
     {
         "nama": "Laporan",
-        "icon": "bx-calendar",
+        "icon": "bx-food-menu",
         "url": "/app/laporan"
     }
 ]
