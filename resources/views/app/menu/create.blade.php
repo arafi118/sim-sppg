@@ -17,7 +17,7 @@
                         <div class="mb-6">
                             <label class="form-label" for="nama_menu">Nama Menu</label>
                             <input type="text" class="form-control" id="nama_menu" name="nama_menu"
-                                placeholder="Nama Menu">
+                                placeholder="Nama Menu" autocomplete="off">
                         </div>
                     </div>
                 </div>
@@ -159,7 +159,46 @@
                 cancelButtonText: "Tidak"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $('#formMenu').submit();
+                    var form = $('#formMenu');
+                    $.ajax({
+                        url: form.attr('action'),
+                        type: 'POST',
+                        data: form.serialize(),
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    title: 'Sukses',
+                                    text: 'Menu berhasil disimpan. Tambahkan Menu Baru?',
+                                    icon: "success",
+                                    showCancelButton: true,
+                                    confirmButtonText: "Ya, Tambahkan",
+                                    cancelButtonText: "Tidak"
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        $('[data-repeater-item]').remove();
+                                        $('[data-repeater-create]').trigger('click');
+                                    } else {
+                                        window.location.href = '/app/menu';
+                                    }
+                                })
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal',
+                                    text: response.message ||
+                                        'Terjadi kesalahan saat menyimpan.'
+                                });
+                            }
+                        },
+                        error: function(xhr) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: xhr.responseJSON.error ||
+                                    'Terjadi kesalahan saat menyimpan.'
+                            });
+                        }
+                    });
                 }
             })
         });
