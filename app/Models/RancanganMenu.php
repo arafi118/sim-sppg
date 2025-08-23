@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class RancanganMenu extends Model
 {
     use HasFactory;
-
-    protected $guarded = ['id'];
-
+    protected $table = 'rancangan_menus';
+    protected $guarded = [];
+    
     public function rancangan()
     {
         return $this->belongsTo(Rancangan::class, 'rancangan_id');
