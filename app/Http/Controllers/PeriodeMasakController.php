@@ -4,15 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\PeriodeMasak;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Response;
 
 class PeriodeMasakController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if ($request->ajax()) {
+            $data = PeriodeMasak::get();
+
+            return DataTables::of($data)->make(true);
+        }
+
+        return view('app.periode-masak.index', ['title' => 'Periode Masak']);
     }
 
     /**
@@ -28,7 +37,32 @@ class PeriodeMasakController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->only([
+            'periode_ke',
+            'tanggal_awal',
+            'tanggal_akhir',
+        ]);
+        $rules = [
+            'periode_ke'    => 'required',
+            'tanggal_awal'  => 'required',
+            'tanggal_akhir' => 'required',
+        ];
+
+        $validate = Validator::make($data, $rules);
+        if ($validate->fails()) {
+            return response()->json($validate->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $periodeMasak = PeriodeMasak::create([
+            'periode_ke'    => $request->periode_ke,
+            'tanggal_awal'  => $request->tanggal_awal,
+            'tanggal_akhir' => $request->tanggal_akhir,
+        ]);
+
+        return response()->json([
+            'success'   => true,
+            'msg'       => 'Data berhasil disimpan!'
+        ]);
     }
 
     /**
@@ -52,7 +86,32 @@ class PeriodeMasakController extends Controller
      */
     public function update(Request $request, PeriodeMasak $periodeMasak)
     {
-        //
+        $data = $request->only([
+            'periode_ke',
+            'tanggal_awal',
+            'tanggal_akhir',
+        ]);
+        $rules = [
+            'periode_ke'    => 'required',
+            'tanggal_awal'  => 'required',
+            'tanggal_akhir' => 'required',
+        ];
+
+        $validate = Validator::make($data, $rules);
+        if ($validate->fails()) {
+            return response()->json($validate->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $periodeMasak->update([
+            'periode_ke'    => $request->periode_ke,
+            'tanggal_awal'  => $request->tanggal_awal,
+            'tanggal_akhir' => $request->tanggal_akhir,
+        ]);
+
+        return response()->json([
+            'success'   => true,
+            'msg'       => 'Data berhasil diperbarui!'
+        ]);
     }
 
     /**
@@ -60,6 +119,11 @@ class PeriodeMasakController extends Controller
      */
     public function destroy(PeriodeMasak $periodeMasak)
     {
-        //
+        $periodeMasak->delete();
+
+        return response()->json([
+            'success'   => true,
+            'message'   => 'Data berhasil dihapus!'
+        ]);
     }
 }
