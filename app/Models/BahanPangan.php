@@ -9,10 +9,15 @@ class BahanPangan extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $table = 'bahan_pangans'; 
+    protected $fillable = [];
 
     public function kelompokPangan()
     {
         return $this->belongsTo(KelompokPangan::class, 'kelompok_pangan_id');
+    }
+     public function resep()
+    {
+        return $this->hasMany(Resep::class);
     }
 }

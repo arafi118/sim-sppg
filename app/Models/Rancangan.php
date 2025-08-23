@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Rancangan extends Model
 {
     use HasFactory;
-    protected $guarded = ['id'];
+    protected $table = 'rancangans';
+    protected $guarded = [];
 
     public function periode()
     {

@@ -8,11 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Menu extends Model
 {
     use HasFactory;
-
-    protected $guarded = ['id'];
+    protected $table = 'menus';
+    protected $guarded = [];
 
     public function resep()
     {
         return $this->hasMany(Resep::class);
+    }
+      public function rancangMenu()
+    {
+        return $this->hasMany(RancanganMenu::class);
     }
 }
