@@ -6,6 +6,8 @@ use App\Models\KelompokPangan;
 use App\Models\Menu;
 use App\Models\Resep;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class MenuController extends Controller
 {
@@ -52,31 +54,56 @@ class MenuController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->only(['nama_menu', 'bahan']);
+
+        $validate = Validator::make($data, [
             'nama_menu' => 'required',
             'bahan' => 'required|array'
         ]);
 
-        $menu = Menu::create([
-            'nama' => $request->nama_menu,
-        ]);
-
-        $bahan = [];
-        foreach ($request->bahan as $item) {
-            $bahan[] = [
-                'menu_id' => $menu->id,
-                'bahan_pangan_id' => json_decode($item['nama_bahan'], true)['id'],
-                'gramasi' => $item['jumlah'],
-                'created_at' => now(),
-                'updated_at' => now()
-            ];
+        if ($validate->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validate->errors()->first()
+            ]);
         }
 
-        if (count($bahan) > 0) {
-            Resep::insert($bahan);
-        }
+        DB::beginTransaction();
 
-        return redirect('/app/menu')->with('success', 'Menu berhasil ditambahkan');
+        try {
+            $menu = Menu::create([
+                'nama' => $request->nama_menu,
+            ]);
+
+            $bahan = [];
+            foreach ($request->bahan as $item) {
+                $bahan[] = [
+                    'menu_id' => $menu->id,
+                    'bahan_pangan_id' => json_decode($item['nama_bahan'], true)['id'],
+                    'gramasi' => $item['jumlah'],
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ];
+            }
+
+            if (count($bahan) > 0) {
+                Resep::insert($bahan);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Menu berhasil disimpan',
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -108,32 +135,57 @@ class MenuController extends Controller
      */
     public function update(Request $request, Menu $menu)
     {
-        $request->validate([
+
+        $data = $request->only(['nama_menu', 'bahan']);
+        $validate = Validator::make($data, [
             'nama_menu' => 'required',
             'bahan' => 'required|array'
         ]);
+
+        if ($validate->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validate->errors()->first()
+            ]);
+        }
 
         Menu::where('id', $menu->id)->update([
             'nama' => $request->nama_menu,
         ]);
 
-        $bahan = [];
-        foreach ($request->bahan as $item) {
-            $bahan[] = [
-                'menu_id' => $menu->id,
-                'bahan_pangan_id' => json_decode($item['nama_bahan'], true)['id'],
-                'gramasi' => $item['jumlah'],
-                'created_at' => now(),
-                'updated_at' => now()
-            ];
-        }
+        DB::beginTransaction();
 
-        if (count($bahan) > 0) {
-            Resep::where('menu_id', $menu->id)->delete();
-            Resep::insert($bahan);
-        }
+        try {
+            $bahan = [];
+            foreach ($request->bahan as $item) {
+                $bahan[] = [
+                    'menu_id' => $menu->id,
+                    'bahan_pangan_id' => json_decode($item['nama_bahan'], true)['id'],
+                    'gramasi' => $item['jumlah'],
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ];
+            }
 
-        return redirect('/app/menu')->with('success', 'Menu berhasil diperbarui');
+            if (count($bahan) > 0) {
+                Resep::where('menu_id', $menu->id)->delete();
+                Resep::insert($bahan);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Menu berhasil disimpan',
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage()
+            ]);
+        }
     }
 
     /**

@@ -175,7 +175,38 @@
                 cancelButtonText: "Tidak"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $('#formMenu').submit();
+                    var form = $('#formMenu');
+                    $.ajax({
+                        url: form.attr('action'),
+                        type: 'POST',
+                        data: form.serialize(),
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    title: 'Sukses',
+                                    text: response.message || 'Menu berhasil disimpan.',
+                                    icon: "success",
+                                }).then((result) => {
+                                    window.location.href = '/app/menu';
+                                })
+                            } else {
+                                Swal.fire({
+                                    title: 'Gagal',
+                                    text: response.message ||
+                                        'Terjadi kesalahan saat menyimpan.',
+                                    icon: "error"
+                                });
+                            }
+                        },
+                        error: function(xhr) {
+                            Swal.fire({
+                                title: 'Error',
+                                text: xhr.responseJSON.error ||
+                                    'Terjadi kesalahan saat menyimpan.',
+                                icon: "error"
+                            });
+                        }
+                    })
                 }
             })
         });
