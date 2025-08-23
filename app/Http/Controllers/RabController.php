@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -7,14 +8,16 @@ use App\Models\RancangMenu;
 use App\Models\Menu;
 use App\Models\Resep;
 use App\Models\BahanPangan;
+use App\Models\PeriodeMasak;
 
 class RabController extends Controller
 {
     public function index()
     {
-        $title = 'Rab';
-        return view('app.rab.index', compact('title'));
+        $periode = PeriodeMasak::orderBy('tanggal_awal', 'desc')->get();
 
+        $title = 'Rencana Anggaran Biaya (RAB)';
+        return view('app.rab.index', compact('title', 'periode'));
     }
 
     public function generate(Request $request)
