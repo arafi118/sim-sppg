@@ -184,9 +184,8 @@
                 text: "Data Periode Masak akan dihapus permanen!",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: "Hapus",
+                confirmButtonText: "Ya, Hapus",
                 cancelButtonText: "Batal",
-                reverseButtons: true
             }).then(res => {
                 if (res.isConfirmed) {
                     let form = $('#FormHapusPeriode');

@@ -100,9 +100,8 @@
                 text: "Data Pemanfaat akan dihapus permanen!",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: "Hapus",
-                cancelButtonText: "Batal",
-                reverseButtons: true
+                confirmButtonText: "Ya, Hapus",
+                cancelButtonText: "Batal"
             }).then(res => {
                 if (res.isConfirmed) {
                     let form = $('#FormHapusPemanfaat');
