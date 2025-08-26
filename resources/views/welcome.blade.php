@@ -22,7 +22,7 @@
     <meta property="og:site_name" content="ThemeSelection" />
     <link rel="canonical" href="https://themeselection.com/item/sneat-dashboard-pro-bootstrap/" />
     <script>
-        (function (w, d, s, l, i) {
+        (function(w, d, s, l, i) {
             w[l] = w[l] || [];
             w[l].push({
                 'gtm.start': new Date().getTime(),
@@ -35,7 +35,6 @@
             j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
             f.parentNode.insertBefore(j, f);
         })(window, document, 'script', 'dataLayer', 'GTM-5DDHKGP');
-
     </script>
     <link rel="icon" type="image/x-icon" href="/assets/img/favicon/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -73,8 +72,8 @@
                     <a href="landing-page.html" class="app-brand-link">
                         <span class="app-brand-logo demo">
                             <span class="text-primary">
-                                <svg width="25" viewBox="0 0 25 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                                <svg width="25" viewBox="0 0 25 42" version="1.1"
+                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     <defs>
                                         <path
                                             d="M13.7918663,0.358365126 L3.39788168,7.44174259 C0.566865006,9.69408886 -0.379795268,12.4788597 0.557900856,15.7960551 C0.68998853,16.2305145 1.09562888,17.7872135 3.12357076,19.2293357 C3.8146334,19.7207684 5.32369333,20.3834223 7.65075054,21.2172976 L7.59773219,21.2525164 L2.63468769,24.5493413 C0.445452254,26.3002124 0.0884951797,28.5083815 1.56381646,31.1738486 C2.83770406,32.8170431 5.20850219,33.2640127 7.09180128,32.5391577 C8.347334,32.0559211 11.4559176,30.0011079 16.4175519,26.3747182 C18.0338572,24.4997857 18.6973423,22.4544883 18.4080071,20.2388261 C17.963753,17.5346866 16.1776345,15.5799961 13.0496516,14.3747546 L10.9194936,13.4715819 L18.6192054,7.984237 L13.7918663,0.358365126 Z"
@@ -89,7 +88,8 @@
                                             d="M20.6,7.13333333 L25.6,13.8 C26.2627417,14.6836556 26.0836556,15.9372583 25.2,16.6 C24.8538077,16.8596443 24.4327404,17 24,17 L14,17 C12.8954305,17 12,16.1045695 12,15 C12,14.5672596 12.1403557,14.1461923 12.4,13.8 L17.4,7.13333333 C18.0627417,6.24967773 19.3163444,6.07059163 20.2,6.73333333 C20.3516113,6.84704183 20.4862915,6.981722 20.6,7.13333333 Z"
                                             id="path-5"></path>
                                     </defs>
-                                    <g id="g-app-brand" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <g id="g-app-brand" stroke="none" stroke-width="1" fill="none"
+                                        fill-rule="evenodd">
                                         <g id="Brand-Logo" transform="translate(-27.000000, -15.000000)">
                                             <g id="Icon" transform="translate(27.000000, 15.000000)">
                                                 <g id="Mask" transform="translate(0.000000, 8.000000)">
@@ -124,7 +124,8 @@
                     </a>
                 </div>
                 <div class="collapse navbar-collapse landing-nav-menu" id="navbarSupportedContent">
-                    <button class="navbar-toggler border-0 text-heading position-absolute end-0 top-0 scaleX-n1-rtl p-2"
+                    <button
+                        class="navbar-toggler border-0 text-heading position-absolute end-0 top-0 scaleX-n1-rtl p-2"
                         type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <i class="icon-base bx bx-x icon-lg"></i>
@@ -182,7 +183,8 @@
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link mega-dropdown-link" href="help-center-landing.html">
+                                                <a class="nav-link mega-dropdown-link"
+                                                    href="help-center-landing.html">
                                                     <i class="icon-base bx bx-radio-circle me-1"></i>
                                                     <span data-i18n="Help Center">Help Center</span>
                                                 </a>
@@ -199,31 +201,36 @@
                                         </div>
                                         <ul class="nav flex-column">
                                             <li class="nav-item">
-                                                <a class="nav-link mega-dropdown-link" href="#" target="_blank">
+                                                <a class="nav-link mega-dropdown-link" href="#"
+                                                    target="_blank">
                                                     <i class="icon-base bx bx-radio-circle me-1"></i>
                                                     Login (Basic)
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link mega-dropdown-link" href="#" target="_blank">
+                                                <a class="nav-link mega-dropdown-link" href="#"
+                                                    target="_blank">
                                                     <i class="icon-base bx bx-radio-circle me-1"></i>
                                                     Login (Cover)
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link mega-dropdown-link" href="#" target="_blank">
+                                                <a class="nav-link mega-dropdown-link" href="#"
+                                                    target="_blank">
                                                     <i class="icon-base bx bx-radio-circle me-1"></i>
                                                     Register (Basic)
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link mega-dropdown-link" href="#" target="_blank">
+                                                <a class="nav-link mega-dropdown-link" href="#"
+                                                    target="_blank">
                                                     <i class="icon-base bx bx-radio-circle me-1"></i>
                                                     Register (Cover)
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link mega-dropdown-link" href="#" target="_blank">
+                                                <a class="nav-link mega-dropdown-link" href="#"
+                                                    target="_blank">
                                                     <i class="icon-base bx bx-radio-circle me-1"></i>
                                                     Register (Multi-steps)
                                                 </a>
@@ -262,7 +269,8 @@
                             <li>
                                 <button type="button" class="dropdown-item align-items-center"
                                     data-bs-theme-value="dark" aria-pressed="true">
-                                    <span><i class="icon-base bx bx-moon icon-md me-3" data-icon="moon"></i>Dark</span>
+                                    <span><i class="icon-base bx bx-moon icon-md me-3"
+                                            data-icon="moon"></i>Dark</span>
                                 </button>
                             </li>
                             <li>
@@ -275,9 +283,9 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="#" class="btn btn-primary" target="_blank"><span
+                        <a href="/auth" class="btn btn-primary" target="_blank"><span
                                 class="tf-icons icon-base bx bx-log-in-circle scaleX-n1-rtl me-md-1"></span><span
-                                class="d-none d-md-block">Login/Register</span></a>
+                                class="d-none d-md-block">Login</span></a>
                     </li>
                 </ul>
             </div>
@@ -298,26 +306,11 @@
                             for Reliability and Customizability.
                         </h2>
                         <div class="landing-hero-btn d-inline-block position-relative">
-                            <span class="hero-btn-item position-absolute d-none d-md-flex fw-medium">Join community <img
-                                    src="../../assets/img/front-pages/icons/Join-community-arrow.png"
+                            <span class="hero-btn-item position-absolute d-none d-md-flex fw-medium">Join community
+                                <img src="../../assets/img/front-pages/icons/Join-community-arrow.png"
                                     alt="Join community arrow" class="scaleX-n1-rtl" /></span>
                             <a href="#landingPricing" class="btn btn-primary btn-lg">Get early access</a>
                         </div>
-                    </div>
-                    <div id="heroDashboardAnimation" class="hero-animation-img">
-                        <a href="../vertical-menu-template/app-ecommerce-dashboard.html" target="_blank">
-                            <div id="heroAnimationImg" class="position-relative hero-dashboard-img">
-                                <img src="../../assets/img/front-pages/landing-page/hero-dashboard-light.png"
-                                    alt="hero dashboard" class="animation-img"
-                                    data-app-light-img="front-pages/landing-page/hero-dashboard-light.png"
-                                    data-app-dark-img="front-pages/landing-page/hero-dashboard-dark.png" />
-                                <img src="../../assets/img/front-pages/landing-page/hero-elements-light.png"
-                                    alt="hero elements"
-                                    class="position-absolute hero-elements-img animation-img top-0 start-0"
-                                    data-app-light-img="front-pages/landing-page/hero-elements-light.png"
-                                    data-app-dark-img="front-pages/landing-page/hero-elements-dark.png" />
-                            </div>
-                        </a>
                     </div>
                 </div>
             </div>
@@ -1182,14 +1175,14 @@
                             </div>
                             <div class="card accordion-item">
                                 <h2 class="accordion-header" id="headingTwo">
-                                    <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
-                                        data-bs-target="#accordionTwo" aria-expanded="false"
-                                        aria-controls="accordionTwo">Do I need to purchase a
+                                    <button type="button" class="accordion-button collapsed"
+                                        data-bs-toggle="collapse" data-bs-target="#accordionTwo"
+                                        aria-expanded="false" aria-controls="accordionTwo">Do I need to purchase a
                                         license for each
                                         website?</button>
                                 </h2>
-                                <div id="accordionTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                                    data-bs-parent="#accordionExample">
+                                <div id="accordionTwo" class="accordion-collapse collapse"
+                                    aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                     <div class="accordion-body">Dessert ice cream donut oat cake jelly-o pie sugar plum
                                         cheesecake. Bear claw dragée oat cake dragée ice cream halvah tootsie roll.
                                         Danish cake oat cake pie macaroon tart donut gummies. Jelly beans candy canes
@@ -1218,9 +1211,9 @@
                             </div>
                             <div class="card accordion-item">
                                 <h2 class="accordion-header" id="headingFour">
-                                    <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
-                                        data-bs-target="#accordionFour" aria-expanded="false"
-                                        aria-controls="accordionFour">What is extended
+                                    <button type="button" class="accordion-button collapsed"
+                                        data-bs-toggle="collapse" data-bs-target="#accordionFour"
+                                        aria-expanded="false" aria-controls="accordionFour">What is extended
                                         license?</button>
                                 </h2>
                                 <div id="accordionFour" class="accordion-collapse collapse"
@@ -1234,9 +1227,9 @@
                             </div>
                             <div class="card accordion-item">
                                 <h2 class="accordion-header" id="headingFive">
-                                    <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
-                                        data-bs-target="#accordionFive" aria-expanded="false"
-                                        aria-controls="accordionFive">Which license is
+                                    <button type="button" class="accordion-button collapsed"
+                                        data-bs-toggle="collapse" data-bs-target="#accordionFive"
+                                        aria-expanded="false" aria-controls="accordionFive">Which license is
                                         applicable for SASS
                                         application?</button>
                                 </h2>
@@ -1290,7 +1283,8 @@
                                                     class="icon-base bx bx-phone-call icon-lg"></i></div>
                                             <div>
                                                 <p class="mb-0">Phone</p>
-                                                <h6 class="mb-0"><a href="tel:+1234-568-963" class="text-heading">+1234
+                                                <h6 class="mb-0"><a href="tel:+1234-568-963"
+                                                        class="text-heading">+1234
                                                         568 963</a></h6>
                                             </div>
                                         </div>
@@ -1322,8 +1316,7 @@
                                         </div>
                                         <div class="col-12">
                                             <label class="form-label" for="contact-form-message">Message</label>
-                                            <textarea id="contact-form-message" class="form-control" rows="11"
-                                                placeholder="Write a message"></textarea>
+                                            <textarea id="contact-form-message" class="form-control" rows="11" placeholder="Write a message"></textarea>
                                         </div>
                                         <div class="col-12">
                                             <button type="submit" class="btn btn-primary">Send inquiry</button>
@@ -1347,8 +1340,8 @@
                             <span class="app-brand-logo demo">
                                 <span class="text-primary">
 
-                                    <svg width="25" viewBox="0 0 25 42" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                                        xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <svg width="25" viewBox="0 0 25 42" version="1.1"
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                         <defs>
                                             <path
                                                 d="M13.7918663,0.358365126 L3.39788168,7.44174259 C0.566865006,9.69408886 -0.379795268,12.4788597 0.557900856,15.7960551 C0.68998853,16.2305145 1.09562888,17.7872135 3.12357076,19.2293357 C3.8146334,19.7207684 5.32369333,20.3834223 7.65075054,21.2172976 L7.59773219,21.2525164 L2.63468769,24.5493413 C0.445452254,26.3002124 0.0884951797,28.5083815 1.56381646,31.1738486 C2.83770406,32.8170431 5.20850219,33.2640127 7.09180128,32.5391577 C8.347334,32.0559211 11.4559176,30.0011079 16.4175519,26.3747182 C18.0338572,24.4997857 18.6973423,22.4544883 18.4080071,20.2388261 C17.963753,17.5346866 16.1776345,15.5799961 13.0496516,14.3747546 L10.9194936,13.4715819 L18.6192054,7.984237 L13.7918663,0.358365126 Z"
@@ -1374,12 +1367,14 @@
                                                         <use fill="currentColor" xlink:href="#path-1"></use>
                                                         <g id="Path-3" mask="url(#mask-2)">
                                                             <use fill="currentColor" xlink:href="#path-3"></use>
-                                                            <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-3">
+                                                            <use fill-opacity="0.2" fill="#FFFFFF"
+                                                                xlink:href="#path-3">
                                                             </use>
                                                         </g>
                                                         <g id="Path-4" mask="url(#mask-2)">
                                                             <use fill="currentColor" xlink:href="#path-4"></use>
-                                                            <use fill-opacity="0.2" fill="#FFFFFF" xlink:href="#path-4">
+                                                            <use fill-opacity="0.2" fill="#FFFFFF"
+                                                                xlink:href="#path-4">
                                                             </use>
                                                         </g>
                                                     </g>
@@ -1473,7 +1468,6 @@
                     <span class="footer-bottom-text">©
                         <script>
                             document.write(new Date().getFullYear());
-
                         </script>
                     </span>
                     <a href="https://themeselection.com" target="_blank" class="text-white">ThemeSelection,</a>
