@@ -4,7 +4,7 @@
     else if ("function" == typeof define && define.amd) define([], e);
     else {
         var o = e();
-        for (var i in o) ("object" == typeof exports ? exports : t)[i] = o[i];
+        for (var i in o)("object" == typeof exports ? exports : t)[i] = o[i];
     }
 })(self, function () {
     return (function () {
@@ -21,12 +21,12 @@
                         u = s()(n()),
                         d = l()(c);
                     u.push([
-                        t.id,
-                        '#template-customizer{position:fixed;z-index:99999999;display:flex;flex-direction:column;block-size:100%;-webkit-box-direction:normal;-webkit-box-orient:vertical;box-shadow:0 .3125rem 1.375rem 0 rgba(34,48,62,.18);font-family:"Public Sans",-apple-system,blinkmacsystemfont,"Segoe UI",Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",sans-serif;font-size:inherit;inline-size:400px;inset-block-start:0;inset-inline-end:0;transform:translateX(420px);transition:transform .2s ease-in}[data-bs-theme=dark] #template-customizer{box-shadow:0 .3125rem 1.375rem 0 rgba(20,20,29,.26)}#template-customizer h5{position:relative;font-size:11px}#template-customizer .form-label{font-size:.9375rem;font-weight:500}#template-customizer .template-customizer-colors-options{display:flex;flex-direction:row;justify-content:space-around;margin:0;gap:.3rem}#template-customizer .template-customizer-colors-options .custom-option{inline-size:50px}#template-customizer .template-customizer-colors-options .custom-option .custom-option-content{padding:0;min-block-size:46px}#template-customizer .template-customizer-colors-options .custom-option .custom-option-content .pcr-button{padding:.625rem;block-size:30px;inline-size:30px}#template-customizer .template-customizer-colors-options .custom-option .custom-option-content .pcr-button::before,#template-customizer .template-customizer-colors-options .custom-option .custom-option-content .pcr-button::after{border-radius:.5rem}#template-customizer .template-customizer-colors-options .custom-option .custom-option-content .pcr-button:focus{box-shadow:none}#template-customizer .template-customizer-colors-options .custom-option-body{border-radius:.5rem;block-size:30px;inline-size:30px}#template-customizer .custom-option-icon{padding:0}#template-customizer .custom-option-icon .custom-option-content{display:flex;align-items:center;justify-content:center;min-block-size:50px}#template-customizer hr{border-color:var(--bs-border-color)}#template-customizer .custom-option{border-width:2px;margin:0}#template-customizer .custom-option.custom-option-image .custom-option-content .custom-option-body svg{inline-size:100%}#template-customizer.template-customizer-open{transform:none;transition-delay:.1s}#template-customizer.template-customizer-open .template-customizer-theme .custom-option.checked{background-color:rgba(var(--bs-primary-rgb), 0.08)}#template-customizer.template-customizer-open .template-customizer-theme .custom-option.checked *,#template-customizer.template-customizer-open .template-customizer-theme .custom-option.checked *::before,#template-customizer.template-customizer-open .template-customizer-theme .custom-option.checked *::after{color:var(--bs-primary)}#template-customizer.template-customizer-open .custom-option.checked{border-width:2px;color:var(--bs-primary)}#template-customizer.template-customizer-open .custom-option.checked .custom-option-content{border:none}#template-customizer .template-customizer-header a:hover,#template-customizer .template-customizer-header a:hover .icon-base{color:inherit !important}#template-customizer .template-customizer-open-btn{position:absolute;z-index:-1;display:block;background:var(--bs-primary);block-size:38px;border-end-start-radius:.375rem;border-start-start-radius:.375rem;box-shadow:0 .125rem .25rem 0 rgba(var(--bs-primary-rgb), 0.4);color:#fff;font-size:18px;inline-size:38px;inset-block-start:180px;inset-inline-start:0;line-height:38px;opacity:1;text-align:center;transform:translateX(-58px);transition:all .1s linear .2s}#template-customizer .template-customizer-open-btn::before{position:absolute;display:block;background-image:url(' +
+                            t.id,
+                            '#template-customizer{position:fixed;z-index:99999999;display:flex;flex-direction:column;block-size:100%;-webkit-box-direction:normal;-webkit-box-orient:vertical;box-shadow:0 .3125rem 1.375rem 0 rgba(34,48,62,.18);font-family:"Public Sans",-apple-system,blinkmacsystemfont,"Segoe UI",Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",sans-serif;font-size:inherit;inline-size:400px;inset-block-start:0;inset-inline-end:0;transform:translateX(420px);transition:transform .2s ease-in}[data-bs-theme=dark] #template-customizer{box-shadow:0 .3125rem 1.375rem 0 rgba(20,20,29,.26)}#template-customizer h5{position:relative;font-size:11px}#template-customizer .form-label{font-size:.9375rem;font-weight:500}#template-customizer .template-customizer-colors-options{display:flex;flex-direction:row;justify-content:space-around;margin:0;gap:.3rem}#template-customizer .template-customizer-colors-options .custom-option{inline-size:50px}#template-customizer .template-customizer-colors-options .custom-option .custom-option-content{padding:0;min-block-size:46px}#template-customizer .template-customizer-colors-options .custom-option .custom-option-content .pcr-button{padding:.625rem;block-size:30px;inline-size:30px}#template-customizer .template-customizer-colors-options .custom-option .custom-option-content .pcr-button::before,#template-customizer .template-customizer-colors-options .custom-option .custom-option-content .pcr-button::after{border-radius:.5rem}#template-customizer .template-customizer-colors-options .custom-option .custom-option-content .pcr-button:focus{box-shadow:none}#template-customizer .template-customizer-colors-options .custom-option-body{border-radius:.5rem;block-size:30px;inline-size:30px}#template-customizer .custom-option-icon{padding:0}#template-customizer .custom-option-icon .custom-option-content{display:flex;align-items:center;justify-content:center;min-block-size:50px}#template-customizer hr{border-color:var(--bs-border-color)}#template-customizer .custom-option{border-width:2px;margin:0}#template-customizer .custom-option.custom-option-image .custom-option-content .custom-option-body svg{inline-size:100%}#template-customizer.template-customizer-open{transform:none;transition-delay:.1s}#template-customizer.template-customizer-open .template-customizer-theme .custom-option.checked{background-color:rgba(var(--bs-primary-rgb), 0.08)}#template-customizer.template-customizer-open .template-customizer-theme .custom-option.checked *,#template-customizer.template-customizer-open .template-customizer-theme .custom-option.checked *::before,#template-customizer.template-customizer-open .template-customizer-theme .custom-option.checked *::after{color:var(--bs-primary)}#template-customizer.template-customizer-open .custom-option.checked{border-width:2px;color:var(--bs-primary)}#template-customizer.template-customizer-open .custom-option.checked .custom-option-content{border:none}#template-customizer .template-customizer-header a:hover,#template-customizer .template-customizer-header a:hover .icon-base{color:inherit !important}#template-customizer .template-customizer-open-btn{position:absolute;z-index:-1;display:block;background:var(--bs-primary);block-size:38px;border-end-start-radius:.375rem;border-start-start-radius:.375rem;box-shadow:0 .125rem .25rem 0 rgba(var(--bs-primary-rgb), 0.4);color:#fff;font-size:18px;inline-size:38px;inset-block-start:180px;inset-inline-start:0;line-height:38px;opacity:1;text-align:center;transform:translateX(-58px);transition:all .1s linear .2s}#template-customizer .template-customizer-open-btn::before{position:absolute;display:block;background-image:url(' +
                             d +
                             ');background-size:100% 100%;block-size:22px;content:"";inline-size:22px;inset-block-start:50%;inset-inline-start:50%;transform:translate(-50%, -50%)}:dir(rtl) #template-customizer .template-customizer-open-btn::before{margin-inline-start:2px;transform:translate(50%, -50%)}.customizer-hide #template-customizer .template-customizer-open-btn{display:none}:dir(rtl) #template-customizer .template-customizer-open-btn{transform:translateX(58px)}#template-customizer.template-customizer-open .template-customizer-open-btn{opacity:0;transform:none;transition-delay:0s}#template-customizer .template-customizer-inner{position:relative;overflow:auto;flex:0 1 auto;-webkit-box-flex:0;opacity:1;transition:opacity .2s}@media(max-width: 1200px){#template-customizer{display:none;visibility:hidden}}.layout-menu-100vh #template-customizer{block-size:100dvh}:dir(rtl) #template-customizer:not(.template-customizer-open){transform:translateX(-420px)}',
-                        "",
-                    ]),
+                            "",
+                        ]),
                         (e.Z = u);
                 },
                 3645: function (t) {
@@ -39,19 +39,19 @@
                                         i = void 0 !== e[5];
                                     return (
                                         e[4] &&
-                                            (o += "@supports (".concat(
-                                                e[4],
-                                                ") {"
-                                            )),
+                                        (o += "@supports (".concat(
+                                            e[4],
+                                            ") {"
+                                        )),
                                         e[2] &&
-                                            (o += "@media ".concat(e[2], " {")),
+                                        (o += "@media ".concat(e[2], " {")),
                                         i &&
-                                            (o += "@layer".concat(
-                                                e[5].length > 0
-                                                    ? " ".concat(e[5])
-                                                    : "",
-                                                " {"
-                                            )),
+                                        (o += "@layer".concat(
+                                            e[5].length > 0 ?
+                                            " ".concat(e[5]) :
+                                            "",
+                                            " {"
+                                        )),
                                         (o += t(e)),
                                         i && (o += "}"),
                                         e[2] && (o += "}"),
@@ -62,7 +62,9 @@
                             }),
                             (e.i = function (t, o, i, n, a) {
                                 "string" == typeof t &&
-                                    (t = [[null, t, void 0]]);
+                                    (t = [
+                                        [null, t, void 0]
+                                    ]);
                                 var s = {};
                                 if (i)
                                     for (var r = 0; r < this.length; r++) {
@@ -72,31 +74,31 @@
                                 for (var c = 0; c < t.length; c++) {
                                     var u = [].concat(t[c]);
                                     (i && s[u[0]]) ||
-                                        (void 0 !== a &&
-                                            (void 0 === u[5] ||
-                                                (u[1] = "@layer"
-                                                    .concat(
-                                                        u[5].length > 0
-                                                            ? " ".concat(u[5])
-                                                            : "",
-                                                        " {"
-                                                    )
-                                                    .concat(u[1], "}")),
+                                    (void 0 !== a &&
+                                        (void 0 === u[5] ||
+                                            (u[1] = "@layer"
+                                                .concat(
+                                                    u[5].length > 0 ?
+                                                    " ".concat(u[5]) :
+                                                    "",
+                                                    " {"
+                                                )
+                                                .concat(u[1], "}")),
                                             (u[5] = a)),
                                         o &&
-                                            (u[2]
-                                                ? ((u[1] = "@media "
-                                                      .concat(u[2], " {")
-                                                      .concat(u[1], "}")),
-                                                  (u[2] = o))
-                                                : (u[2] = o)),
+                                        (u[2] ?
+                                            ((u[1] = "@media "
+                                                    .concat(u[2], " {")
+                                                    .concat(u[1], "}")),
+                                                (u[2] = o)) :
+                                            (u[2] = o)),
                                         n &&
-                                            (u[4]
-                                                ? ((u[1] = "@supports ("
-                                                      .concat(u[4], ") {")
-                                                      .concat(u[1], "}")),
-                                                  (u[4] = n))
-                                                : (u[4] = "".concat(n))),
+                                        (u[4] ?
+                                            ((u[1] = "@supports ("
+                                                    .concat(u[4], ") {")
+                                                    .concat(u[1], "}")),
+                                                (u[4] = n)) :
+                                            (u[4] = "".concat(n))),
                                         e.push(u));
                                 }
                             }),
@@ -108,20 +110,20 @@
                     t.exports = function (t, e) {
                         return (
                             e || (e = {}),
+                            t ?
+                            ((t = String(t.__esModule ? t.default : t)),
+                                /^['"].*['"]$/.test(t) &&
+                                (t = t.slice(1, -1)),
+                                e.hash && (t += e.hash),
+                                /["'() \t\n]|(%20)/.test(t) || e.needQuotes ?
+                                '"'.concat(
+                                    t
+                                    .replace(/"/g, '\\"')
+                                    .replace(/\n/g, "\\n"),
+                                    '"'
+                                ) :
+                                t) :
                             t
-                                ? ((t = String(t.__esModule ? t.default : t)),
-                                  /^['"].*['"]$/.test(t) &&
-                                      (t = t.slice(1, -1)),
-                                  e.hash && (t += e.hash),
-                                  /["'() \t\n]|(%20)/.test(t) || e.needQuotes
-                                      ? '"'.concat(
-                                            t
-                                                .replace(/"/g, '\\"')
-                                                .replace(/\n/g, "\\n"),
-                                            '"'
-                                        )
-                                      : t)
-                                : t
                         );
                     };
                 },
@@ -161,11 +163,11 @@
                             else {
                                 var h = n(p, i);
                                 (i.byIndex = r),
-                                    e.splice(r, 0, {
-                                        identifier: d,
-                                        updater: h,
-                                        references: 1,
-                                    });
+                                e.splice(r, 0, {
+                                    identifier: d,
+                                    updater: h,
+                                    references: 1,
+                                });
                             }
                             s.push(d);
                         }
@@ -266,16 +268,16 @@
                                             ") {"
                                         )),
                                         o.media &&
-                                            (i += "@media ".concat(
-                                                o.media,
-                                                " {"
-                                            ));
+                                        (i += "@media ".concat(
+                                            o.media,
+                                            " {"
+                                        ));
                                     var n = void 0 !== o.layer;
                                     n &&
                                         (i += "@layer".concat(
-                                            o.layer.length > 0
-                                                ? " ".concat(o.layer)
-                                                : "",
+                                            o.layer.length > 0 ?
+                                            " ".concat(o.layer) :
+                                            "",
                                             " {"
                                         )),
                                         (i += o.css),
@@ -312,7 +314,7 @@
                     t.exports = function (t, e) {
                         if (e.styleSheet) e.styleSheet.cssText = t;
                         else {
-                            for (; e.firstChild; ) e.removeChild(e.firstChild);
+                            for (; e.firstChild;) e.removeChild(e.firstChild);
                             e.appendChild(document.createTextNode(t));
                         }
                     };
@@ -334,46 +336,46 @@
             return t[i](a, a.exports, o), a.exports;
         }
         (o.m = t),
-            (o.n = function (t) {
-                var e =
-                    t && t.__esModule
-                        ? function () {
-                              return t.default;
-                          }
-                        : function () {
-                              return t;
-                          };
-                return (
-                    o.d(e, {
-                        a: e,
-                    }),
-                    e
-                );
-            }),
-            (o.d = function (t, e) {
-                for (var i in e)
-                    o.o(e, i) &&
-                        !o.o(t, i) &&
-                        Object.defineProperty(t, i, {
-                            enumerable: !0,
-                            get: e[i],
-                        });
-            }),
-            (o.o = function (t, e) {
-                return Object.prototype.hasOwnProperty.call(t, e);
-            }),
-            (o.r = function (t) {
-                "undefined" != typeof Symbol &&
-                    Symbol.toStringTag &&
-                    Object.defineProperty(t, Symbol.toStringTag, {
-                        value: "Module",
-                    }),
-                    Object.defineProperty(t, "__esModule", {
-                        value: !0,
-                    });
-            }),
-            (o.b = document.baseURI || self.location.href),
-            (o.nc = void 0);
+        (o.n = function (t) {
+            var e =
+                t && t.__esModule ?
+                function () {
+                    return t.default;
+                } :
+                function () {
+                    return t;
+                };
+            return (
+                o.d(e, {
+                    a: e,
+                }),
+                e
+            );
+        }),
+        (o.d = function (t, e) {
+            for (var i in e)
+                o.o(e, i) &&
+                !o.o(t, i) &&
+                Object.defineProperty(t, i, {
+                    enumerable: !0,
+                    get: e[i],
+                });
+        }),
+        (o.o = function (t, e) {
+            return Object.prototype.hasOwnProperty.call(t, e);
+        }),
+        (o.r = function (t) {
+            "undefined" != typeof Symbol &&
+                Symbol.toStringTag &&
+                Object.defineProperty(t, Symbol.toStringTag, {
+                    value: "Module",
+                }),
+                Object.defineProperty(t, "__esModule", {
+                    value: !0,
+                });
+        }),
+        (o.b = document.baseURI || self.location.href),
+        (o.nc = void 0);
         var i = {};
         return (
             (function () {
@@ -398,28 +400,28 @@
                     h = o(7621),
                     g = {};
                 (g.styleTagTransform = p()),
-                    (g.setAttributes = c()),
-                    (g.insert = r().bind(null, "head")),
-                    (g.domAPI = a()),
-                    (g.insertStyleElement = d());
+                (g.setAttributes = c()),
+                (g.insert = r().bind(null, "head")),
+                (g.domAPI = a()),
+                (g.insertStyleElement = d());
                 e()(h.Z, g), h.Z && h.Z.locals && h.Z.locals;
 
                 function v(t) {
                     return (
                         (v =
                             "function" == typeof Symbol &&
-                            "symbol" == typeof Symbol.iterator
-                                ? function (t) {
-                                      return typeof t;
-                                  }
-                                : function (t) {
-                                      return t &&
-                                          "function" == typeof Symbol &&
-                                          t.constructor === Symbol &&
-                                          t !== Symbol.prototype
-                                          ? "symbol"
-                                          : typeof t;
-                                  }),
+                            "symbol" == typeof Symbol.iterator ?
+                            function (t) {
+                                return typeof t;
+                            } :
+                            function (t) {
+                                return t &&
+                                    "function" == typeof Symbol &&
+                                    t.constructor === Symbol &&
+                                    t !== Symbol.prototype ?
+                                    "symbol" :
+                                    typeof t;
+                            }),
                         v(t)
                     );
                 }
@@ -428,8 +430,8 @@
                     for (var o = 0; o < e.length; o++) {
                         var i = e[o];
                         (i.enumerable = i.enumerable || !1),
-                            (i.configurable = !0),
-                            "value" in i && (i.writable = !0),
+                        (i.configurable = !0),
+                        "value" in i && (i.writable = !0),
                             Object.defineProperty(t, f(i.key), i);
                     }
                 }
@@ -465,28 +467,28 @@
                     ],
                     k = ["light", "dark", "system"],
                     S = document.documentElement.classList;
-                y = S.contains("layout-navbar-fixed")
-                    ? "sticky"
-                    : S.contains("layout-navbar-hidden")
-                    ? "hidden"
-                    : "static";
+                y = S.contains("layout-navbar-fixed") ?
+                    "sticky" :
+                    S.contains("layout-navbar-hidden") ?
+                    "hidden" :
+                    "static";
                 var z,
                     w =
-                        document.documentElement.getAttribute(
-                            "data-bs-theme"
-                        ) || "light",
+                    document.documentElement.getAttribute(
+                        "data-bs-theme"
+                    ) || "light",
                     C =
-                        document
-                            .getElementsByTagName("HTML")[0]
-                            .getAttribute("data-skin") || 0,
+                    document
+                    .getElementsByTagName("HTML")[0]
+                    .getAttribute("data-skin") || 0,
                     x = S.contains("layout-wide") ? "wide" : "compact",
-                    A = S.contains("layout-menu-offcanvas")
-                        ? "static-offcanvas"
-                        : S.contains("layout-menu-fixed")
-                        ? "fixed"
-                        : S.contains("layout-menu-fixed-offcanvas")
-                        ? "fixed-offcanvas"
-                        : "static",
+                    A = S.contains("layout-menu-offcanvas") ?
+                    "static-offcanvas" :
+                    S.contains("layout-menu-fixed") ?
+                    "fixed" :
+                    S.contains("layout-menu-fixed-offcanvas") ?
+                    "fixed-offcanvas" :
+                    "static",
                     L = !!S.contains("layout-menu-collapsed"),
                     E = y,
                     N = "rtl" === document.documentElement.getAttribute("dir"),
@@ -520,86 +522,86 @@
                                 F = e.onSettingsChange;
                             if (
                                 ((function (t, e) {
-                                    if (!(t instanceof e))
-                                        throw new TypeError(
-                                            "Cannot call a class as a function"
-                                        );
-                                })(this, t),
-                                !this._ssr)
+                                        if (!(t instanceof e))
+                                            throw new TypeError(
+                                                "Cannot call a class as a function"
+                                            );
+                                    })(this, t),
+                                    !this._ssr)
                             ) {
                                 if (!window.Helpers)
                                     throw new Error("window.Helpers required.");
                                 if (
                                     ((this.settings = {}),
-                                    (this.settings.displayCustomizer =
-                                        void 0 === o || o),
-                                    (this.settings.lang = i || "en"),
-                                    n
-                                        ? ((this.settings.defaultPrimaryColor =
-                                              n),
-                                          (z = !0))
-                                        : ((this.settings.defaultPrimaryColor =
-                                              O.getPropertyValue(
-                                                  "--bs-primary"
-                                              ).trim()),
-                                          (z = !1)),
-                                    (this.settings.defaultTheme = s || w),
-                                    (this.settings.defaultSemiDark =
-                                        void 0 !== r && r),
-                                    (this.settings.defaultContentLayout =
-                                        void 0 !== l ? l : x),
-                                    (this.settings.defaultHeaderType = c || A),
-                                    (this.settings.defaultMenuCollapsed =
-                                        void 0 !== u ? u : L),
-                                    (this.settings.defaultNavbarType =
-                                        void 0 !== d ? d : E),
-                                    (this.settings.defaultTextDir =
-                                        "rtl" === m || N),
-                                    (this.settings.defaultFooterFixed =
-                                        void 0 !== p ? p : T),
-                                    (this.settings.defaultShowDropdownOnHover =
-                                        void 0 === h || h),
-                                    (this.settings.controls = g || _),
-                                    (this.settings.availableColors =
-                                        b || t.COLORS),
-                                    (this.settings.availableSkins =
-                                        f || t.SKINS),
-                                    (this.settings.availableThemes =
-                                        y || t.THEMES),
-                                    (this.settings.availableContentLayouts =
-                                        S || t.CONTENT),
-                                    (this.settings.availableHeaderTypes =
-                                        D || t.HEADER_TYPES),
-                                    (this.settings.availableMenuCollapsed =
-                                        q || t.LAYOUTS),
-                                    (this.settings.availableNavbarOptions =
-                                        H || t.NAVBAR_OPTIONS),
-                                    (this.settings.availableDirections =
-                                        I || t.DIRECTIONS),
-                                    (this.settings.defaultSkin =
-                                        this._getDefaultSkin(
-                                            void 0 !== a ? a : C
-                                        )),
-                                    (this.settings.themes = v || k),
-                                    this.settings.themes.length < 2)
+                                        (this.settings.displayCustomizer =
+                                            void 0 === o || o),
+                                        (this.settings.lang = i || "en"),
+                                        n ?
+                                        ((this.settings.defaultPrimaryColor =
+                                                n),
+                                            (z = !0)) :
+                                        ((this.settings.defaultPrimaryColor =
+                                                O.getPropertyValue(
+                                                    "--bs-primary"
+                                                ).trim()),
+                                            (z = !1)),
+                                        (this.settings.defaultTheme = s || w),
+                                        (this.settings.defaultSemiDark =
+                                            void 0 !== r && r),
+                                        (this.settings.defaultContentLayout =
+                                            void 0 !== l ? l : x),
+                                        (this.settings.defaultHeaderType = c || A),
+                                        (this.settings.defaultMenuCollapsed =
+                                            void 0 !== u ? u : L),
+                                        (this.settings.defaultNavbarType =
+                                            void 0 !== d ? d : E),
+                                        (this.settings.defaultTextDir =
+                                            "rtl" === m || N),
+                                        (this.settings.defaultFooterFixed =
+                                            void 0 !== p ? p : T),
+                                        (this.settings.defaultShowDropdownOnHover =
+                                            void 0 === h || h),
+                                        (this.settings.controls = g || _),
+                                        (this.settings.availableColors =
+                                            b || t.COLORS),
+                                        (this.settings.availableSkins =
+                                            f || t.SKINS),
+                                        (this.settings.availableThemes =
+                                            y || t.THEMES),
+                                        (this.settings.availableContentLayouts =
+                                            S || t.CONTENT),
+                                        (this.settings.availableHeaderTypes =
+                                            D || t.HEADER_TYPES),
+                                        (this.settings.availableMenuCollapsed =
+                                            q || t.LAYOUTS),
+                                        (this.settings.availableNavbarOptions =
+                                            H || t.NAVBAR_OPTIONS),
+                                        (this.settings.availableDirections =
+                                            I || t.DIRECTIONS),
+                                        (this.settings.defaultSkin =
+                                            this._getDefaultSkin(
+                                                void 0 !== a ? a : C
+                                            )),
+                                        (this.settings.themes = v || k),
+                                        this.settings.themes.length < 2)
                                 ) {
                                     var B =
-                                        this.settings.controls.indexOf("theme");
-                                    -1 !== B &&
+                                        this.settings.controls.indexOf("theme"); -
+                                    1 !== B &&
                                         (this.settings.controls =
                                             this.settings.controls
-                                                .slice(0, B)
-                                                .concat(
-                                                    this.settings.controls.slice(
-                                                        B + 1
-                                                    )
-                                                ));
+                                            .slice(0, B)
+                                            .concat(
+                                                this.settings.controls.slice(
+                                                    B + 1
+                                                )
+                                            ));
                                 }
                                 (this.settings.onSettingsChange =
-                                    "function" == typeof F
-                                        ? F
-                                        : function () {}),
-                                    this._loadSettings(),
+                                    "function" == typeof F ?
+                                    F :
+                                    function () {}),
+                                this._loadSettings(),
                                     (this._listeners = []),
                                     (this._controls = {}),
                                     this._initDirection(),
@@ -628,8 +630,7 @@
                         }
                         return (
                             (e = t),
-                            (o = [
-                                {
+                            (o = [{
                                     key: "setColor",
                                     value: function (t) {
                                         var e =
@@ -648,18 +649,17 @@
                                 {
                                     key: "setSkin",
                                     value: function (t) {
-                                        var e =
-                                            !(
-                                                arguments.length > 1 &&
-                                                void 0 !== arguments[1]
-                                            ) || arguments[1];
+                                        var e = !(
+                                            arguments.length > 1 &&
+                                            void 0 !== arguments[1]
+                                        ) || arguments[1];
                                         if (this._hasControls("skins")) {
                                             var o = this._getSkinByName(t);
                                             o &&
                                                 ((this.settings.skin = o),
-                                                e &&
+                                                    e &&
                                                     this._setSetting("Skin", t),
-                                                e &&
+                                                    e &&
                                                     this.settings.onSettingsChange.call(
                                                         this,
                                                         this.settings
@@ -670,23 +670,22 @@
                                 {
                                     key: "setLayoutNavbarOption",
                                     value: function (t) {
-                                        var e =
-                                            !(
-                                                arguments.length > 1 &&
-                                                void 0 !== arguments[1]
-                                            ) || arguments[1];
+                                        var e = !(
+                                            arguments.length > 1 &&
+                                            void 0 !== arguments[1]
+                                        ) || arguments[1];
                                         this._hasControls(
-                                            "layoutNavbarOptions"
-                                        ) &&
+                                                "layoutNavbarOptions"
+                                            ) &&
                                             ((this.settings.layoutNavbarOptions =
-                                                t),
-                                            e &&
+                                                    t),
+                                                e &&
                                                 this._setSetting(
                                                     "FixedNavbarOption",
                                                     t
                                                 ),
-                                            window.Helpers.setNavbar(t),
-                                            e &&
+                                                window.Helpers.setNavbar(t),
+                                                e &&
                                                 this.settings.onSettingsChange.call(
                                                     this,
                                                     this.settings
@@ -696,20 +695,19 @@
                                 {
                                     key: "setContentLayout",
                                     value: function (t) {
-                                        var e =
-                                            !(
-                                                arguments.length > 1 &&
-                                                void 0 !== arguments[1]
-                                            ) || arguments[1];
+                                        var e = !(
+                                            arguments.length > 1 &&
+                                            void 0 !== arguments[1]
+                                        ) || arguments[1];
                                         this._hasControls("contentLayout") &&
                                             ((this.settings.contentLayout = t),
-                                            e &&
+                                                e &&
                                                 this._setSetting(
                                                     "contentLayout",
                                                     t
                                                 ),
-                                            window.Helpers.setContentLayout(t),
-                                            e &&
+                                                window.Helpers.setContentLayout(t),
+                                                e &&
                                                 this.settings.onSettingsChange.call(
                                                     this,
                                                     this.settings
@@ -719,14 +717,12 @@
                                 {
                                     key: "setHeaderType",
                                     value: function (t) {
-                                        var e =
-                                            !(
-                                                arguments.length > 1 &&
-                                                void 0 !== arguments[1]
-                                            ) || arguments[1];
+                                        var e = !(
+                                            arguments.length > 1 &&
+                                            void 0 !== arguments[1]
+                                        ) || arguments[1];
                                         if (
-                                            this._hasControls("headerType") &&
-                                            [
+                                            this._hasControls("headerType") && [
                                                 "static",
                                                 "static-offcanvas",
                                                 "fixed",
@@ -734,77 +730,74 @@
                                             ].includes(t)
                                         ) {
                                             (this.settings.headerType = t),
-                                                e &&
-                                                    this._setSetting(
-                                                        "HeaderType",
-                                                        t
-                                                    ),
+                                            e &&
+                                                this._setSetting(
+                                                    "HeaderType",
+                                                    t
+                                                ),
                                                 window.Helpers.setPosition(
                                                     "fixed" === t ||
-                                                        "fixed-offcanvas" === t,
+                                                    "fixed-offcanvas" === t,
                                                     "static-offcanvas" === t ||
-                                                        "fixed-offcanvas" === t
+                                                    "fixed-offcanvas" === t
                                                 ),
                                                 e &&
-                                                    this.settings.onSettingsChange.call(
-                                                        this,
-                                                        this.settings
-                                                    );
+                                                this.settings.onSettingsChange.call(
+                                                    this,
+                                                    this.settings
+                                                );
                                             var o = window.Helpers.menuPsScroll,
                                                 i = window.PerfectScrollbar;
                                             "fixed" ===
-                                                this.settings.headerType ||
-                                            "fixed-offcanvas" ===
-                                                this.settings.headerType
-                                                ? i &&
-                                                  o &&
-                                                  (window.Helpers.menuPsScroll.destroy(),
-                                                  (o = new i(
-                                                      document.querySelector(
-                                                          ".menu-inner"
-                                                      ),
-                                                      {
-                                                          suppressScrollX: !0,
-                                                          wheelPropagation: !1,
-                                                      }
-                                                  )),
-                                                  (window.Helpers.menuPsScroll =
-                                                      o))
-                                                : o &&
-                                                  window.Helpers.menuPsScroll.destroy();
+                                            this.settings.headerType ||
+                                                "fixed-offcanvas" ===
+                                                this.settings.headerType ?
+                                                i &&
+                                                o &&
+                                                (window.Helpers.menuPsScroll.destroy(),
+                                                    (o = new i(
+                                                        document.querySelector(
+                                                            ".menu-inner"
+                                                        ), {
+                                                            suppressScrollX: !0,
+                                                            wheelPropagation: !1,
+                                                        }
+                                                    )),
+                                                    (window.Helpers.menuPsScroll =
+                                                        o)) :
+                                                o &&
+                                                window.Helpers.menuPsScroll.destroy();
                                         }
                                     },
                                 },
                                 {
                                     key: "setLayoutFooterFixed",
                                     value: function (t) {
-                                        var e =
-                                            !(
-                                                arguments.length > 1 &&
-                                                void 0 !== arguments[1]
-                                            ) || arguments[1];
+                                        var e = !(
+                                            arguments.length > 1 &&
+                                            void 0 !== arguments[1]
+                                        ) || arguments[1];
                                         (this.settings.layoutFooterFixed = t),
-                                            e &&
-                                                this._setSetting(
-                                                    "FixedFooter",
-                                                    t
-                                                ),
+                                        e &&
+                                            this._setSetting(
+                                                "FixedFooter",
+                                                t
+                                            ),
                                             window.Helpers.setFooterFixed(t),
                                             e &&
-                                                this.settings.onSettingsChange.call(
-                                                    this,
-                                                    this.settings
-                                                );
+                                            this.settings.onSettingsChange.call(
+                                                this,
+                                                this.settings
+                                            );
                                     },
                                 },
                                 {
                                     key: "setDropdownOnHover",
                                     value: function (t) {
-                                        var e =
-                                            !(
-                                                arguments.length > 1 &&
-                                                void 0 !== arguments[1]
-                                            ) || arguments[1];
+                                        var e = !(
+                                            arguments.length > 1 &&
+                                            void 0 !== arguments[1]
+                                        ) || arguments[1];
                                         if (
                                             this._hasControls(
                                                 "showDropdownOnHover"
@@ -812,13 +805,13 @@
                                         ) {
                                             if (
                                                 ((this.settings.showDropdownOnHover =
-                                                    t),
-                                                e &&
+                                                        t),
+                                                    e &&
                                                     this._setSetting(
                                                         "ShowDropdownOnHover",
                                                         t
                                                     ),
-                                                window.Helpers.mainMenu)
+                                                    window.Helpers.mainMenu)
                                             ) {
                                                 window.Helpers.mainMenu.destroy(),
                                                     (config.showDropdownOnHover =
@@ -827,13 +820,10 @@
                                                 window.Helpers.mainMenu = new o(
                                                     document.getElementById(
                                                         "layout-menu"
-                                                    ),
-                                                    {
-                                                        orientation:
-                                                            "horizontal",
+                                                    ), {
+                                                        orientation: "horizontal",
                                                         closeChildren: !0,
-                                                        showDropdownOnHover:
-                                                            config.showDropdownOnHover,
+                                                        showDropdownOnHover: config.showDropdownOnHover,
                                                     }
                                                 );
                                             }
@@ -856,15 +846,14 @@
                                     key: "setLang",
                                     value: function (e) {
                                         var o = this,
-                                            i =
-                                                !(
-                                                    arguments.length > 1 &&
-                                                    void 0 !== arguments[1]
-                                                ) || arguments[1],
+                                            i = !(
+                                                arguments.length > 1 &&
+                                                void 0 !== arguments[1]
+                                            ) || arguments[1],
                                             n =
-                                                arguments.length > 2 &&
-                                                void 0 !== arguments[2] &&
-                                                arguments[2];
+                                            arguments.length > 2 &&
+                                            void 0 !== arguments[2] &&
+                                            arguments[2];
                                         if (e !== this.settings.lang || n) {
                                             if (!t.LANGUAGES[e])
                                                 throw new Error(
@@ -898,22 +887,22 @@
                                                 "semiDark_label",
                                                 "direction_label",
                                             ].forEach(function (t) {
-                                                var e =
-                                                    o.container.querySelector(
-                                                        ".template-customizer-t-".concat(
-                                                            t
-                                                        )
-                                                    );
-                                                e && (e.textContent = a[t]);
-                                            }),
+                                                    var e =
+                                                        o.container.querySelector(
+                                                            ".template-customizer-t-".concat(
+                                                                t
+                                                            )
+                                                        );
+                                                    e && (e.textContent = a[t]);
+                                                }),
                                                 (this.settings.lang = e),
                                                 i &&
-                                                    this._setSetting("Lang", e),
+                                                this._setSetting("Lang", e),
                                                 i &&
-                                                    this.settings.onSettingsChange.call(
-                                                        this,
-                                                        this.settings
-                                                    );
+                                                this.settings.onSettingsChange.call(
+                                                    this,
+                                                    this.settings
+                                                );
                                         }
                                     },
                                 },
@@ -921,59 +910,56 @@
                                     key: "update",
                                     value: function () {
                                         if (!this._ssr) {
-                                            var t =
-                                                    !!document.querySelector(
-                                                        ".layout-navbar"
-                                                    ),
-                                                e =
-                                                    !!document.querySelector(
-                                                        ".layout-menu"
-                                                    ),
+                                            var t = !!document.querySelector(
+                                                    ".layout-navbar"
+                                                ),
+                                                e = !!document.querySelector(
+                                                    ".layout-menu"
+                                                ),
                                                 o = !!document.querySelector(
                                                     ".layout-menu-horizontal.menu, .layout-menu-horizontal .menu"
                                                 ),
-                                                i =
-                                                    !!document.querySelector(
-                                                        ".content-footer"
-                                                    );
+                                                i = !!document.querySelector(
+                                                    ".content-footer"
+                                                );
                                             this._controls
                                                 .showDropdownOnHover &&
-                                                (e
-                                                    ? (this._controls.showDropdownOnHover.setAttribute(
-                                                          "disabled",
-                                                          "disabled"
-                                                      ),
-                                                      this._controls.showDropdownOnHover.classList.add(
-                                                          "disabled"
-                                                      ))
-                                                    : (this._controls.showDropdownOnHover.removeAttribute(
-                                                          "disabled"
-                                                      ),
-                                                      this._controls.showDropdownOnHover.classList.remove(
-                                                          "disabled"
-                                                      ))),
+                                                (e ?
+                                                    (this._controls.showDropdownOnHover.setAttribute(
+                                                            "disabled",
+                                                            "disabled"
+                                                        ),
+                                                        this._controls.showDropdownOnHover.classList.add(
+                                                            "disabled"
+                                                        )) :
+                                                    (this._controls.showDropdownOnHover.removeAttribute(
+                                                            "disabled"
+                                                        ),
+                                                        this._controls.showDropdownOnHover.classList.remove(
+                                                            "disabled"
+                                                        ))),
                                                 this._controls
-                                                    .layoutNavbarOptions &&
-                                                    (t
-                                                        ? (this._controls.layoutNavbarOptions.removeAttribute(
-                                                              "disabled"
-                                                          ),
-                                                          this._controls.layoutNavbarOptionsW.classList.remove(
-                                                              "disabled"
-                                                          ))
-                                                        : (this._controls.layoutNavbarOptions.setAttribute(
-                                                              "disabled",
-                                                              "disabled"
-                                                          ),
-                                                          this._controls.layoutNavbarOptionsW.classList.add(
-                                                              "disabled"
-                                                          )),
+                                                .layoutNavbarOptions &&
+                                                (t ?
+                                                    (this._controls.layoutNavbarOptions.removeAttribute(
+                                                            "disabled"
+                                                        ),
+                                                        this._controls.layoutNavbarOptionsW.classList.remove(
+                                                            "disabled"
+                                                        )) :
+                                                    (this._controls.layoutNavbarOptions.setAttribute(
+                                                            "disabled",
+                                                            "disabled"
+                                                        ),
+                                                        this._controls.layoutNavbarOptionsW.classList.add(
+                                                            "disabled"
+                                                        )),
                                                     o &&
-                                                        t &&
-                                                        "fixed" ===
-                                                            this.settings
-                                                                .headerType &&
-                                                        (this._controls.layoutNavbarOptions.setAttribute(
+                                                    t &&
+                                                    "fixed" ===
+                                                    this.settings
+                                                    .headerType &&
+                                                    (this._controls.layoutNavbarOptions.setAttribute(
                                                             "disabled",
                                                             "disabled"
                                                         ),
@@ -981,30 +967,30 @@
                                                             "disabled"
                                                         ))),
                                                 this._controls
-                                                    .layoutFooterFixed &&
-                                                    (i
-                                                        ? (this._controls.layoutFooterFixed.removeAttribute(
-                                                              "disabled"
-                                                          ),
-                                                          this._controls.layoutFooterFixedW.classList.remove(
-                                                              "disabled"
-                                                          ))
-                                                        : (this._controls.layoutFooterFixed.setAttribute(
-                                                              "disabled",
-                                                              "disabled"
-                                                          ),
-                                                          this._controls.layoutFooterFixedW.classList.add(
-                                                              "disabled"
-                                                          ))),
+                                                .layoutFooterFixed &&
+                                                (i ?
+                                                    (this._controls.layoutFooterFixed.removeAttribute(
+                                                            "disabled"
+                                                        ),
+                                                        this._controls.layoutFooterFixedW.classList.remove(
+                                                            "disabled"
+                                                        )) :
+                                                    (this._controls.layoutFooterFixed.setAttribute(
+                                                            "disabled",
+                                                            "disabled"
+                                                        ),
+                                                        this._controls.layoutFooterFixedW.classList.add(
+                                                            "disabled"
+                                                        ))),
                                                 this._controls.headerType &&
-                                                    (e || o
-                                                        ? this._controls.headerType.removeAttribute(
-                                                              "disabled"
-                                                          )
-                                                        : this._controls.headerType.setAttribute(
-                                                              "disabled",
-                                                              "disabled"
-                                                          ));
+                                                (e || o ?
+                                                    this._controls.headerType.removeAttribute(
+                                                        "disabled"
+                                                    ) :
+                                                    this._controls.headerType.setAttribute(
+                                                        "disabled",
+                                                        "disabled"
+                                                    ));
                                         }
                                     },
                                 },
@@ -1025,11 +1011,11 @@
                                                 "Rtl",
                                                 "Lang",
                                             ].forEach(function (e) {
-                                                var o = "templateCustomizer-"
-                                                    .concat(t, "--")
-                                                    .concat(e);
-                                                localStorage.removeItem(o);
-                                            }),
+                                                    var o = "templateCustomizer-"
+                                                        .concat(t, "--")
+                                                        .concat(e);
+                                                    localStorage.removeItem(o);
+                                                }),
                                                 this._showResetBtnNotification(
                                                     !1
                                                 );
@@ -1041,11 +1027,11 @@
                                     value: function () {
                                         this._ssr ||
                                             (this._cleanup(),
-                                            (this.settings = null),
-                                            this.container.parentNode.removeChild(
-                                                this.container
-                                            ),
-                                            (this.container = null));
+                                                (this.settings = null),
+                                                this.container.parentNode.removeChild(
+                                                    this.container
+                                                ),
+                                                (this.container = null));
                                     },
                                 },
                                 {
@@ -1057,160 +1043,159 @@
                                             i = this._getSetting("Skin"),
                                             n = this._getSetting("SemiDark"),
                                             a =
-                                                this._getSetting(
-                                                    "contentLayout"
-                                                ),
+                                            this._getSetting(
+                                                "contentLayout"
+                                            ),
                                             s =
-                                                this._getSetting(
-                                                    "LayoutCollapsed"
-                                                ),
+                                            this._getSetting(
+                                                "LayoutCollapsed"
+                                            ),
                                             r = this._getSetting(
                                                 "ShowDropdownOnHover"
                                             ),
                                             l =
-                                                this._getSetting(
-                                                    "FixedNavbarOption"
-                                                ),
+                                            this._getSetting(
+                                                "FixedNavbarOption"
+                                            ),
                                             c = this._getSetting("FixedFooter"),
                                             u = this._getSetting("HeaderType");
                                         t ||
-                                        o ||
-                                        i ||
-                                        a ||
-                                        s ||
-                                        l ||
-                                        u ||
-                                        e ||
-                                        n
-                                            ? this._showResetBtnNotification(!0)
-                                            : this._showResetBtnNotification(
-                                                  !1
-                                              ),
+                                            o ||
+                                            i ||
+                                            a ||
+                                            s ||
+                                            l ||
+                                            u ||
+                                            e ||
+                                            n ?
+                                            this._showResetBtnNotification(!0) :
+                                            this._showResetBtnNotification(
+                                                !1
+                                            ),
                                             (this.settings.headerType = [
-                                                "static",
-                                                "static-offcanvas",
-                                                "fixed",
-                                                "fixed-offcanvas",
-                                            ].includes(u)
-                                                ? u
-                                                : this.settings
-                                                      .defaultHeaderType),
+                                                    "static",
+                                                    "static-offcanvas",
+                                                    "fixed",
+                                                    "fixed-offcanvas",
+                                                ].includes(u) ?
+                                                u :
+                                                this.settings
+                                                .defaultHeaderType),
                                             (this.settings.rtl =
-                                                "" !== t
-                                                    ? "true" === t
-                                                    : this.settings
-                                                          .defaultTextDir),
+                                                "" !== t ?
+                                                "true" === t :
+                                                this.settings
+                                                .defaultTextDir),
                                             e && (z = !0),
                                             (this.settings.color =
                                                 e ||
                                                 this.settings
-                                                    .defaultPrimaryColor),
+                                                .defaultPrimaryColor),
                                             this.setColor(
                                                 this.settings.color,
                                                 z
                                             ),
                                             (this.settings.themesOpt =
-                                                this.settings.themes.includes(o)
-                                                    ? o
-                                                    : this.settings
-                                                          .defaultTheme);
+                                                this.settings.themes.includes(o) ?
+                                                o :
+                                                this.settings
+                                                .defaultTheme);
                                         var d,
                                             m = window.matchMedia(
                                                 "(prefers-color-scheme: dark)"
-                                            ).matches
-                                                ? "dark"
-                                                : "light";
-                                        (d = this.settings.themes.includes(o)
-                                            ? "system" === o
-                                                ? m
-                                                : o
-                                            : "system" ===
-                                              this.settings.defaultTheme
-                                            ? m
-                                            : this.settings.defaultTheme),
-                                            (this.settings.theme =
-                                                this.settings.defaultTheme),
-                                            document.documentElement.setAttribute(
+                                            ).matches ?
+                                            "dark" :
+                                            "light";
+                                        (d = this.settings.themes.includes(o) ?
+                                            "system" === o ?
+                                            m :
+                                            o :
+                                            "system" ===
+                                            this.settings.defaultTheme ?
+                                            m :
+                                            this.settings.defaultTheme),
+                                        (this.settings.theme =
+                                            this.settings.defaultTheme),
+                                        document.documentElement.setAttribute(
                                                 "data-bs-theme",
                                                 d
                                             ),
-                                            (this.settings.semiDark = n
-                                                ? "true" === n
-                                                : this.settings
-                                                      .defaultSemiDark),
+                                            (this.settings.semiDark = n ?
+                                                "true" === n :
+                                                this.settings
+                                                .defaultSemiDark),
                                             this.settings.semiDark &&
-                                                document.documentElement.setAttribute(
-                                                    "data-semidark-menu",
-                                                    this.settings.semiDark
-                                                ),
+                                            document.documentElement.setAttribute(
+                                                "data-semidark-menu",
+                                                this.settings.semiDark
+                                            ),
                                             (this.settings.contentLayout =
                                                 a ||
                                                 this.settings
-                                                    .defaultContentLayout),
-                                            (this.settings.layoutCollapsed = s
-                                                ? "true" === s
-                                                : this.settings
-                                                      .defaultMenuCollapsed),
+                                                .defaultContentLayout),
+                                            (this.settings.layoutCollapsed = s ?
+                                                "true" === s :
+                                                this.settings
+                                                .defaultMenuCollapsed),
                                             this.settings.layoutCollapsed &&
-                                                document.documentElement.classList.add(
-                                                    "layout-menu-collapsed"
-                                                ),
+                                            document.documentElement.classList.add(
+                                                "layout-menu-collapsed"
+                                            ),
                                             (this.settings.showDropdownOnHover =
-                                                r
-                                                    ? "true" === r
-                                                    : this.settings
-                                                          .defaultShowDropdownOnHover),
-                                            (this.settings.layoutNavbarOptions =
-                                                [
+                                                r ?
+                                                "true" === r :
+                                                this.settings
+                                                .defaultShowDropdownOnHover),
+                                            (this.settings.layoutNavbarOptions = [
                                                     "static",
                                                     "sticky",
                                                     "hidden",
-                                                ].includes(l)
-                                                    ? l
-                                                    : this.settings
-                                                          .defaultNavbarType),
-                                            (this.settings.layoutFooterFixed = c
-                                                ? "true" === c
-                                                : this.settings
-                                                      .defaultFooterFixed),
+                                                ].includes(l) ?
+                                                l :
+                                                this.settings
+                                                .defaultNavbarType),
+                                            (this.settings.layoutFooterFixed = c ?
+                                                "true" === c :
+                                                this.settings
+                                                .defaultFooterFixed),
                                             (this.settings.skin =
                                                 this._getSkinByName(
                                                     this._getSetting("Skin"),
                                                     !0
                                                 )),
                                             this._hasControls("rtl") ||
-                                                (this.settings.rtl =
-                                                    "rtl" ===
-                                                    document.documentElement.getAttribute(
-                                                        "dir"
-                                                    )),
+                                            (this.settings.rtl =
+                                                "rtl" ===
+                                                document.documentElement.getAttribute(
+                                                    "dir"
+                                                )),
                                             this._hasControls("theme") ||
-                                                (this.settings.theme =
-                                                    window.Helpers.isDarkStyle()
-                                                        ? "dark"
-                                                        : "light"),
+                                            (this.settings.theme =
+                                                window.Helpers.isDarkStyle() ?
+                                                "dark" :
+                                                "light"),
                                             this._hasControls(
                                                 "contentLayout"
                                             ) ||
-                                                (this.settings.contentLayout =
-                                                    null),
+                                            (this.settings.contentLayout =
+                                                null),
                                             this._hasControls("headerType") ||
-                                                (this.settings.headerType =
-                                                    null),
+                                            (this.settings.headerType =
+                                                null),
                                             this._hasControls(
                                                 "layoutCollapsed"
                                             ) ||
-                                                (this.settings.layoutCollapsed =
-                                                    null),
+                                            (this.settings.layoutCollapsed =
+                                                null),
                                             this._hasControls(
                                                 "layoutNavbarOptions"
                                             ) ||
-                                                (this.settings.layoutNavbarOptions =
-                                                    null),
+                                            (this.settings.layoutNavbarOptions =
+                                                null),
                                             this._hasControls("skins") ||
-                                                (this.settings.skin = null),
+                                            (this.settings.skin = null),
                                             this._hasControls("semiDark") ||
-                                                (this.settings.semiDark = null);
+                                            (this.settings.semiDark = null);
                                     },
                                 },
                                 {
@@ -1218,86 +1203,86 @@
                                     value: function () {
                                         var t = this,
                                             e =
-                                                arguments.length > 0 &&
-                                                void 0 !== arguments[0]
-                                                    ? arguments[0]
-                                                    : document,
+                                            arguments.length > 0 &&
+                                            void 0 !== arguments[0] ?
+                                            arguments[0] :
+                                            document,
                                             o = function (t, e, o, i) {
                                                 var n =
-                                                        arguments.length > 4 &&
-                                                        void 0 !==
-                                                            arguments[4] &&
-                                                        arguments[4],
+                                                    arguments.length > 4 &&
+                                                    void 0 !==
+                                                    arguments[4] &&
+                                                    arguments[4],
                                                     a =
-                                                        document.createElement(
-                                                            "div"
-                                                        );
+                                                    document.createElement(
+                                                        "div"
+                                                    );
                                                 a.classList.add(
                                                     "col-4",
                                                     "px-2"
                                                 );
-                                                var s = n
-                                                    ? "custom-option custom-option-icon"
-                                                    : "custom-option custom-option-image custom-option-image-radio";
+                                                var s = n ?
+                                                    "custom-option custom-option-icon" :
+                                                    "custom-option custom-option-image custom-option-image-radio";
                                                 return (
                                                     (a.innerHTML =
                                                         '\n        <div class="form-check '
-                                                            .concat(
-                                                                s,
-                                                                ' mb-0">\n          <label class="form-check-label custom-option-content p-0" for="'
-                                                            )
-                                                            .concat(o)
-                                                            .concat(
-                                                                t,
-                                                                '">\n            <span class="custom-option-body mb-0 scaleX-n1-rtl"></span>\n          </label>\n          <input\n            name="'
-                                                            )
-                                                            .concat(
-                                                                o,
-                                                                '"\n            class="form-check-input d-none"\n            type="radio"\n            value="'
-                                                            )
-                                                            .concat(
-                                                                t,
-                                                                '"\n            id="'
-                                                            )
-                                                            .concat(o)
-                                                            .concat(
-                                                                t,
-                                                                '" />\n        </div>\n        <label class="form-check-label small text-nowrap text-body" for="'
-                                                            )
-                                                            .concat(o)
-                                                            .concat(t, '">')
-                                                            .concat(
-                                                                e,
-                                                                "</label>\n      "
-                                                            )),
-                                                    n
-                                                        ? (a.querySelector(
-                                                              ".custom-option-body"
-                                                          ).innerHTML = i)
-                                                        : fetch(
-                                                              ""
-                                                                  .concat(
-                                                                      assetsPath,
-                                                                      "img/customizer/"
-                                                                  )
-                                                                  .concat(i)
-                                                          )
-                                                              .then(function (
-                                                                  t
-                                                              ) {
-                                                                  return t.text();
-                                                              })
-                                                              .then(function (
-                                                                  t
-                                                              ) {
-                                                                  a.querySelector(
-                                                                      ".custom-option-body"
-                                                                  ).innerHTML =
-                                                                      t;
-                                                              })
-                                                              .catch(function (
-                                                                  t
-                                                              ) {}),
+                                                        .concat(
+                                                            s,
+                                                            ' mb-0">\n          <label class="form-check-label custom-option-content p-0" for="'
+                                                        )
+                                                        .concat(o)
+                                                        .concat(
+                                                            t,
+                                                            '">\n            <span class="custom-option-body mb-0 scaleX-n1-rtl"></span>\n          </label>\n          <input\n            name="'
+                                                        )
+                                                        .concat(
+                                                            o,
+                                                            '"\n            class="form-check-input d-none"\n            type="radio"\n            value="'
+                                                        )
+                                                        .concat(
+                                                            t,
+                                                            '"\n            id="'
+                                                        )
+                                                        .concat(o)
+                                                        .concat(
+                                                            t,
+                                                            '" />\n        </div>\n        <label class="form-check-label small text-nowrap text-body" for="'
+                                                        )
+                                                        .concat(o)
+                                                        .concat(t, '">')
+                                                        .concat(
+                                                            e,
+                                                            "</label>\n      "
+                                                        )),
+                                                    n ?
+                                                    (a.querySelector(
+                                                        ".custom-option-body"
+                                                    ).innerHTML = i) :
+                                                    fetch(
+                                                        ""
+                                                        .concat(
+                                                            assetsPath,
+                                                            "img/customizer/"
+                                                        )
+                                                        .concat(i)
+                                                    )
+                                                    .then(function (
+                                                        t
+                                                    ) {
+                                                        return t.text();
+                                                    })
+                                                    .then(function (
+                                                        t
+                                                    ) {
+                                                        a.querySelector(
+                                                                ".custom-option-body"
+                                                            ).innerHTML =
+                                                            t;
+                                                    })
+                                                    .catch(function (
+                                                        t
+                                                    ) {}),
                                                     a
                                                 );
                                             };
@@ -1310,9 +1295,9 @@
                                                 "style",
                                                 "visibility: ".concat(
                                                     this.settings
-                                                        .displayCustomizer
-                                                        ? "visible"
-                                                        : "hidden"
+                                                    .displayCustomizer ?
+                                                    "visible" :
+                                                    "hidden"
                                                 )
                                             );
                                         var i = this.container.querySelector(
@@ -1320,13 +1305,13 @@
                                             ),
                                             n = function () {
                                                 t.container.classList.add(
-                                                    "template-customizer-open"
-                                                ),
+                                                        "template-customizer-open"
+                                                    ),
                                                     t.update(),
                                                     t._updateInterval &&
-                                                        clearInterval(
-                                                            t._updateInterval
-                                                        ),
+                                                    clearInterval(
+                                                        t._updateInterval
+                                                    ),
                                                     (t._updateInterval =
                                                         setInterval(
                                                             function () {
@@ -1359,10 +1344,10 @@
                                             ),
                                             l = function () {
                                                 t.container.classList.remove(
-                                                    "template-customizer-open"
-                                                ),
+                                                        "template-customizer-open"
+                                                    ),
                                                     t._updateInterval &&
-                                                        (clearInterval(
+                                                    (clearInterval(
                                                             t._updateInterval
                                                         ),
                                                         (t._updateInterval =
@@ -1383,42 +1368,42 @@
                                         if (this._hasControls("color")) {
                                             var d = "colorRadioIcon";
                                             this.settings.availableColors.forEach(
-                                                function (e) {
-                                                    var o =
+                                                    function (e) {
+                                                        var o =
                                                             '<div class="form-check custom-option custom-option-icon mb-0">\n          <label class="form-check-label custom-option-content p-0" for="'
-                                                                .concat(d)
-                                                                .concat(
-                                                                    e.name,
-                                                                    '">\n            <span class="custom-option-body mb-0 scaleX-n1-rtl" style="background-color: '
-                                                                )
-                                                                .concat(
-                                                                    e.color,
-                                                                    ';"></span>\n          </label>\n          <input\n            name="'
-                                                                )
-                                                                .concat(
-                                                                    d,
-                                                                    '"\n            class="form-check-input d-none"\n            type="radio"\n            value="'
-                                                                )
-                                                                .concat(
-                                                                    e.color,
-                                                                    '"\n            data-color="'
-                                                                )
-                                                                .concat(
-                                                                    e.color,
-                                                                    '"\n            id="'
-                                                                )
-                                                                .concat(d)
-                                                                .concat(
-                                                                    e.name,
-                                                                    '" />\n        </div>'
-                                                                ),
-                                                        i =
+                                                            .concat(d)
+                                                            .concat(
+                                                                e.name,
+                                                                '">\n            <span class="custom-option-body mb-0 scaleX-n1-rtl" style="background-color: '
+                                                            )
+                                                            .concat(
+                                                                e.color,
+                                                                ';"></span>\n          </label>\n          <input\n            name="'
+                                                            )
+                                                            .concat(
+                                                                d,
+                                                                '"\n            class="form-check-input d-none"\n            type="radio"\n            value="'
+                                                            )
+                                                            .concat(
+                                                                e.color,
+                                                                '"\n            data-color="'
+                                                            )
+                                                            .concat(
+                                                                e.color,
+                                                                '"\n            id="'
+                                                            )
+                                                            .concat(d)
+                                                            .concat(
+                                                                e.name,
+                                                                '" />\n        </div>'
+                                                            ),
+                                                            i =
                                                             t._getElementFromString(
                                                                 o
                                                             );
-                                                    u.appendChild(i);
-                                                }
-                                            ),
+                                                        u.appendChild(i);
+                                                    }
+                                                ),
                                                 u.appendChild(
                                                     this._getElementFromString(
                                                         '<div class="form-check custom-option custom-option-icon mb-0"><label class="form-check-label custom-option-content" for="colorRadioIcon"><span class="custom-option-body customizer-nano-picker mb-50"><i class="bx bxs-color-fill icon-base"></i></span></label><input name="colorRadioIcon" class="form-check-input picker d-none" type="radio" value="picker" id="colorRadioIcon" /> </div>'
@@ -1431,46 +1416,47 @@
                                                 )
                                             );
                                             m
-                                                ? (m.setAttribute(
-                                                      "checked",
-                                                      "checked"
-                                                  ),
-                                                  u
-                                                      .querySelector(
-                                                          'input[value="picker"]'
-                                                      )
-                                                      .removeAttribute(
-                                                          "checked"
-                                                      ))
-                                                : u
-                                                      .querySelector(
-                                                          'input[value="picker"]'
-                                                      )
-                                                      .setAttribute(
-                                                          "checked",
-                                                          "checked"
-                                                      );
+                                                ?
+                                                (m.setAttribute(
+                                                        "checked",
+                                                        "checked"
+                                                    ),
+                                                    u
+                                                    .querySelector(
+                                                        'input[value="picker"]'
+                                                    )
+                                                    .removeAttribute(
+                                                        "checked"
+                                                    )) :
+                                                u
+                                                .querySelector(
+                                                    'input[value="picker"]'
+                                                )
+                                                .setAttribute(
+                                                    "checked",
+                                                    "checked"
+                                                );
                                             var p = function (e) {
-                                                "picker" === e.target.value
-                                                    ? document
-                                                          .querySelector(
-                                                              ".custom-option-content .pcr-button"
-                                                          )
-                                                          .click()
-                                                    : (t._setSetting(
-                                                          "Color",
-                                                          e.target.dataset.color
-                                                      ),
-                                                      t.setColor(
-                                                          e.target.dataset
-                                                              .color,
-                                                          function () {
-                                                              t._loadingState(
-                                                                  !1
-                                                              );
-                                                          },
-                                                          !0
-                                                      ));
+                                                "picker" === e.target.value ?
+                                                    document
+                                                    .querySelector(
+                                                        ".custom-option-content .pcr-button"
+                                                    )
+                                                    .click() :
+                                                    (t._setSetting(
+                                                            "Color",
+                                                            e.target.dataset.color
+                                                        ),
+                                                        t.setColor(
+                                                            e.target.dataset
+                                                            .color,
+                                                            function () {
+                                                                t._loadingState(
+                                                                    !1
+                                                                );
+                                                            },
+                                                            !0
+                                                        ));
                                             };
                                             u.addEventListener("change", p),
                                                 this._listeners.push([
@@ -1487,58 +1473,58 @@
                                             );
                                         if (this._hasControls("theme")) {
                                             this.settings.availableThemes.forEach(
-                                                function (t) {
-                                                    var e = o(
-                                                        t.name,
-                                                        t.title,
-                                                        "customRadioIcon",
-                                                        t.image,
-                                                        !0
-                                                    );
-                                                    g.appendChild(e);
-                                                }
-                                            ),
+                                                    function (t) {
+                                                        var e = o(
+                                                            t.name,
+                                                            t.title,
+                                                            "customRadioIcon",
+                                                            t.image,
+                                                            !0
+                                                        );
+                                                        g.appendChild(e);
+                                                    }
+                                                ),
                                                 g.querySelector(
                                                     'input[value="'.concat(
                                                         this.settings.themesOpt,
                                                         '"]'
                                                     )
                                                 ) &&
-                                                    g
-                                                        .querySelector(
-                                                            'input[value="'.concat(
-                                                                this.settings
-                                                                    .themesOpt,
-                                                                '"]'
-                                                            )
-                                                        )
-                                                        .setAttribute(
-                                                            "checked",
-                                                            "checked"
-                                                        );
+                                                g
+                                                .querySelector(
+                                                    'input[value="'.concat(
+                                                        this.settings
+                                                        .themesOpt,
+                                                        '"]'
+                                                    )
+                                                )
+                                                .setAttribute(
+                                                    "checked",
+                                                    "checked"
+                                                );
                                             var v = function (e) {
                                                 if (
                                                     (document.documentElement.setAttribute(
-                                                        "data-bs-theme",
-                                                        e.target.value
-                                                    ),
-                                                    t._hasControls("semiDark"))
+                                                            "data-bs-theme",
+                                                            e.target.value
+                                                        ),
+                                                        t._hasControls("semiDark"))
                                                 ) {
                                                     var o =
                                                         t.container.querySelector(
                                                             ".template-customizer-semiDark"
                                                         );
-                                                    "dark" === e.target.value
-                                                        ? o.classList.add(
-                                                              "d-none"
-                                                          )
-                                                        : o.classList.remove(
-                                                              "d-none"
-                                                          );
+                                                    "dark" === e.target.value ?
+                                                        o.classList.add(
+                                                            "d-none"
+                                                        ) :
+                                                        o.classList.remove(
+                                                            "d-none"
+                                                        );
                                                 }
                                                 window.Helpers.syncThemeToggles(
-                                                    e.target.value
-                                                ),
+                                                        e.target.value
+                                                    ),
                                                     t.setTheme(
                                                         e.target.value,
                                                         !0,
@@ -1562,37 +1548,37 @@
                                             );
                                         if (this._hasControls("skins")) {
                                             this.settings.availableSkins.forEach(
-                                                function (t) {
-                                                    var e = o(
-                                                        t.name,
-                                                        t.title,
-                                                        "skinRadios",
-                                                        t.image
-                                                    );
-                                                    f.appendChild(e);
-                                                }
-                                            ),
+                                                    function (t) {
+                                                        var e = o(
+                                                            t.name,
+                                                            t.title,
+                                                            "skinRadios",
+                                                            t.image
+                                                        );
+                                                        f.appendChild(e);
+                                                    }
+                                                ),
                                                 f
-                                                    .querySelector(
-                                                        'input[value="'.concat(
-                                                            this.settings.skin
-                                                                .name,
-                                                            '"]'
-                                                        )
+                                                .querySelector(
+                                                    'input[value="'.concat(
+                                                        this.settings.skin
+                                                        .name,
+                                                        '"]'
                                                     )
-                                                    .setAttribute(
-                                                        "checked",
-                                                        "checked"
-                                                    ),
+                                                )
+                                                .setAttribute(
+                                                    "checked",
+                                                    "checked"
+                                                ),
                                                 document.documentElement.setAttribute(
                                                     "data-skin",
                                                     this.settings.skin.name
                                                 );
                                             var y = function (e) {
                                                 document.documentElement.setAttribute(
-                                                    "data-skin",
-                                                    e.target.value
-                                                ),
+                                                        "data-skin",
+                                                        e.target.value
+                                                    ),
                                                     t.setSkin(
                                                         e.target.value,
                                                         !0,
@@ -1622,12 +1608,12 @@
                                                 document.documentElement.getAttribute(
                                                     "data-bs-theme"
                                                 ) && k.classList.add("d-none"),
-                                            this._hasControls("semiDark"))
+                                                this._hasControls("semiDark"))
                                         )
                                             if (
                                                 this._hasControls("semiDark") &&
                                                 "dark" ===
-                                                    this._getSetting("Theme")
+                                                this._getSetting("Theme")
                                             )
                                                 _.classList.add("d-none");
                                             else {
@@ -1638,32 +1624,33 @@
                                                     );
                                                 var S = function (e) {
                                                     var o = e.target.checked,
-                                                        i = o
-                                                            ? "dark"
-                                                            : "light";
+                                                        i = o ?
+                                                        "dark" :
+                                                        "light";
                                                     "dark" === i
-                                                        ? (document
-                                                              .getElementById(
-                                                                  "layout-menu"
-                                                              )
-                                                              .setAttribute(
-                                                                  "data-bs-theme",
-                                                                  i
-                                                              ),
-                                                          document.documentElement.setAttribute(
-                                                              "data-semidark-menu",
-                                                              "true"
-                                                          ))
-                                                        : (document
-                                                              .getElementById(
-                                                                  "layout-menu"
-                                                              )
-                                                              .removeAttribute(
-                                                                  "data-bs-theme"
-                                                              ),
-                                                          document.documentElement.removeAttribute(
-                                                              "data-semidark-menu"
-                                                          )),
+                                                        ?
+                                                        (document
+                                                            .getElementById(
+                                                                "layout-menu"
+                                                            )
+                                                            .setAttribute(
+                                                                "data-bs-theme",
+                                                                i
+                                                            ),
+                                                            document.documentElement.setAttribute(
+                                                                "data-semidark-menu",
+                                                                "true"
+                                                            )) :
+                                                        (document
+                                                            .getElementById(
+                                                                "layout-menu"
+                                                            )
+                                                            .removeAttribute(
+                                                                "data-bs-theme"
+                                                            ),
+                                                            document.documentElement.removeAttribute(
+                                                                "data-semidark-menu"
+                                                            )),
                                                         t._setSetting(
                                                             "SemiDark",
                                                             o
@@ -1705,8 +1692,8 @@
                                             ) {
                                                 setTimeout(function () {
                                                     document.querySelector(
-                                                        ".layout-menu-horizontal"
-                                                    ) &&
+                                                            ".layout-menu-horizontal"
+                                                        ) &&
                                                         C.parentNode.removeChild(
                                                             C
                                                         );
@@ -1715,40 +1702,40 @@
                                                     ".template-customizer-layouts-options"
                                                 );
                                                 this.settings.availableMenuCollapsed.forEach(
-                                                    function (t) {
-                                                        var e = o(
-                                                            t.name,
-                                                            t.title,
-                                                            "layoutsRadios",
-                                                            t.image
-                                                        );
-                                                        x.appendChild(e);
-                                                    }
-                                                ),
+                                                        function (t) {
+                                                            var e = o(
+                                                                t.name,
+                                                                t.title,
+                                                                "layoutsRadios",
+                                                                t.image
+                                                            );
+                                                            x.appendChild(e);
+                                                        }
+                                                    ),
                                                     x
-                                                        .querySelector(
-                                                            'input[value="'.concat(
-                                                                this.settings
-                                                                    .layoutCollapsed
-                                                                    ? "collapsed"
-                                                                    : "expanded",
-                                                                '"]'
-                                                            )
+                                                    .querySelector(
+                                                        'input[value="'.concat(
+                                                            this.settings
+                                                            .layoutCollapsed ?
+                                                            "collapsed" :
+                                                            "expanded",
+                                                            '"]'
                                                         )
-                                                        .setAttribute(
-                                                            "checked",
-                                                            "checked"
-                                                        );
+                                                    )
+                                                    .setAttribute(
+                                                        "checked",
+                                                        "checked"
+                                                    );
                                                 var A = function (e) {
                                                     window.Helpers.setCollapsed(
-                                                        "collapsed" ===
+                                                            "collapsed" ===
                                                             e.target.value,
-                                                        !0
-                                                    ),
+                                                            !0
+                                                        ),
                                                         t._setSetting(
                                                             "LayoutCollapsed",
                                                             "collapsed" ===
-                                                                e.target.value
+                                                            e.target.value
                                                         );
                                                 };
                                                 x.addEventListener("change", A),
@@ -1771,20 +1758,20 @@
                                                     ".template-customizer-content-options"
                                                 );
                                                 this.settings.availableContentLayouts.forEach(
-                                                    function (t) {
-                                                        var e = o(
-                                                            t.name,
-                                                            t.title,
-                                                            "contentRadioIcon",
-                                                            t.image
-                                                        );
-                                                        E.appendChild(e);
-                                                    }
-                                                ),
+                                                        function (t) {
+                                                            var e = o(
+                                                                t.name,
+                                                                t.title,
+                                                                "contentRadioIcon",
+                                                                t.image
+                                                            );
+                                                            E.appendChild(e);
+                                                        }
+                                                    ),
                                                     E.querySelector(
                                                         'input[value="'.concat(
                                                             this.settings
-                                                                .contentLayout,
+                                                            .contentLayout,
                                                             '"]'
                                                         )
                                                     ).setAttribute(
@@ -1793,17 +1780,16 @@
                                                     );
                                                 var N = function (e) {
                                                     (t._loading = !0),
-                                                        t._loadingState(!0, !0),
+                                                    t._loadingState(!0, !0),
                                                         t.setContentLayout(
                                                             e.target.value,
                                                             !0,
                                                             function () {
-                                                                (t._loading =
-                                                                    !1),
-                                                                    t._loadingState(
-                                                                        !1,
-                                                                        !0
-                                                                    );
+                                                                (t._loading = !1),
+                                                                t._loadingState(
+                                                                    !1,
+                                                                    !0
+                                                                );
                                                             }
                                                         );
                                                 };
@@ -1815,14 +1801,14 @@
                                                     ]);
                                             } else L.parentNode.removeChild(L);
                                             var T =
-                                                    this.container.querySelector(
-                                                        ".template-customizer-headerOptions"
-                                                    ),
+                                                this.container.querySelector(
+                                                    ".template-customizer-headerOptions"
+                                                ),
                                                 O = document.documentElement
-                                                    .getAttribute(
-                                                        "data-template"
-                                                    )
-                                                    .split("-");
+                                                .getAttribute(
+                                                    "data-template"
+                                                )
+                                                .split("-");
                                             if (
                                                 this._hasControls("headerType")
                                             ) {
@@ -1830,11 +1816,11 @@
                                                     ".template-customizer-header-options"
                                                 );
                                                 setTimeout(function () {
-                                                    O.includes("vertical") &&
-                                                        T.parentNode.removeChild(
-                                                            T
-                                                        );
-                                                }, 100),
+                                                        O.includes("vertical") &&
+                                                            T.parentNode.removeChild(
+                                                                T
+                                                            );
+                                                    }, 100),
                                                     this.settings.availableHeaderTypes.forEach(
                                                         function (t) {
                                                             var e = o(
@@ -1849,7 +1835,7 @@
                                                     D.querySelector(
                                                         'input[value="'.concat(
                                                             this.settings
-                                                                .headerType,
+                                                            .headerType,
                                                             '"]'
                                                         )
                                                     ).setAttribute(
@@ -1887,20 +1873,20 @@
                                                     ".template-customizer-navbar-options"
                                                 );
                                                 this.settings.availableNavbarOptions.forEach(
-                                                    function (t) {
-                                                        var e = o(
-                                                            t.name,
-                                                            t.title,
-                                                            "navbarOptionRadios",
-                                                            t.image
-                                                        );
-                                                        I.appendChild(e);
-                                                    }
-                                                ),
+                                                        function (t) {
+                                                            var e = o(
+                                                                t.name,
+                                                                t.title,
+                                                                "navbarOptionRadios",
+                                                                t.image
+                                                            );
+                                                            I.appendChild(e);
+                                                        }
+                                                    ),
                                                     I.querySelector(
                                                         'input[value="'.concat(
                                                             this.settings
-                                                                .layoutNavbarOptions,
+                                                            .layoutNavbarOptions,
                                                             '"]'
                                                         )
                                                     ).setAttribute(
@@ -1909,17 +1895,16 @@
                                                     );
                                                 var F = function (e) {
                                                     (t._loading = !0),
-                                                        t._loadingState(!0, !0),
+                                                    t._loadingState(!0, !0),
                                                         t.setLayoutNavbarOption(
                                                             e.target.value,
                                                             !0,
                                                             function () {
-                                                                (t._loading =
-                                                                    !1),
-                                                                    t._loadingState(
-                                                                        !1,
-                                                                        !0
-                                                                    );
+                                                                (t._loading = !1),
+                                                                t._loadingState(
+                                                                    !1,
+                                                                    !0
+                                                                );
                                                             }
                                                         );
                                                 };
@@ -1935,108 +1920,74 @@
                                                     ".template-customizer-directions"
                                                 );
                                             if (this._hasControls("rtl")) {
-                                                var M = B.querySelector(
-                                                    ".template-customizer-directions-options"
-                                                );
-                                                this.settings.availableDirections.forEach(
-                                                    function (t) {
-                                                        var e = o(
-                                                            t.name,
-                                                            t.title,
-                                                            "directionRadioIcon",
-                                                            t.image
-                                                        );
+                                                var M = B.querySelector(".template-customizer-directions-options");
+
+                                                if (this.settings.availableDirections && Array.isArray(this.settings.availableDirections)) {
+                                                    this.settings.availableDirections.forEach(function (t) {
+                                                        var e = o(t.name, t.title, "directionRadioIcon", t.image);
                                                         M.appendChild(e);
-                                                    }
-                                                ),
-                                                    M.querySelector(
-                                                        'input[value="'.concat(
-                                                            this.settings.rtl
-                                                                ? "rtl"
-                                                                : "ltr",
-                                                            '"]'
-                                                        )
-                                                    ).setAttribute(
-                                                        "checked",
-                                                        "checked"
+                                                    });
+
+                                                    var checkedInput = M.querySelector(
+                                                        'input[value="'.concat(this.settings.rtl ? "rtl" : "ltr", '"]')
                                                     );
+                                                    if (checkedInput) {
+                                                        checkedInput.setAttribute("checked", "checked");
+                                                    }
+                                                }
+
                                                 var P = function (e) {
-                                                    t._setSetting(
-                                                        "Lang",
-                                                        t.settings.lang
-                                                    ),
-                                                        t._setSetting(
-                                                            "Lang",
-                                                            "ar" ===
-                                                                t.settings.lang
-                                                                ? "en"
-                                                                : "ar"
-                                                        ),
-                                                        (t.settings.rtl =
-                                                            "rtl" ===
-                                                            e.target.value);
-                                                    var o =
-                                                            t._getSetting(
-                                                                "Lang"
-                                                            ),
-                                                        i =
-                                                            document.querySelector(
-                                                                ".dropdown-language .dropdown-menu"
-                                                            );
-                                                    i &&
-                                                        i
-                                                            .querySelector(
-                                                                '[data-language="'.concat(
-                                                                    o,
-                                                                    '"]'
-                                                                )
-                                                            )
-                                                            .click(),
-                                                        t._initDirection(),
-                                                        t.setRtl(
-                                                            "rtl" ===
-                                                                e.target.value,
-                                                            !0,
-                                                            function () {
-                                                                t._loadingState(
-                                                                    !1
-                                                                );
-                                                            }
-                                                        );
+                                                    t._setSetting("Lang", t.settings.lang);
+                                                    t._setSetting("Lang", "ar" === t.settings.lang ? "en" : "ar");
+                                                    t.settings.rtl = "rtl" === e.target.value;
+
+                                                    var o = t._getSetting("Lang"),
+                                                        i = document.querySelector(".dropdown-language .dropdown-menu");
+                                                    if (i) {
+                                                        var langEl = i.querySelector('[data-language="'.concat(o, '"]'));
+                                                        if (langEl) langEl.click();
+                                                    }
+
+                                                    t._initDirection();
+                                                    t.setRtl("rtl" === e.target.value, !0, function () {
+                                                        t._loadingState(!1);
+                                                    });
                                                 };
-                                                M.addEventListener("change", P),
-                                                    this._listeners.push([
-                                                        M,
-                                                        "change",
-                                                        P,
-                                                    ]);
-                                            } else B.parentNode.removeChild(B);
+
+                                                M.addEventListener("change", P);
+                                                this._listeners.push([M, "change", P]);
+                                            } else {
+                                                if (B && B.parentNode) {
+                                                    B.parentNode.removeChild(B);
+                                                }
+                                            }
+
                                         } else w.parentNode.removeChild(w);
                                         setTimeout(function () {
-                                            var e = t.container.querySelector(
-                                                    ".template-customizer-layout"
-                                                ),
-                                                o = t.container.querySelector(
-                                                    ".template-customizer-theming"
-                                                ),
-                                                i = !1;
-                                            "light" ===
+                                                var e = t.container.querySelector(
+                                                        ".template-customizer-layout"
+                                                    ),
+                                                    o = t.container.querySelector(
+                                                        ".template-customizer-theming"
+                                                    ),
+                                                    i = !1;
+                                                "light" ===
                                                 document.documentElement.getAttribute(
-                                                    "data-bs-theme"
-                                                ) &&
-                                                document.querySelector(
-                                                    ".layout-menu"
-                                                ) &&
-                                                ("dark" ===
-                                                    document
+                                                        "data-bs-theme"
+                                                    ) &&
+                                                    document.querySelector(
+                                                        ".layout-menu"
+                                                    ) &&
+                                                    ("dark" ===
+                                                        document
                                                         .querySelector(
                                                             ".layout-menu"
                                                         )
                                                         .getAttribute(
                                                             "data-bs-theme"
                                                         ) && (i = !0),
-                                                !0 === i &&
-                                                    o
+                                                        !0 === i &&
+                                                        o
                                                         .querySelector(
                                                             ".template-customizer-semi-dark-switch"
                                                         )
@@ -2044,48 +1995,48 @@
                                                             "checked",
                                                             "checked"
                                                         )),
-                                                document.querySelector(
-                                                    ".menu-vertical"
-                                                )
-                                                    ? t._hasControls(
-                                                          "rtl contentLayout layoutCollapsed layoutNavbarOptions",
-                                                          !0
-                                                      ) ||
-                                                      (e &&
-                                                          e.parentNode.removeChild(
-                                                              e
-                                                          ))
-                                                    : document.querySelector(
-                                                          ".menu-horizontal"
-                                                      ) &&
-                                                      (t._hasControls(
-                                                          "rtl contentLayout headerType",
-                                                          !0
-                                                      ) ||
-                                                          (e &&
-                                                              e.parentNode.removeChild(
-                                                                  e
-                                                              )));
-                                        }, 100),
+                                                    document.querySelector(
+                                                        ".menu-vertical"
+                                                    ) ?
+                                                    t._hasControls(
+                                                        "rtl contentLayout layoutCollapsed layoutNavbarOptions",
+                                                        !0
+                                                    ) ||
+                                                    (e &&
+                                                        e.parentNode.removeChild(
+                                                            e
+                                                        )) :
+                                                    document.querySelector(
+                                                        ".menu-horizontal"
+                                                    ) &&
+                                                    (t._hasControls(
+                                                            "rtl contentLayout headerType",
+                                                            !0
+                                                        ) ||
+                                                        (e &&
+                                                            e.parentNode.removeChild(
+                                                                e
+                                                            )));
+                                            }, 100),
                                             this.setLang(
                                                 this.settings.lang,
                                                 !1,
                                                 !0
                                             ),
-                                            e === document
-                                                ? e.body
-                                                    ? e.body.appendChild(
-                                                          this.container
-                                                      )
-                                                    : window.addEventListener(
-                                                          "DOMContentLoaded",
-                                                          function () {
-                                                              return e.body.appendChild(
-                                                                  t.container
-                                                              );
-                                                          }
-                                                      )
-                                                : e.appendChild(this.container);
+                                            e === document ?
+                                            e.body ?
+                                            e.body.appendChild(
+                                                this.container
+                                            ) :
+                                            window.addEventListener(
+                                                "DOMContentLoaded",
+                                                function () {
+                                                    return e.body.appendChild(
+                                                        t.container
+                                                    );
+                                                }
+                                            ) :
+                                            e.appendChild(this.container);
                                     },
                                 },
                                 {
@@ -2094,9 +2045,9 @@
                                         this._hasControls("rtl") &&
                                             document.documentElement.setAttribute(
                                                 "dir",
-                                                this.settings.rtl
-                                                    ? "rtl"
-                                                    : "ltr"
+                                                this.settings.rtl ?
+                                                "rtl" :
+                                                "ltr"
                                             );
                                     },
                                 },
@@ -2125,11 +2076,11 @@
                                         var o = this._getLayoutName();
                                         try {
                                             localStorage.setItem(
-                                                "templateCustomizer-"
+                                                    "templateCustomizer-"
                                                     .concat(o, "--")
                                                     .concat(t),
-                                                String(e)
-                                            ),
+                                                    String(e)
+                                                ),
                                                 this._showResetBtnNotification();
                                         } catch (t) {}
                                     },
@@ -2142,8 +2093,8 @@
                                         try {
                                             e = localStorage.getItem(
                                                 "templateCustomizer-"
-                                                    .concat(o, "--")
-                                                    .concat(t)
+                                                .concat(o, "--")
+                                                .concat(t)
                                             );
                                         } catch (t) {}
                                         return String(e || "");
@@ -2153,18 +2104,18 @@
                                     key: "_showResetBtnNotification",
                                     value: function () {
                                         var t = this,
-                                            e =
-                                                !(
-                                                    arguments.length > 0 &&
-                                                    void 0 !== arguments[0]
-                                                ) || arguments[0];
+                                            e = !(
+                                                arguments.length > 0 &&
+                                                void 0 !== arguments[0]
+                                            ) || arguments[0];
                                         setTimeout(function () {
                                             var o = t.container.querySelector(
                                                 ".template-customizer-reset-btn .badge"
                                             );
                                             e
-                                                ? o.classList.remove("d-none")
-                                                : o.classList.add("d-none");
+                                                ?
+                                                o.classList.remove("d-none") :
+                                                o.classList.add("d-none");
                                         }, 200);
                                     },
                                 },
@@ -2181,9 +2132,7 @@
                                     value: function () {
                                         for (
                                             var t = 0,
-                                                e = this._listeners.length;
-                                            t < e;
-                                            t++
+                                                e = this._listeners.length; t < e; t++
                                         )
                                             this._listeners[
                                                 t
@@ -2200,7 +2149,7 @@
                                             (this._listeners = []),
                                             (this._controls = {}),
                                             this._updateInterval &&
-                                                (clearInterval(
+                                            (clearInterval(
                                                     this._updateInterval
                                                 ),
                                                 (this._updateInterval = null));
@@ -2217,9 +2166,9 @@
                                     value: function (t) {
                                         var e = this,
                                             o =
-                                                arguments.length > 1 &&
-                                                void 0 !== arguments[1] &&
-                                                arguments[1];
+                                            arguments.length > 1 &&
+                                            void 0 !== arguments[1] &&
+                                            arguments[1];
                                         return t
                                             .split(" ")
                                             .reduce(function (t, i) {
@@ -2227,11 +2176,11 @@
                                                     -1 !==
                                                     e.settings.controls.indexOf(
                                                         i
-                                                    )
-                                                        ? (o || !1 !== t) &&
-                                                          (t = !0)
-                                                        : (o && !0 === t) ||
-                                                          (t = !1),
+                                                    ) ?
+                                                    (o || !1 !== t) &&
+                                                    (t = !0) :
+                                                    (o && !0 === t) ||
+                                                    (t = !1),
                                                     t
                                                 );
                                             }, null);
@@ -2241,11 +2190,11 @@
                                     key: "_getDefaultSkin",
                                     value: function (t) {
                                         var e =
-                                            "string" == typeof t
-                                                ? this._getSkinByName(t, !1)
-                                                : this.settings.availableSkins[
-                                                      t
-                                                  ];
+                                            "string" == typeof t ?
+                                            this._getSkinByName(t, !1) :
+                                            this.settings.availableSkins[
+                                                t
+                                            ];
                                         if (!e)
                                             throw new Error(
                                                 'Skin ID "'.concat(
@@ -2261,21 +2210,19 @@
                                     value: function (t) {
                                         for (
                                             var e =
-                                                    arguments.length > 1 &&
-                                                    void 0 !== arguments[1] &&
-                                                    arguments[1],
+                                                arguments.length > 1 &&
+                                                void 0 !== arguments[1] &&
+                                                arguments[1],
                                                 o =
-                                                    this.settings
-                                                        .availableSkins,
+                                                this.settings
+                                                .availableSkins,
                                                 i = 0,
-                                                n = o.length;
-                                            i < n;
-                                            i++
+                                                n = o.length; i < n; i++
                                         )
                                             if (o[i].name === t) return o[i];
-                                        return e
-                                            ? this.settings.defaultSkin
-                                            : null;
+                                        return e ?
+                                            this.settings.defaultSkin :
+                                            null;
                                     },
                                 },
                             ]),
@@ -2288,8 +2235,7 @@
                         );
                         var e, o, i;
                     })();
-                (D.COLORS = [
-                    {
+                (D.COLORS = [{
                         name: "primary",
                         title: "Primary",
                         color: O.getPropertyValue("--bs-primary").trim(),
@@ -2315,167 +2261,145 @@
                         color: "#2092EC",
                     },
                 ]),
-                    (D.THEMES = [
-                        {
-                            name: "light",
-                            title: "Light",
-                            image: '<i class="bx bx-sun icon-base mb-0"></i>',
-                        },
-                        {
-                            name: "dark",
-                            title: "Dark",
-                            image: '<i class="bx bx-moon icon-base mb-0"></i>',
-                        },
-                        {
-                            name: "system",
-                            title: "System",
-                            image: '<i class="bx bx-desktop icon-base mb-0"></i>',
-                        },
-                    ]),
-                    (D.SKINS = [
-                        {
-                            name: "default",
-                            title: "Default",
-                            image: "skin-default.svg",
-                        },
-                        {
-                            name: "bordered",
-                            title: "Bordered",
-                            image: "skin-border.svg",
-                        },
-                    ]),
-                    (D.LAYOUTS = [
-                        {
-                            name: "expanded",
-                            title: "Expanded",
-                            image: "layouts-expanded.svg",
-                        },
-                        {
-                            name: "collapsed",
-                            title: "Collapsed",
-                            image: "layouts-collapsed.svg",
-                        },
-                    ]),
-                    (D.NAVBAR_OPTIONS = [
-                        {
-                            name: "sticky",
-                            title: "Sticky",
-                            image: "navbar-sticky.svg",
-                        },
-                        {
-                            name: "static",
-                            title: "Static",
-                            image: "navbar-static.svg",
-                        },
-                        {
-                            name: "hidden",
-                            title: "Hidden",
-                            image: "navbar-hidden.svg",
-                        },
-                    ]),
-                    (D.HEADER_TYPES = [
-                        {
-                            name: "fixed",
-                            title: "Fixed",
-                            image: "horizontal-fixed.svg",
-                        },
-                        {
-                            name: "static",
-                            title: "Static",
-                            image: "horizontal-static.svg",
-                        },
-                    ]),
-                    (D.CONTENT = [
-                        {
-                            name: "compact",
-                            title: "Compact",
-                            image: "content-compact.svg",
-                        },
-                        {
-                            name: "wide",
-                            title: "Wide",
-                            image: "content-wide.svg",
-                        },
-                    ]),
-                    (D.DIRECTIONS = [
-                        {
-                            name: "ltr",
-                            title: "Left to Right (En)",
-                            image: "direction-ltr.svg",
-                        },
-                        {
-                            name: "rtl",
-                            title: "Right to Left (Ar)",
-                            image: "direction-rtl.svg",
-                        },
-                    ]),
-                    (D.LANGUAGES = {
-                        en: {
-                            panel_header: "Template Customizer",
-                            panel_sub_header:
-                                "Customize and preview in real time",
-                            theming_header: "Theming",
-                            color_label: "Primary Color",
-                            theme_label: "Theme",
-                            skin_label: "Skins",
-                            semiDark_label: "Semi Dark",
-                            layout_header: "Layout",
-                            layout_label: "Menu (Navigation)",
-                            layout_header_label: "Header Types",
-                            content_label: "Content",
-                            layout_navbar_label: "Navbar Type",
-                            direction_label: "Direction",
-                        },
-                        fr: {
-                            panel_header: "ModÃ¨le De Personnalisation",
-                            panel_sub_header:
-                                "Personnalisez et prÃ©visualisez en temps rÃ©el",
-                            theming_header: "ThÃ©matisation",
-                            color_label: "Couleur primaire",
-                            theme_label: "ThÃ¨me",
-                            skin_label: "Peaux",
-                            semiDark_label: "Demi-foncÃ©",
-                            layout_header: "Disposition",
-                            layout_label: "Menu (Navigation)",
-                            layout_header_label: "Types d'en-tÃªte",
-                            content_label: "Contenu",
-                            layout_navbar_label: "Type de barre de navigation",
-                            direction_label: "Direction",
-                        },
-                        ar: {
-                            panel_header: "Ø£Ø¯Ø§Ø© ØªØ®ØµÙŠØµ Ø§Ù„Ù‚Ø§Ù„Ø¨",
-                            panel_sub_header:
-                                "ØªØ®ØµÙŠØµ ÙˆÙ…Ø¹Ø§ÙŠÙ†Ø© ÙÙŠ Ø§Ù„ÙˆÙ‚Øª Ø§Ù„Ø­Ù‚ÙŠÙ‚ÙŠ",
-                            theming_header: "Ø§Ù„Ø³Ù…Ø§Øª",
-                            color_label: "Ø§Ù„Ù„ÙˆÙ† Ø§Ù„Ø£Ø³Ø§Ø³ÙŠ",
-                            theme_label: "Ø³Ù…Ø©",
-                            skin_label: "Ø¬Ù„ÙˆØ¯",
-                            semiDark_label: "Ø´Ø¨Ù‡ Ø¯Ø§ÙƒÙ†",
-                            layout_header: "ØªÙŽØ®Ø·ÙÙŠØ·",
-                            layout_label: "Ø§Ù„Ù‚Ø§Ø¦Ù…Ø© (Ø§Ù„Ù…Ù„Ø§Ø­Ø©)",
-                            layout_header_label: "Ø£Ù†ÙˆØ§Ø¹ Ø§Ù„Ø±Ø£Ø³",
-                            content_label: "Ù…Ø­ØªÙˆÙ‰",
-                            layout_navbar_label: "Ù†ÙˆØ¹ Ø´Ø±ÙŠØ· Ø§Ù„ØªÙ†Ù‚Ù„",
-                            direction_label: "Ø§ØªØ¬Ø§Ù‡",
-                        },
-                        de: {
-                            panel_header: "Vorlagen-Anpasser",
-                            panel_sub_header:
-                                "Anpassen und Vorschau in Echtzeit",
-                            theming_header: "Themen",
-                            color_label: "Grundfarbe",
-                            theme_label: "Thema",
-                            skin_label: "Skins",
-                            semiDark_label: "Halbdunkel",
-                            layout_header: "Layout",
-                            layout_label: "MenÃ¼ (Navigation)",
-                            layout_header_label: "Header-Typen",
-                            content_label: "Inhalt",
-                            layout_navbar_label: "Art der Navigationsleiste",
-                            direction_label: "Richtung",
-                        },
-                    }),
-                    (window.TemplateCustomizer = D);
+                (D.THEMES = [{
+                        name: "light",
+                        title: "Light",
+                        image: '<i class="bx bx-sun icon-base mb-0"></i>',
+                    },
+                    {
+                        name: "dark",
+                        title: "Dark",
+                        image: '<i class="bx bx-moon icon-base mb-0"></i>',
+                    },
+                    {
+                        name: "system",
+                        title: "System",
+                        image: '<i class="bx bx-desktop icon-base mb-0"></i>',
+                    },
+                ]),
+                (D.SKINS = [{
+                        name: "default",
+                        title: "Default",
+                        image: "skin-default.svg",
+                    },
+                    {
+                        name: "bordered",
+                        title: "Bordered",
+                        image: "skin-border.svg",
+                    },
+                ]),
+                (D.LAYOUTS = [{
+                        name: "expanded",
+                        title: "Expanded",
+                        image: "layouts-expanded.svg",
+                    },
+                    {
+                        name: "collapsed",
+                        title: "Collapsed",
+                        image: "layouts-collapsed.svg",
+                    },
+                ]),
+                (D.NAVBAR_OPTIONS = [{
+                        name: "sticky",
+                        title: "Sticky",
+                        image: "navbar-sticky.svg",
+                    },
+                    {
+                        name: "static",
+                        title: "Static",
+                        image: "navbar-static.svg",
+                    },
+                    {
+                        name: "hidden",
+                        title: "Hidden",
+                        image: "navbar-hidden.svg",
+                    },
+                ]),
+                (D.HEADER_TYPES = [{
+                        name: "fixed",
+                        title: "Fixed",
+                        image: "horizontal-fixed.svg",
+                    },
+                    {
+                        name: "static",
+                        title: "Static",
+                        image: "horizontal-static.svg",
+                    },
+                ]),
+                (D.CONTENT = [{
+                        name: "compact",
+                        title: "Compact",
+                        image: "content-compact.svg",
+                    },
+                    {
+                        name: "wide",
+                        title: "Wide",
+                        image: "content-wide.svg",
+                    },
+                ]),
+                (D.LANGUAGES = {
+                    en: {
+                        panel_header: "Template Customizer",
+                        panel_sub_header: "Customize and preview in real time",
+                        theming_header: "Theming",
+                        color_label: "Primary Color",
+                        theme_label: "Theme",
+                        skin_label: "Skins",
+                        semiDark_label: "Semi Dark",
+                        layout_header: "Layout",
+                        layout_label: "Menu (Navigation)",
+                        layout_header_label: "Header Types",
+                        content_label: "Content",
+                        layout_navbar_label: "Navbar Type",
+                        direction_label: "Direction",
+                    },
+                    fr: {
+                        panel_header: "ModÃ¨le De Personnalisation",
+                        panel_sub_header: "Personnalisez et prÃ©visualisez en temps rÃ©el",
+                        theming_header: "ThÃ©matisation",
+                        color_label: "Couleur primaire",
+                        theme_label: "ThÃ¨me",
+                        skin_label: "Peaux",
+                        semiDark_label: "Demi-foncÃ©",
+                        layout_header: "Disposition",
+                        layout_label: "Menu (Navigation)",
+                        layout_header_label: "Types d'en-tÃªte",
+                        content_label: "Contenu",
+                        layout_navbar_label: "Type de barre de navigation",
+                        direction_label: "Direction",
+                    },
+                    ar: {
+                        panel_header: "Ø£Ø¯Ø§Ø© ØªØ®ØµÙŠØµ Ø§Ù„Ù‚Ø§Ù„Ø¨",
+                        panel_sub_header: "ØªØ®ØµÙŠØµ ÙˆÙ…Ø¹Ø§ÙŠÙ†Ø© ÙÙŠ Ø§Ù„ÙˆÙ‚Øª Ø§Ù„Ø­Ù‚ÙŠÙ‚ÙŠ",
+                        theming_header: "Ø§Ù„Ø³Ù…Ø§Øª",
+                        color_label: "Ø§Ù„Ù„ÙˆÙ† Ø§Ù„Ø£Ø³Ø§Ø³ÙŠ",
+                        theme_label: "Ø³Ù…Ø©",
+                        skin_label: "Ø¬Ù„ÙˆØ¯",
+                        semiDark_label: "Ø´Ø¨Ù‡ Ø¯Ø§ÙƒÙ†",
+                        layout_header: "ØªÙŽØ®Ø·ÙÙŠØ·",
+                        layout_label: "Ø§Ù„Ù‚Ø§Ø¦Ù…Ø© (Ø§Ù„Ù…Ù„Ø§Ø­Ø©)",
+                        layout_header_label: "Ø£Ù†ÙˆØ§Ø¹ Ø§Ù„Ø±Ø£Ø³",
+                        content_label: "Ù…Ø­ØªÙˆÙ‰",
+                        layout_navbar_label: "Ù†ÙˆØ¹ Ø´Ø±ÙŠØ· Ø§Ù„ØªÙ†Ù‚Ù„",
+                        direction_label: "Ø§ØªØ¬Ø§Ù‡",
+                    },
+                    de: {
+                        panel_header: "Vorlagen-Anpasser",
+                        panel_sub_header: "Anpassen und Vorschau in Echtzeit",
+                        theming_header: "Themen",
+                        color_label: "Grundfarbe",
+                        theme_label: "Thema",
+                        skin_label: "Skins",
+                        semiDark_label: "Halbdunkel",
+                        layout_header: "Layout",
+                        layout_label: "MenÃ¼ (Navigation)",
+                        layout_header_label: "Header-Typen",
+                        content_label: "Inhalt",
+                        layout_navbar_label: "Art der Navigationsleiste",
+                        direction_label: "Richtung",
+                    },
+                }),
+                (window.TemplateCustomizer = D);
                 window.onload = function () {
                     !(function () {
                         var t = {
@@ -2491,17 +2415,17 @@
                         };
                         if (t.pickerWrapper && t.pickerEl) {
                             var e =
-                                    "checked" ===
-                                    t.pickerWrapper.getAttribute("checked")
-                                        ? window.templateCustomizer._getSetting(
-                                              "Color"
-                                          )
-                                            ? window.templateCustomizer._getSetting(
-                                                  "Color"
-                                              )
-                                            : window.templateCustomizer.settings
-                                                  .defaultPrimaryColor
-                                        : "#FF4961",
+                                "checked" ===
+                                t.pickerWrapper.getAttribute("checked") ?
+                                window.templateCustomizer._getSetting(
+                                    "Color"
+                                ) ?
+                                window.templateCustomizer._getSetting(
+                                    "Color"
+                                ) :
+                                window.templateCustomizer.settings
+                                .defaultPrimaryColor :
+                                "#FF4961",
                                 o = new Pickr({
                                     el: t.pickerEl,
                                     theme: "nano",
@@ -2517,9 +2441,9 @@
                                     },
                                 });
                             o._root.button.classList.add(
-                                "bx",
-                                "bxs-color-fill"
-                            ),
+                                    "bx",
+                                    "bxs-color-fill"
+                                ),
                                 o.on("change", function (e) {
                                     var o,
                                         i = e.toHEXA().toString(),
@@ -2549,7 +2473,7 @@
                         t.style.setProperty(
                             "--pcr-color",
                             window.templateCustomizer.settings
-                                .defaultPrimaryColor
+                            .defaultPrimaryColor
                         );
                 };
             })(),
