@@ -15,7 +15,7 @@ class Menu extends Model
     {
         return $this->hasMany(Resep::class);
     }
-      public function rancangMenu()
+      public function rancanganMenu()
     {
         return $this->hasMany(RancanganMenu::class);
     }

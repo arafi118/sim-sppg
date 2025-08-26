@@ -79,8 +79,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/pelaporan/simpan-saldo/{tahun}/{bulan?}', [PelaporanController::class, 'simpanSaldo']);
 
     //Rab
-    Route::get('/rab', [RabController::class, 'index'])->name('rab.index');
-    Route::post('/rab/generate', [RabController::class, 'generate'])->name('rab.generate');
+Route::get('/rab', [RabController::class, 'index']);
+    Route::get('/rab/generate', [RabController::class, 'generate']);
 
     Route::post('/auth/logout', [AuthController::class, 'logout']);
 });

@@ -70,24 +70,18 @@
             });
         </script>
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                // Date picker
-                flatpickr("#flatpickr-date", {
-                    dateFormat: "Y-m-d"
-                });
+            // DOB (Date of Birth)
+            flatpickr("#formValidationDob", {
+                dateFormat: "Y-m-d"
+            });
 
-                // DOB (Date of Birth)
-                flatpickr("#formValidationDob", {
-                    dateFormat: "Y-m-d"
-                });
-
-                // Time picker
-                flatpickr("#flatpickr-time", {
-                    enableTime: true,
-                    noCalendar: true,
-                    dateFormat: "H:i",
-                    time_24hr: true
-                });
+            // Time picker
+            flatpickr("#flatpickr-time", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true
+            });
             });
         </script>
     @endsection

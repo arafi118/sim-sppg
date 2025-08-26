@@ -7,7 +7,7 @@
                 <div class="col-md-6 col-12 mb-6">
                     <label for="periode" class="form-label">Periode</label>
                     <select id="periode" name="periode" class="select2 form-select form-select-lg" data-allow-clear="true">
-                        <option value="">-- Pilih Kelompok --</option>
+                        <option value=" ">-- Pilih Periode --</option>
                         @foreach ($periode as $p)
                             <option value="{{ $p->tanggal_awal }}_{{ $p->tanggal_akhir }}">
                                 Periode Ke {{ $p->periode_ke }}
@@ -19,10 +19,15 @@
                     <label for="tanggal" class="form-label">Pilih Tanggal</label>
                     <select id="tanggal" name="tanggal" class="select2 form-select form-select-lg"
                         data-allow-clear="true">
-                        <option value=""></option>
+                        <option value=" ">-- Pilih Tanggal --</option>
                     </select>
                 </div>
             </div>
+
+            <!-- Input hidden untuk tanggal awal & akhir -->
+            <input type="hidden" name="tanggal_awal" id="tanggal_awal">
+            <input type="hidden" name="tanggal_akhir" id="tanggal_akhir">
+            <input type="hidden" name="jenis" id="jenis" value="Periode">
 
             <div class="d-flex justify-content-end">
                 <button type="button" class="btn btn-primary" id="generateRab">
@@ -42,11 +47,17 @@
 
             if (!periode) {
                 $tanggal.empty().trigger('change');
+                $('#tanggal_awal').val('');
+                $('#tanggal_akhir').val('');
                 return;
             }
 
             var tanggal_awal = periode.split('_')[0];
             var tanggal_akhir = periode.split('_')[1];
+
+            // Simpan ke input hidden
+            $('#tanggal_awal').val(tanggal_awal);
+            $('#tanggal_akhir').val(tanggal_akhir);
 
             var awal = new Date(tanggal_awal);
             var akhir = new Date(tanggal_akhir);
@@ -63,7 +74,6 @@
                     "Juli", "Agustus", "September", "Oktober", "November", "Desember"
                 ];
                 var label = `${day} ${namaBulan[d.getMonth()]} ${year}`;
-
                 var option = new Option(label, `${year}-${month}-${day}`, false, false);
                 $tanggal.append(option);
             }
@@ -84,6 +94,13 @@
 
             var tanggal_awal = periode.split('_')[0];
             var tanggal_akhir = periode.split('_')[1];
+
+            var params = 'tanggal=' + tanggal_awal + ',' + tanggal_akhir;
+            if (tanggal != '-') {
+                var params = 'tanggal=' + tanggal;
+            }
+
+            window.open('/app/rab/generate?' + params)
         });
     </script>
 @endsection
