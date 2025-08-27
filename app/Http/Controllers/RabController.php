@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Rancangan;
+use App\Models\Po;
 use App\Models\PeriodeMasak;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Carbon\Carbon;
@@ -91,110 +92,99 @@ class RabController extends Controller
             ->setOption('title', $title) // ini yang akan jadi judul PDF di header kiri
             ->inline('RAB.pdf');
     }
-public function PO(Request $request)
-{
-    if (
-        !$request->filled('tanggal') &&
-        (!$request->filled('tanggal_awal') || !$request->filled('tanggal_akhir'))
-    ) {
-        return response()->json([
-            'error' => 'Periode harus dipilih terlebih dahulu'
-        ], 400);
-    }
+    public function PO(Request $request)
+    {
+        $tanggalAwal = $request->tanggal_awal;
+        $tanggalAkhir = $request->tanggal_akhir;
+        $tanggal = $request->tanggal;
 
-    // Tentukan tanggal
-    if ($request->tanggal === '-') {
-        $tanggalParam = [$request->tanggal_awal, $request->tanggal_akhir];
-        $rancangan = Rancangan::with(['rancanganMenu.menu.resep.bahanPangan'])
-            ->whereBetween('tanggal', $tanggalParam)
-            ->orderBy('tanggal', 'ASC')
-            ->get();
-    } else {
-        $tanggalParam = [$request->tanggal];
-        $rancangan = Rancangan::with(['rancanganMenu.menu.resep.bahanPangan'])
-            ->whereDate('tanggal', $request->tanggal)
-            ->orderBy('tanggal', 'ASC')
-            ->get();
-    }
+        if ($tanggal === '-') {
+            $rancangan = Rancangan::with(['rancanganMenu.menu.resep.bahanPangan'])
+                ->whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir])
+                ->orderBy('tanggal','ASC')->get();
+        } else {
+            $rancangan = Rancangan::with(['rancanganMenu.menu.resep.bahanPangan'])
+                ->whereDate('tanggal', $tanggal)
+                ->orderBy('tanggal','ASC')->get();
+        }
 
-    $dataBahanPangan = [];
-    foreach ($rancangan as $r) {
-        $jumlahRancangan = $r->jumlah ?? 1;
+        $dataBahanPangan = [];
+        foreach($rancangan as $r){
+            $jumlahRancangan = $r->jumlah ?? 1;
+            foreach($r->rancanganMenu as $rm){
+                $menu = $rm->menu;
+                if(!$menu) continue;
+                foreach($menu->resep as $resep){
+                    $bp = $resep->bahanPangan;
+                    if(!$bp) continue;
 
-        foreach ($r->rancanganMenu as $rm) {
-            $menu = $rm->menu;
-            if (!$menu) continue;
+                    $bpId = $bp->id;
 
-            $jumlahMenu = $rm->jumlah ?? 1;
+                    if(!isset($dataBahanPangan[$bpId])){
+                        $dataBahanPangan[$bpId] = [
+                            'bahan_pangan_id' => $bpId,
+                            'nama' => $bp->nama,
+                            'satuan' => $bp->satuan,
+                            'harga' => $bp->harga_jual ?? 0,
+                            'jumlah' => 0
+                        ];
+                    }
 
-            foreach ($menu->resep as $resep) {
-                $bp = $resep->bahanPangan;
-                if (!$bp) continue;
-
-                $bpId = $bp->id;
-
-                if (!isset($dataBahanPangan[$bpId])) {
-                    $dataBahanPangan[$bpId] = [
-                        'nama'   => $bp->nama,
-                        'satuan' => $bp->satuan,
-                        'harga'  => $bp->harga_jual ?? 0,
-                        'jumlah' => 0,
-                    ];
+                    $dataBahanPangan[$bpId]['jumlah'] += ($resep->gramasi ?? 0) * $jumlahRancangan;
                 }
-
-                // Jumlah konsisten dengan RAB PDF
-                $dataBahanPangan[$bpId]['jumlah'] += ($resep->gramasi ?? 0) * $jumlahRancangan;
             }
         }
+
+        uasort($dataBahanPangan, fn($a,$b) => strcmp($a['nama'],$b['nama']));
+
+        return view('app.rab.po_tabel', compact('dataBahanPangan'));
     }
 
-    uasort($dataBahanPangan, fn($a, $b) => strcmp($a['nama'], $b['nama']));
+    public function simpanPO(Request $request)
+    {
+        $totals = $request->input('total_harga');
 
-    // Bangun HTML tabel
-    $html = '<table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Bahan Pangan</th>
-                <th>Satuan</th>
-                <th>Harga</th>
-                <th>Kebutuhan</th>
-                <th>Total Harga</th>
-            </tr>
-        </thead>
-        <tbody>';
+        $totalKeseluruhan = array_sum($totals);
 
-    if (empty($dataBahanPangan)) {
-        $html .= '<tr><td colspan="6" class="text-center">Tidak ada data</td></tr>';
-    } else {
-        $grandTotal = 0;
-        $no = 1;
-        foreach ($dataBahanPangan as $b) {
-            $total = $b['harga'] * $b['jumlah'];
-            $grandTotal += $total;
+        $po = \App\Models\Po::create([
+            'tanggal' => now(),
+            'total_harga' => $totalKeseluruhan,
+            'status_bayar' => 'unpaid'
+        ]);
 
-            $html .= '<tr>
-                <td class="center">'.$no.'</td>
-                <td>'.$b['nama'].'</td>
-                <td class="center">'.$b['satuan'].'</td>
-                <td class="right">'.number_format($b['harga'], 0, ',', '.').'</td>
-                <td class="right">'.number_format($b['jumlah'], 2, ',', '.').'</td>
-                <td class="right">'.number_format($total, 0, ',', '.').'</td>
-            </tr>';
+       $hargaSatuan = $request->input('harga_satuan'); // array [id => harga]
+        $jumlahs = $request->input('jumlah');           // array [id => jumlah]
 
-            $no++;
+        foreach($totals as $bpId => $total){
+            \App\Models\PoDetail::create([
+                'po_id' => $po->id,
+                'bahan_pangan_id' => $bpId,
+                'harga_satuan' => $hargaSatuan[$bpId] ?? 0,
+                'jumlah' => $jumlahs[$bpId] ?? 0,
+                'total_harga' => $total,
+                'sisa_bayar' => $total,
+                'status_bayar' => 'unpaid'
+            ]);
         }
-
-        $html .= '<tr>
-            <th colspan="5" class="center">TOTAL</th>
-            <th class="right">'.number_format($grandTotal, 0, ',', '.').'</th>
-        </tr>';
+                return response()->json([
+                    'message' => 'PO berhasil disimpan, total harga siap dicicil.',
+                    'po_id' => $po->id
+                ]);
+    }
+    public function detailPO($id)
+    {
+        $title = 'Detail Po';
+        $po = Po::with('poDetail.bahanPangan')->findOrFail($id);
+        return view('app.rab.po_detail', compact('po','title'));
     }
 
-    $html .= '</tbody></table>';
 
-    return $html;
-}
+
+
+
+
+
+
 
 
 }

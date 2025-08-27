@@ -82,6 +82,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/rab', [RabController::class, 'index']);
     Route::get('/rab/generate', [RabController::class, 'generate']);
     Route::get('/rab/po', [RabController::class, 'PO']);
+    Route::post('/rab/simpanPO', [RabController::class, 'simpanPO']);
+    Route::get('/rab/detailPO/{id}', [RabController::class, 'detailPO']);
+
+
 
 
     Route::post('/auth/logout', [AuthController::class, 'logout']);

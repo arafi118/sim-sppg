@@ -24,7 +24,7 @@
                 </div>
             </div>
 
-            <!-- Input hidden untuk tanggal awal & akhir -->
+            <!-- Input hidden -->
             <input type="hidden" name="tanggal_awal" id="tanggal_awal">
             <input type="hidden" name="tanggal_akhir" id="tanggal_akhir">
             <input type="hidden" name="jenis" id="jenis" value="Periode">
@@ -46,118 +46,152 @@
     <div id="poCard" class="card mt-3" style="display:none;">
         <div class="card-body">
             <h5 class="card-title">Pemesanan (PO)</h5>
-            <div id="poTabel"></div>
+            <div id="poTabel"></div> <!-- Form PO akan dimuat dari controller -->
         </div>
     </div>
 @endsection
 
 @section('script')
     <script>
-        // Generate tanggal berdasarkan periode
-        $(document).on('change', '#periode', function() {
-            var periode = $(this).val();
-            var $tanggal = $('#tanggal');
+        $(document).ready(function() {
 
-            if (!periode) {
-                $tanggal.empty().trigger('change');
-                $('#tanggal_awal').val('');
-                $('#tanggal_akhir').val('');
-                return;
-            }
+            // Generate tanggal berdasarkan periode
+            $(document).on('change', '#periode', function() {
+                var periode = $(this).val();
+                var $tanggal = $('#tanggal');
 
-            var tanggal_awal = periode.split('_')[0];
-            var tanggal_akhir = periode.split('_')[1];
+                if (!periode) {
+                    $tanggal.empty().trigger('change');
+                    $('#tanggal_awal').val('');
+                    $('#tanggal_akhir').val('');
+                    return;
+                }
 
-            $('#tanggal_awal').val(tanggal_awal);
-            $('#tanggal_akhir').val(tanggal_akhir);
+                var tanggal_awal = periode.split('_')[0];
+                var tanggal_akhir = periode.split('_')[1];
 
-            var awal = new Date(tanggal_awal);
-            var akhir = new Date(tanggal_akhir);
+                $('#tanggal_awal').val(tanggal_awal);
+                $('#tanggal_akhir').val(tanggal_akhir);
 
-            $tanggal.empty();
-            $tanggal.append(new Option('Satu Periode', '-', false, false));
-            for (var d = new Date(awal); d <= akhir; d.setDate(d.getDate() + 1)) {
-                var year = d.getFullYear();
-                var month = String(d.getMonth() + 1).padStart(2, '0');
-                var day = String(d.getDate()).padStart(2, '0');
+                var awal = new Date(tanggal_awal);
+                var akhir = new Date(tanggal_akhir);
 
-                var namaBulan = [
-                    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-                    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-                ];
-                var label = `${day} ${namaBulan[d.getMonth()]} ${year}`;
-                var option = new Option(label, `${year}-${month}-${day}`, false, false);
-                $tanggal.append(option);
-            }
-        });
+                $tanggal.empty();
+                $tanggal.append(new Option('Satu Periode', '-', false, false));
+                for (var d = new Date(awal); d <= akhir; d.setDate(d.getDate() + 1)) {
+                    var year = d.getFullYear();
+                    var month = String(d.getMonth() + 1).padStart(2, '0');
+                    var day = String(d.getDate()).padStart(2, '0');
 
-        // PO
-        $(document).on('click', '#btnGeneratePO', function() {
-            var periode = $('#periode').val();
-            if (!periode || periode.trim() === "") {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Peringatan',
-                    text: 'Periode harus diisi!',
-                });
-                return; // hentikan proses
-            }
-
-            // jika valid, jalankan AJAX
-            var tanggal = $('#tanggal').val();
-            var tanggal_awal = periode.split('_')[0];
-            var tanggal_akhir = periode.split('_')[1];
-
-            var params = {
-                tanggal_awal: tanggal_awal,
-                tanggal_akhir: tanggal_akhir,
-                tanggal: tanggal,
-                jenis: $('#jenis').val()
-            };
-
-            $.ajax({
-                url: '/app/rab/po',
-                method: 'GET',
-                data: params,
-                success: function(response) {
-                    $('#poTabel').html(response);
-                    $('#poCard').show();
-                    $('html, body').animate({
-                        scrollTop: $('#poCard').offset().top
-                    }, 500);
-                },
-                error: function() {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Terjadi kesalahan',
-                        text: 'Gagal menampilkan PO',
-                    });
+                    var namaBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+                    ];
+                    var label = `${day} ${namaBulan[d.getMonth()]} ${year}`;
+                    $tanggal.append(new Option(label, `${year}-${month}-${day}`, false, false));
                 }
             });
-        });
 
-        // Cetak RAB
-        $(document).on('click', '#btnCetakRAB', function() {
-            var periode = $('#periode').val();
-            if (!periode || periode.trim() === "") {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Peringatan',
-                    text: 'Periode harus diisi!',
+            // Generate PO
+            $(document).on('click', '#btnGeneratePO', function() {
+                var periode = $('#periode').val();
+                if (!periode || periode.trim() === "") {
+                    Swal.fire('Peringatan', 'Periode harus diisi!', 'warning');
+                    return;
+                }
+
+                var tanggal = $('#tanggal').val();
+                var tanggal_awal = periode.split('_')[0];
+                var tanggal_akhir = periode.split('_')[1];
+
+                $.ajax({
+                    url: '/app/rab/po',
+                    method: 'GET',
+                    data: {
+                        tanggal: tanggal,
+                        tanggal_awal: tanggal_awal,
+                        tanggal_akhir: tanggal_akhir
+                    },
+                    success: function(res) {
+                        $('#poTabel').html(res);
+                        $('#poCard').show();
+                        $('html, body').animate({
+                            scrollTop: $('#poCard').offset().top
+                        }, 500);
+                    },
+                    error: function() {
+                        Swal.fire('Error', 'Gagal menampilkan PO', 'error');
+                    }
                 });
-                return; // hentikan proses
-            }
+            });
 
-            var tanggal = $('#tanggal').val();
-            var tanggal_awal = periode.split('_')[0];
-            var tanggal_akhir = periode.split('_')[1];
+            // Cetak RAB
+            $(document).on('click', '#btnCetakRAB', function() {
+                var periode = $('#periode').val();
+                if (!periode || periode.trim() === "") {
+                    Swal.fire('Peringatan', 'Periode harus diisi!', 'warning');
+                    return;
+                }
+                var tanggal = $('#tanggal').val();
+                var tanggal_awal = periode.split('_')[0];
+                var tanggal_akhir = periode.split('_')[1];
+                var params = 'tanggal=' + tanggal_awal + ',' + tanggal_akhir;
+                if (tanggal != '-') params = 'tanggal=' + tanggal;
+                window.open('/app/rab/generate?' + params);
+            });
 
-            var params = 'tanggal=' + tanggal_awal + ',' + tanggal_akhir;
-            if (tanggal != '-') {
-                params = 'tanggal=' + tanggal;
-            }
 
-            window.open('/app/rab/generate?' + params);
+            $(document).on('click', '#btnSimpanPO', function() {
+                var form = $(this).closest('form');
+                var data = form.serialize();
+
+                $.ajax({
+                    url: '/app/rab/simpanPO',
+                    method: 'POST',
+                    data: data,
+                    success: function(res) {
+                        Swal.fire({
+                            title: 'Berhasil',
+                            text: 'PO berhasil disimpan. Anda ingin melihat detail?',
+                            icon: 'success',
+                            showCancelButton: true,
+                            confirmButtonText: 'Ya',
+                            cancelButtonText: 'Tidak',
+                            customClass: {
+                                cancelButton: 'btn btn-danger me-2', // tombol Tidak merah
+                                confirmButton: 'btn btn-success' // tombol Ya hijau
+                            },
+                            buttonsStyling: false // gunakan class Bootstrap
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Tombol Ya → ke detail PO
+                                window.location.href = '/app/rab/detailPO/' + res.po_id;
+                            } else {
+                                // Tombol Tidak → kembali ke halaman index PO
+                                window.location.href = '/app/rab';
+                            }
+                        });
+                    },
+                    error: function() {
+                        Swal.fire('Gagal', 'PO gagal disimpan', 'error');
+                    }
+                });
+            });
+
+
+
+
+            // Tombol Detail PO
+            $(document).on('click', '#btnDetailPO', function() {
+                var poId = $(this).data('po-id');
+                if (!poId) {
+                    Swal.fire('Peringatan', 'PO belum disimpan!', 'warning');
+                    return;
+                }
+
+                window.location.href = '/app/rab/detailPO/' + poId;
+            });
+
+
         });
     </script>
 @endsection
