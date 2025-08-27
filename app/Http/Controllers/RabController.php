@@ -140,37 +140,49 @@ class RabController extends Controller
         return view('app.rab.po_tabel', compact('dataBahanPangan'));
     }
 
-    public function simpanPO(Request $request)
-    {
-        $totals = $request->input('total_harga');
+public function simpanPO(Request $request)
+{
+    $totalsInput = $request->input('total_harga');     // total harga input user
+    $jumlahs = $request->input('jumlah');              // jumlah sesuai rancangan (hidden)
+    $hargaSatuan = $request->input('harga_satuan');    // harga satuan (hidden)
 
-        $totalKeseluruhan = array_sum($totals);
+    $totalKeseluruhan = array_sum($totalsInput);
 
-        $po = \App\Models\Po::create([
-            'tanggal' => now(),
-            'total_harga' => $totalKeseluruhan,
-            'status_bayar' => 'unpaid'
-        ]);
+    // PO hari ini
+    $po = \App\Models\Po::firstOrNew(['tanggal' => now()->toDateString()]);
+    $po->total_harga = $totalKeseluruhan;
+    $po->status_bayar = 'unpaid';
+    $po->save();
 
-       $hargaSatuan = $request->input('harga_satuan'); // array [id => harga]
-        $jumlahs = $request->input('jumlah');           // array [id => jumlah]
+    foreach ($totalsInput as $bpId => $totalInput) {
+        $totalAwal = ($hargaSatuan[$bpId] ?? 0) * ($jumlahs[$bpId] ?? 0);
+        $sisaBayar = $totalAwal - $totalInput;
 
-        foreach($totals as $bpId => $total){
-            \App\Models\PoDetail::create([
+        \App\Models\PoDetail::updateOrCreate(
+            [
                 'po_id' => $po->id,
-                'bahan_pangan_id' => $bpId,
+                'bahan_pangan_id' => $bpId
+            ],
+            [
                 'harga_satuan' => $hargaSatuan[$bpId] ?? 0,
-                'jumlah' => $jumlahs[$bpId] ?? 0,
-                'total_harga' => $total,
-                'sisa_bayar' => $total,
+                'jumlah'       => $jumlahs[$bpId] ?? 0,
+                'total_harga'  => $totalInput,
+                'sisa_bayar'   => $sisaBayar,
                 'status_bayar' => 'unpaid'
-            ]);
-        }
-                return response()->json([
-                    'message' => 'PO berhasil disimpan, total harga siap dicicil.',
-                    'po_id' => $po->id
-                ]);
+            ]
+        );
     }
+
+    return response()->json([
+        'message' => 'PO berhasil disimpan/diupdate, sisa bayar sudah diperhitungkan.',
+        'po_id' => $po->id
+    ]);
+}
+
+
+
+
+
     public function detailPO($id)
     {
         $title = 'Detail Po';

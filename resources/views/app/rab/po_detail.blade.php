@@ -18,7 +18,6 @@
                         <th>Jumlah</th>
                         <th>Total Harga</th>
                         <th>Sisa Bayar</th>
-                        <th>Status Bayar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,7 +37,6 @@
                             <td class="text-end">{{ number_format($detail->jumlah, 2, ',', '.') }}</td>
                             <td class="text-end">{{ number_format($detail->total_harga, 0, ',', '.') }}</td>
                             <td class="text-end">{{ number_format($detail->sisa_bayar, 0, ',', '.') }}</td>
-                            <td align="center">{{ ucfirst($detail->status_bayar) }}</td>
                         </tr>
                         @php
                             $no++;
