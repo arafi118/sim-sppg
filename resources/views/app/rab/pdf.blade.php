@@ -50,7 +50,6 @@
         @endif
     </div>
 
-    <!-- Spacer -->
     <div style="width: 150px;"></div>
 </div>
 <table class="tb-border">
@@ -65,52 +64,30 @@
         </tr>
     </thead>
     @php
-        $menuNo = 1;
         $grandTotal = 0;
     @endphp
 
-    @foreach ($menuGabungan as $menuName => $dataMenu)
+    @foreach ($dataBahanPangan as $index => $b)
         @php
-            $menuTotal = 0;
+            $nama_bahan = $b['nama'];
+            $satuan = $b['satuan'];
+            $harga = $b['harga'];
+            $jumlah = $b['jumlah'];
+
+            $total = $harga * $jumlah;
+            $grandTotal += $total;
         @endphp
 
-        <!-- Judul Menu -->
         <tr>
-            <td class="center">{{ $menuNo }}</td>
-            <td colspan="5" style="font-weight: bold;">{{ $menuName }}</td>
+            <td class="center">{{ $loop->iteration }}</td>
+            <td>{{ $nama_bahan }}</td>
+            <td class="center">{{ $satuan }}</td>
+            <td class="right">{{ number_format($harga, 0, ',', '.') }}</td>
+            <td class="right">{{ number_format($jumlah, 2, ',', '.') }}</td>
+            <td class="right">{{ number_format($total, 0, ',', '.') }}</td>
         </tr>
-
-        <!-- List Bahan -->
-        @foreach ($dataMenu['bahan'] as $index => $b)
-            @php
-                $bp = $b['bahanPangan'];
-                $jumlah = $b['gramasi'] ?? 0;
-                $harga = $bp->harga_jual ?? 0;
-                $total = $jumlah * $harga;
-
-                $menuTotal += $total;
-                $grandTotal += $total;
-            @endphp
-            <tr>
-                <td class="center">{{ $menuNo . '.' . ($index + 1) }}</td>
-                <td>{{ $bp->nama ?? '-' }}</td>
-                <td class="center">{{ $bp->satuan ?? '-' }}</td>
-                <td class="right">{{ number_format($harga, 0, ',', '.') }}</td>
-                <td class="right">{{ number_format($jumlah, 2, ',', '.') }}</td>
-                <td class="right">{{ number_format($total, 0, ',', '.') }}</td>
-            </tr>
-        @endforeach
-
-        <!-- Subtotal per Menu -->
-        <tr>
-            <th colspan="5" class="center">Subtotal {{ $menuName }}</th>
-            <th class="right">{{ number_format($menuTotal, 0, ',', '.') }}</th>
-        </tr>
-
-        @php $menuNo++; @endphp
     @endforeach
 
-    <!-- Grand Total -->
     <tfoot>
         <tr>
             <th colspan="5" class="center">TOTAL</th>
