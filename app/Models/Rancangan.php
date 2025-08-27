@@ -11,7 +11,7 @@ class Rancangan extends Model
     protected $table = 'rancangans';
     protected $guarded = [];
 
-    public function periodeMasak()
+    public function periode()
     {
         return $this->belongsTo(PeriodeMasak::class, 'periode_masak_id');
     }
