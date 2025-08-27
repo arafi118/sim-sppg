@@ -1,50 +1,11 @@
-<!DOCTYPE html>
-<html lang="id">
-
-<head>
-    <meta charset="UTF-8">
-    <title>{{ $title }}</title>
-    <style>
-        * {
-            font-family: 'Arial', sans-serif;
-            font-size: 12px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: center;
-        }
-
-        th,
-        td {
-            border: 1px solid #000;
-            padding: 4px;
-        }
-
-        th {
-            font-weight: bold;
-        }
-
-        .no-border td {
-            border: none;
-            text-align: left;
-            padding: 6px;
-        }
-    </style>
-</head>
-
-<body>
-    <div style="text-align:center; font-size:14px; font-weight:bold; margin-bottom:20px;">
-        BADAN GIZI NASIONAL RI <br>
-        SATUAN PELAYANAN PEMENUHAN GIZI (SPPG) <br>
-        <span style="font-weight:normal; font-size:inherit;">KOTA DEPOK</span> <br>
-        CATATAN PENGELUARAN BULAN FEBRUARI
+@extends('app.pelaporan.layout.base')
+@section('content')
+    <br>
+    <div class="judul">BADAN GIZI NASIONAL RI <br>
+        SATUAN PELAYANAN PEMENUHAN GIZI (SPPG) KOTA DEPOK
     </div>
-
-
-
-    <table>
+    <div class="subjudul">CATATAN PENGELUARAN BULAN FEBRUARI</div>
+    <table class="border-table">
         <tr>
             <th style="width:5%;">No</th>
             <th style="width:12%;">Tanggal</th>
@@ -72,40 +33,36 @@
         </tr>
     </table>
 
-    <br>
-    <table style="width:100%; border-collapse:collapse; margin-top:15px;">
+
+    <table class="border-table">
         <tr>
-            <th style="width:50%; text-align:center; border:1px solid #000;">Keterangan</th>
-            <th style="width:50%; text-align:center; border:1px solid #000;">Jumlah</th>
+            <th>Keterangan</th>
+            <th>Jumlah</th>
         </tr>
 
         <tr>
-            <td style="border:1px solid #000; text-align:left; font-weight:bold;">Upah Sukarelawan</td>
-            <td style="border:1px solid #000; text-align:left">Rp</td>
+            <td>Upah Sukarelawan</td>
+            <td>Rp</td>
         </tr>
         <tr>
-            <td style="border:1px solid #000; text-align:left; font-weight:bold;">Pengeluaran Kebutuhan SPPG</td>
-            <td style="border:1px solid #000; text-align:left">Rp</td>
+            <td>Pengeluaran Kebutuhan SPPG</td>
+            <td>Rp</td>
         </tr>
         <tr>
-            <td style="border:1px solid #000; text-align:left; font-weight:bold;">Sisa Dana Periode Lalu</td>
-            <td style="border:1px solid #000; text-align:left">Rp</td>
+            <td>Sisa Dana Periode Lalu</td>
+            <td>Rp</td>
         </tr>
         <tr>
-            <td style="border:1px solid #000; text-align:left; font-weight:bold;">Total Operasional</td>
-            <td style="border:1px solid #000; text-align:left">Rp</td>
+            <td>Total Operasional</td>
+            <td>Rp</td>
         </tr>
         <tr>
-            <td style="border:1px solid #000; text-align:left; font-weight:bold;">Dana yang diterima</td>
-            <td style="border:1px solid #000; text-align:left">Rp</td>
+            <td>Dana yang diterima</td>
+            <td>Rp</td>
         </tr>
         <tr>
-            <td style="border:1px solid #000; text-align:left; font-weight:bold;">Sisa Dana</td>
-            <td style="border:1px solid #000; text-align:left">Rp</td>
+            <td>Sisa Dana</td>
+            <td>Rp</td>
         </tr>
     </table>
-
-
-</body>
-
-</html>
+@endsection

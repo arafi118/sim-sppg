@@ -2,6 +2,8 @@
 
 @section('content')
     <div class="judul">Perjanjian Kerjasama (PKS)</div>
+    <div class="subjudul">&nbsp;</div>
+
     <table border="0" width="100%">
         <tr>
             <td width="10%">Nomor</td>

@@ -35,10 +35,11 @@ class PelaporanController extends Controller
         $view = view('app.pelaporan.views.cover', $data)->render();
 
         $pdf = PDF::loadHTML($view)->setOptions([
-            'margin-top'    => 20,
-            'margin-bottom' => 20,
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
             'margin-left'   => 25,
             'margin-right'  => 20,
+            'enable-local-file-access' => true,
         ]);
 
         return $pdf->inline();
@@ -52,10 +53,12 @@ class PelaporanController extends Controller
         $view = view('app.pelaporan.views.penggunaan_anggaran', $data)->render();
 
         $pdf = PDF::loadHTML($view)->setOptions([
-            'margin-top'    => 20,
-            'margin-bottom' => 20,
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
             'margin-left'   => 25,
             'margin-right'  => 20,
+            'header-html' => view('app.pelaporan.layout.header', $data)->render(),
+            'enable-local-file-access' => true,
         ]);
 
         return $pdf->inline();
@@ -68,12 +71,15 @@ class PelaporanController extends Controller
 
         $view = view('app.pelaporan.views.surat_pernyataan', $data)->render();
 
-        $pdf = PDF::loadHTML($view)->setOptions([
-            'margin-top'    => 20,
-            'margin-bottom' => 20,
-            'margin-left'   => 25,
-            'margin-right'  => 20,
-        ]);
+        $pdf = PDF::loadHTML($view)
+            ->setOptions([
+                'margin-top'    => 30,
+                'margin-bottom' => 15,
+                'margin-left'   => 25,
+                'margin-right'  => 20,
+                'header-html' => view('app.pelaporan.layout.header', $data)->render(),
+                'enable-local-file-access' => true,
+            ]);
 
         return $pdf->inline();
     }
@@ -85,10 +91,12 @@ class PelaporanController extends Controller
         $view = view('app.pelaporan.views.tanda_terima', $data)->render();
 
         $pdf = PDF::loadHTML($view)->setOptions([
-            'margin-top'    => 20,
-            'margin-bottom' => 20,
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
             'margin-left'   => 25,
             'margin-right'  => 20,
+            'header-html' => view('app.pelaporan.layout.header', $data)->render(),
+            'enable-local-file-access' => true,
         ]);
 
         return $pdf->inline();
@@ -101,10 +109,12 @@ class PelaporanController extends Controller
         $view = view('app.pelaporan.views.berita_acara', $data)->render();
 
         $pdf = PDF::loadHTML($view)->setOptions([
-            'margin-top'    => 20,
-            'margin-bottom' => 20,
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
             'margin-left'   => 25,
             'margin-right'  => 20,
+            'header-html' => view('app.pelaporan.layout.header', $data)->render(),
+            'enable-local-file-access' => true,
         ]);
 
         return $pdf->inline();
@@ -119,10 +129,12 @@ class PelaporanController extends Controller
         $pdf = PDF::loadHTML($view)
             ->setPaper('a4', 'landscape')
             ->setOptions([
-                'margin-top'    => 20,
-                'margin-bottom' => 20,
+                'margin-top'    => 30,
+                'margin-bottom' => 15,
                 'margin-left'   => 25,
                 'margin-right'  => 20,
+                'header-html' => view('app.pelaporan.layout.header', $data)->render(),
+                'enable-local-file-access' => true,
             ]);
 
         return $pdf->inline();
@@ -213,10 +225,63 @@ class PelaporanController extends Controller
         $view = view('app.pelaporan.views.laporan_pelaksanaan', $data)->render();
 
         $pdf = PDF::loadHTML($view)->setOptions([
-            'margin-top'    => 20,
-            'margin-bottom' => 20,
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
             'margin-left'   => 25,
             'margin-right'  => 20,
+            'header-html' => view('app.pelaporan.layout.header', $data)->render(),
+            'enable-local-file-access' => true,
+        ]);
+        return $pdf->inline();
+    }
+    private function pemeriksaan_bahan(array $data)
+    {
+        $data['title'] = 'Format Pemeriksaan Bahan Makanan';
+        $data['tgl']   = now()->format('d-m-Y');
+
+        $view = view('app.pelaporan.views.pemeriksaan_bahan', $data)->render();
+
+        $pdf = PDF::loadHTML($view)->setOptions([
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+            'header-html' => view('app.pelaporan.layout.header', $data)->render(),
+            'enable-local-file-access' => true,
+        ]);
+        return $pdf->inline();
+    }
+    private function pemeriksaan_makanan(array $data)
+    {
+        $data['title'] = 'Format Pemeriksaan Makanan';
+        $data['tgl']   = now()->format('d-m-Y');
+
+        $view = view('app.pelaporan.views.pemeriksaan_makanan', $data)->render();
+
+        $pdf = PDF::loadHTML($view)->setOptions([
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+            'header-html' => view('app.pelaporan.layout.header', $data)->render(),
+            'enable-local-file-access' => true,
+        ]);
+        return $pdf->inline();
+    }
+    private function nota_pesanan(array $data)
+    {
+        $data['title'] = 'Nota Pesanan Bahan Makanan';
+        $data['tgl']   = now()->format('d-m-Y');
+
+        $view = view('app.pelaporan.views.nota_pesanan', $data)->render();
+
+        $pdf = PDF::loadHTML($view)->setOptions([
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+            'header-html' => view('app.pelaporan.layout.header', $data)->render(),
+            'enable-local-file-access' => true,
         ]);
         return $pdf->inline();
     }
@@ -228,14 +293,14 @@ class PelaporanController extends Controller
 
         $view = view('app.pelaporan.views.catatan_pengeluaran', $data)->render();
 
-        $pdf = PDF::loadHTML($view)
-            ->setPaper('a4', 'landscape')
-            ->setOptions([
-                'margin-top'    => 20,
-                'margin-bottom' => 20,
-                'margin-left'   => 25,
-                'margin-right'  => 20,
-            ]);
+        $pdf = PDF::loadHTML($view)->setOptions([
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+            'header-html' => view('app.pelaporan.layout.header', $data)->render(),
+            'enable-local-file-access' => true,
+        ]);
 
         return $pdf->inline();
     }
@@ -247,10 +312,12 @@ class PelaporanController extends Controller
         $view = view('app.pelaporan.views.kuitansi', $data)->render();
 
         $pdf = PDF::loadHTML($view)->setOptions([
-            'margin-top'    => 20,
-            'margin-bottom' => 20,
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
             'margin-left'   => 25,
             'margin-right'  => 20,
+            'header-html' => view('app.pelaporan.layout.header', $data)->render(),
+            'enable-local-file-access' => true,
         ]);
 
         return $pdf->inline();
