@@ -17,23 +17,11 @@
             font-weight: bold;
             font-size: 14px;
             text-transform: uppercase;
-            margin-bottom: 30px;
         }
 
         .subjudul {
-            text-align: left;
-            margin-bottom: 20px;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        .tb-border th,
-        .tb-border td {
-            border: 1px solid #000;
-            padding: 4px;
+            text-align: center;
+            margin-bottom: 30px;
         }
 
         .rata-kanan {
@@ -83,6 +71,28 @@
         ol.huruf-besar {
             list-style-type: upper-alpha;
             padding-top: 5px;
+        }
+
+        .border-table {
+            border-collapse: collapse;
+            width: 100%;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .border-table th,
+        .border-table td {
+            border: 1px solid black;
+            padding: 2px 5px;
+            text-align: left;
+        }
+
+        .border-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            text-align: center;
         }
     </style>
 </head>
