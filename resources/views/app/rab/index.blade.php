@@ -29,23 +29,31 @@
             <input type="hidden" name="tanggal_akhir" id="tanggal_akhir">
             <input type="hidden" name="jenis" id="jenis" value="Periode">
 
-            <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-primary" id="generateRab">
+            <div class="d-flex justify-content-end mt-3">
+                <button type="button" class="btn btn-primary" id="btnGeneratePO">
                     <i class="icon-base bx bx-folder me-1"></i>
                     <span class="align-middle">Pemesanan (PO)</span>
                 </button>
-                <button type="button" class="btn btn-danger ms-3" id="generateRab">
+                <button type="button" class="btn btn-danger ms-3" id="btnCetakRAB">
                     <i class="icon-base bx bx-printer me-1"></i>
                     <span class="align-middle">Cetak (RAB)</span>
                 </button>
             </div>
+        </div>
+    </div>
 
+    <!-- Card untuk PO -->
+    <div id="poCard" class="card mt-3" style="display:none;">
+        <div class="card-body">
+            <h5 class="card-title">Pemesanan (PO)</h5>
+            <div id="poTabel"></div>
         </div>
     </div>
 @endsection
 
 @section('script')
     <script>
+        // Generate tanggal berdasarkan periode
         $(document).on('change', '#periode', function() {
             var periode = $(this).val();
             var $tanggal = $('#tanggal');
@@ -60,7 +68,6 @@
             var tanggal_awal = periode.split('_')[0];
             var tanggal_akhir = periode.split('_')[1];
 
-            // Simpan ke input hidden
             $('#tanggal_awal').val(tanggal_awal);
             $('#tanggal_akhir').val(tanggal_akhir);
 
@@ -84,28 +91,73 @@
             }
         });
 
-        $(document).on('click', '#generateRab', function() {
+        // PO
+        $(document).on('click', '#btnGeneratePO', function() {
             var periode = $('#periode').val();
-            var tanggal = $('#tanggal').val();
-
-            if (!periode) {
+            if (!periode || periode.trim() === "") {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Peringatan',
                     text: 'Periode harus diisi!',
                 });
-                return;
+                return; // hentikan proses
             }
 
+            // jika valid, jalankan AJAX
+            var tanggal = $('#tanggal').val();
+            var tanggal_awal = periode.split('_')[0];
+            var tanggal_akhir = periode.split('_')[1];
+
+            var params = {
+                tanggal_awal: tanggal_awal,
+                tanggal_akhir: tanggal_akhir,
+                tanggal: tanggal,
+                jenis: $('#jenis').val()
+            };
+
+            $.ajax({
+                url: '/app/rab/po',
+                method: 'GET',
+                data: params,
+                success: function(response) {
+                    $('#poTabel').html(response);
+                    $('#poCard').show();
+                    $('html, body').animate({
+                        scrollTop: $('#poCard').offset().top
+                    }, 500);
+                },
+                error: function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Terjadi kesalahan',
+                        text: 'Gagal menampilkan PO',
+                    });
+                }
+            });
+        });
+
+        // Cetak RAB
+        $(document).on('click', '#btnCetakRAB', function() {
+            var periode = $('#periode').val();
+            if (!periode || periode.trim() === "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Peringatan',
+                    text: 'Periode harus diisi!',
+                });
+                return; // hentikan proses
+            }
+
+            var tanggal = $('#tanggal').val();
             var tanggal_awal = periode.split('_')[0];
             var tanggal_akhir = periode.split('_')[1];
 
             var params = 'tanggal=' + tanggal_awal + ',' + tanggal_akhir;
             if (tanggal != '-') {
-                var params = 'tanggal=' + tanggal;
+                params = 'tanggal=' + tanggal;
             }
 
-            window.open('/app/rab/generate?' + params)
+            window.open('/app/rab/generate?' + params);
         });
     </script>
 @endsection
