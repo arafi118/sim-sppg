@@ -31,10 +31,15 @@
 
             <div class="d-flex justify-content-end">
                 <button type="button" class="btn btn-primary" id="generateRab">
-                    <i class="icon-base bx bx-refresh me-1"></i>
-                    <span class="align-middle">Generate</span>
+                    <i class="icon-base bx bx-folder me-1"></i>
+                    <span class="align-middle">Pemesanan (PO)</span>
+                </button>
+                <button type="button" class="btn btn-danger ms-3" id="generateRab">
+                    <i class="icon-base bx bx-printer me-1"></i>
+                    <span class="align-middle">Cetak (RAB)</span>
                 </button>
             </div>
+
         </div>
     </div>
 @endsection

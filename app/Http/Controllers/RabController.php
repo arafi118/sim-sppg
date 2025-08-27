@@ -13,15 +13,15 @@ use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Carbon\Carbon;
 Carbon::setLocale('id');
 class RabController extends Controller
-{
-    public function index()
     {
-        $periode = PeriodeMasak::orderBy('tanggal_awal', 'desc')->get();
-        $title = 'Rencana Anggaran Biaya (RAB)';
-        return view('app.rab.index', compact('title', 'periode'));
-    }
+        public function index()
+        {
+            $periode = PeriodeMasak::orderBy('tanggal_awal', 'desc')->get();
+            $title = 'Rencana Anggaran Biaya (RAB)';
+            return view('app.rab.index', compact('title', 'periode'));
+        }
 
-public function generate(Request $request)
+   public function generate(Request $request)
 {
     $tanggalParam = explode(',', $request->get('tanggal'));
 
@@ -40,7 +40,34 @@ public function generate(Request $request)
 
     $jenis = ($tanggalParam[0] === $tanggalParam[1]) ? 'Harian' : 'Periode';
 
-    // Buat title dinamis untuk PDF
+    // Gabungkan menu berdasarkan nama dan jumlahkan bahan
+    $menuGabungan = [];
+    foreach ($rancangan as $r) {
+        foreach ($r->rancanganMenu as $rm) {
+            $menuName = $rm->menu->nama ?? '-';
+            if (!isset($menuGabungan[$menuName])) {
+                $menuGabungan[$menuName] = [
+                    'menu' => $rm->menu,
+                    'bahan' => [],
+                ];
+            }
+
+            foreach ($rm->menu->resep as $resep) {
+                $bpId = $resep->bahanPangan->id ?? null;
+                if ($bpId) {
+                    if (!isset($menuGabungan[$menuName]['bahan'][$bpId])) {
+                        $menuGabungan[$menuName]['bahan'][$bpId] = [
+                            'bahanPangan' => $resep->bahanPangan,
+                            'gramasi' => 0,
+                        ];
+                    }
+                    $menuGabungan[$menuName]['bahan'][$bpId]['gramasi'] += $resep->gramasi ?? 0;
+                }
+            }
+        }
+    }
+
+    // Judul PDF
     if ($jenis === 'Harian') {
         $title = "Rab Harian - " . Carbon::parse($tanggalParam[0])->translatedFormat('d F Y');
     } else {
@@ -50,9 +77,7 @@ public function generate(Request $request)
                  Carbon::parse($tanggalParam[1])->translatedFormat('d F Y');
     }
 
-    $view = view('app.rab.pdf', compact('rancangan', 'tanggalParam', 'jenis'))->render();
-
-    return PDF::loadHTML($view)
+    return PDF::loadView('app.rab.pdf', compact('menuGabungan', 'tanggalParam', 'jenis', 'title','rancangan'))
         ->setOptions([
             'margin-top'    => 20,
             'margin-bottom' => 20,
@@ -60,9 +85,10 @@ public function generate(Request $request)
             'margin-right'  => 20,
         ])
         ->setPaper('A4', 'portrait')
-        ->setOption('title', $title) // ini yang akan jadi judul PDF di header kiri
+        ->setOption('title', $title)
         ->inline('RAB.pdf');
 }
+
 
 
 
