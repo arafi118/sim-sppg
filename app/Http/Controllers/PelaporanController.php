@@ -44,7 +44,7 @@ class PelaporanController extends Controller
         return $pdf->inline();
     }
 
-    private function penggunaan_anggaran(array $data) 
+    private function penggunaan_anggaran(array $data)
     {
         $data['title'] = 'Laporan Penggunaan Anggaran';
         $data['tgl']   = now()->format('d-m-Y');
@@ -61,8 +61,7 @@ class PelaporanController extends Controller
         return $pdf->inline();
     }
 
-
-    private function surat_pernyataan(array $data) 
+    private function surat_pernyataan(array $data)
     {
         $data['title'] = 'Surat Pernyataan Tanggung Jawab';
         $data['tgl']   = now()->format('d-m-Y');
@@ -78,7 +77,7 @@ class PelaporanController extends Controller
 
         return $pdf->inline();
     }
-    private function tanda_terima(array $data) 
+    private function tanda_terima(array $data)
     {
         $data['title'] = 'Bukti Tanda Terima';
         $data['tgl']   = now()->format('d-m-Y');
@@ -94,7 +93,7 @@ class PelaporanController extends Controller
 
         return $pdf->inline();
     }
-     private function berita_acara(array $data) 
+    private function berita_acara(array $data)
     {
         $data['title'] = 'Berita Acara';
         $data['tgl']   = now()->format('d-m-Y');
@@ -110,7 +109,7 @@ class PelaporanController extends Controller
 
         return $pdf->inline();
     }
-    private function daftar_nominatif(array $data) 
+    private function daftar_nominatif(array $data)
     {
         $data['title'] = 'Daftar Nominatif';
         $data['tgl']   = now()->format('d-m-Y');
@@ -128,7 +127,101 @@ class PelaporanController extends Controller
 
         return $pdf->inline();
     }
-    private function catatan_pengeluaran(array $data) 
+
+    private function proposal(array $data)
+    {
+        $data['title'] = 'Proposal';
+        $data['tgl']   = now()->format('d-m-Y');
+
+        $view = view('app.pelaporan.views.proposal', $data)->render();
+
+        $pdf = PDF::loadHTML($view)->setOptions([
+            'margin-top'    => 20,
+            'margin-bottom' => 20,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+        ]);
+        return $pdf->inline();
+    }
+    private function pajak_belanja(array $data)
+    {
+        $data['title'] = 'Pajak Belanja';
+        $data['tgl']   = now()->format('d-m-Y');
+
+        $view = view('app.pelaporan.views.pajak_belanja', $data)->render();
+
+        $pdf = PDF::loadHTML($view)->setOptions([
+            'margin-top'    => 20,
+            'margin-bottom' => 20,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+        ]);
+        return $pdf->inline();
+    }
+    private function pks(array $data)
+    {
+        $data['title'] = 'Perjangan Kerja Sama';
+        $data['tgl']   = now()->format('d-m-Y');
+
+        $view = view('app.pelaporan.views.pks', $data)->render();
+
+        $pdf = PDF::loadHTML($view)->setOptions([
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+            'header-html' => view('app.pelaporan.layout.header', $data)->render(),
+            'enable-local-file-access' => true,
+        ]);
+        return $pdf->inline();
+    }
+    private function bast(array $data)
+    {
+        $data['title'] = 'Berita Acara Serh Terima';
+        $data['tgl']   = now()->format('d-m-Y');
+
+        $view = view('app.pelaporan.views.bast', $data)->render();
+
+        $pdf = PDF::loadHTML($view)->setOptions([
+            'margin-top'    => 20,
+            'margin-bottom' => 20,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+        ]);
+        return $pdf->inline();
+    }
+    private function bukti_setor_pajak(array $data)
+    {
+        $data['title'] = 'Bukti Setor Pajak';
+        $data['tgl']   = now()->format('d-m-Y');
+
+        $view = view('app.pelaporan.views.bukti_setor_pajak', $data)->render();
+
+        $pdf = PDF::loadHTML($view)->setOptions([
+            'margin-top'    => 20,
+            'margin-bottom' => 20,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+        ]);
+        return $pdf->inline();
+    }
+    private function laporan_pelaksanaan(array $data)
+    {
+        $data['title'] = 'Laporan Pelaksanaan';
+        $data['tgl']   = now()->format('d-m-Y');
+
+        $view = view('app.pelaporan.views.laporan_pelaksanaan', $data)->render();
+
+        $pdf = PDF::loadHTML($view)->setOptions([
+            'margin-top'    => 20,
+            'margin-bottom' => 20,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+        ]);
+        return $pdf->inline();
+    }
+
+    private function catatan_pengeluaran(array $data)
     {
         $data['title'] = 'Catatan pengeluaran';
         $data['tgl']   = now()->format('d-m-Y');
@@ -136,7 +229,7 @@ class PelaporanController extends Controller
         $view = view('app.pelaporan.views.catatan_pengeluaran', $data)->render();
 
         $pdf = PDF::loadHTML($view)
-            ->setPaper('a4', 'landscape') 
+            ->setPaper('a4', 'landscape')
             ->setOptions([
                 'margin-top'    => 20,
                 'margin-bottom' => 20,
@@ -146,14 +239,14 @@ class PelaporanController extends Controller
 
         return $pdf->inline();
     }
-    private function kuitansi(array $data) 
+    private function kuitansi(array $data)
     {
         $data['title'] = 'Kuitansi';
         $data['tgl']   = now()->format('d-m-Y');
 
         $view = view('app.pelaporan.views.kuitansi', $data)->render();
 
-       $pdf = PDF::loadHTML($view)->setOptions([
+        $pdf = PDF::loadHTML($view)->setOptions([
             'margin-top'    => 20,
             'margin-bottom' => 20,
             'margin-left'   => 25,
@@ -162,5 +255,4 @@ class PelaporanController extends Controller
 
         return $pdf->inline();
     }
-
 }
