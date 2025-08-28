@@ -142,42 +142,55 @@ class RabController extends Controller
 
 public function simpanPO(Request $request)
 {
-    $totalsInput = $request->input('total_harga');     // total harga input user
-    $jumlahs = $request->input('jumlah');              // jumlah sesuai rancangan (hidden)
-    $hargaSatuan = $request->input('harga_satuan');    // harga satuan (hidden)
+    // Ambil PO hari ini, buat baru jika belum ada
+    $po = \App\Models\Po::firstOrCreate(
+        ['tanggal' => now()->toDateString()], // kondisi
+        ['total_harga' => 0, 'status_bayar' => 'unpaid'] // default jika baru
+    );
 
-    $totalKeseluruhan = array_sum($totalsInput);
+    $jumlahs     = $request->input('jumlah_input');       // jumlah input user
+    $hargaSatuan = $request->input('harga_satuan');      // harga satuan
+    $kebutuhans  = $request->input('jumlah_kebutuhan');  // kebutuhan dari rancangan
 
-    // PO hari ini
-    $po = \App\Models\Po::firstOrNew(['tanggal' => now()->toDateString()]);
-    $po->total_harga = $totalKeseluruhan;
-    $po->status_bayar = 'unpaid';
-    $po->save();
+    $totalKeseluruhan = 0;
 
-    foreach ($totalsInput as $bpId => $totalInput) {
-        $totalAwal = ($hargaSatuan[$bpId] ?? 0) * ($jumlahs[$bpId] ?? 0);
-        $sisaBayar = $totalAwal - $totalInput;
+    foreach ($jumlahs as $bpId => $jmlInput) {
+        $harga      = $hargaSatuan[$bpId] ?? 0;
+        $kebutuhan  = $kebutuhans[$bpId] ?? 0;
+        $total      = $harga * $jmlInput;
+
+        $totalKeseluruhan += $total;
 
         \App\Models\PoDetail::updateOrCreate(
             [
-                'po_id' => $po->id,
+                'po_id'           => $po->id,
                 'bahan_pangan_id' => $bpId
             ],
             [
-                'harga_satuan' => $hargaSatuan[$bpId] ?? 0,
-                'jumlah'       => $jumlahs[$bpId] ?? 0,
-                'total_harga'  => $totalInput,
-                'sisa_bayar'   => $sisaBayar,
+                'harga_satuan' => $harga,
+                'jumlah'       => $kebutuhan,   // kebutuhan dari rancangan
+                'jumlah_input' => $jmlInput,    // input user
+                'total_harga'  => $total,
                 'status_bayar' => 'unpaid'
             ]
         );
     }
 
+    // Update total_harga di PO master
+    $po->update(['total_harga' => $totalKeseluruhan]);
+
     return response()->json([
-        'message' => 'PO berhasil disimpan/diupdate, sisa bayar sudah diperhitungkan.',
-        'po_id' => $po->id
+        'message' => 'PO berhasil disimpan.',
+        'po_id'   => $po->id,
+        'total'   => $totalKeseluruhan
     ]);
 }
+
+
+
+
+
+
 
 
 

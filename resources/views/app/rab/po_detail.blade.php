@@ -15,18 +15,16 @@
                         <th>Bahan Pangan</th>
                         <th>Satuan</th>
                         <th>Harga Satuan</th>
-                        <th>Jumlah</th>
+                        <th>Kebutuhan (Kg)</th>
+                        <th>Jumlah Input</th>
                         <th>Total Harga</th>
-                        <th>Sisa Bayar</th>
                     </tr>
                 </thead>
                 <tbody>
                     @php
                         $no = 1;
-                        $totalHargaSatuan = 0;
                         $totalJumlah = 0;
                         $totalHarga = 0;
-                        $totalSisaBayar = 0;
                     @endphp
                     @foreach ($po->poDetail as $detail)
                         <tr>
@@ -34,36 +32,30 @@
                             <td>{{ $detail->bahanPangan->nama ?? '-' }}</td>
                             <td>{{ $detail->bahanPangan->satuan ?? '-' }}</td>
                             <td class="text-end">{{ number_format($detail->harga_satuan, 0, ',', '.') }}</td>
-                            <td class="text-end">{{ number_format($detail->jumlah, 2, ',', '.') }}</td>
+                            <td class="text-end">{{ number_format($detail->jumlah, 2, ',', '.') }} Kg</td>
+                            <td class="text-end">
+                                {{ $detail->jumlah_input % 1 == 0 ? number_format($detail->jumlah_input, 0, ',', '.') : number_format($detail->jumlah_input, 2, ',', '.') }}
+                                Kg
+                            </td>
                             <td class="text-end">{{ number_format($detail->total_harga, 0, ',', '.') }}</td>
-                            <td class="text-end">{{ number_format($detail->sisa_bayar, 0, ',', '.') }}</td>
                         </tr>
                         @php
                             $no++;
-                            $totalHargaSatuan += $detail->harga_satuan;
                             $totalJumlah += $detail->jumlah;
                             $totalHarga += $detail->total_harga;
-                            $totalSisaBayar += $detail->sisa_bayar;
                         @endphp
                     @endforeach
 
                     {{-- Baris Total --}}
                     <tr class="fw-bold">
-                        <td colspan="3" class="text-center">Total</td>
-                        <td class="text-end">{{ number_format($totalHargaSatuan, 0, ',', '.') }}</td>
-                        <td class="text-end">{{ number_format($totalJumlah, 2, ',', '.') }}</td>
+                        <td colspan="6" class="text-center">Total</td>
                         <td class="text-end">{{ number_format($totalHarga, 0, ',', '.') }}</td>
-                        <td class="text-end">{{ number_format($totalSisaBayar, 0, ',', '.') }}</td>
-                        <td></td>
                     </tr>
                 </tbody>
             </table>
-
-
             <div class="mt-3 d-flex justify-content-end">
                 <a href="{{ url('/app/rab') }}" class="btn btn-primary">Kembali</a>
             </div>
-
         </div>
     </div>
 @endsection
