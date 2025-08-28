@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\JenisLaporan;
+use App\Models\KelompokPemanfaat;
+use App\Models\DataPemanfaat;
+use App\Models\User;
+use App\Models\Profil;
 
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
@@ -144,14 +148,17 @@ class PelaporanController extends Controller
     {
         $data['title'] = 'Proposal';
         $data['tgl']   = now()->format('d-m-Y');
+        $data['kelompokpemanfaat'] = KelompokPemanfaat::all();
 
         $view = view('app.pelaporan.views.proposal', $data)->render();
 
         $pdf = PDF::loadHTML($view)->setOptions([
-            'margin-top'    => 20,
-            'margin-bottom' => 20,
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
             'margin-left'   => 25,
             'margin-right'  => 20,
+            'header-html' => view('app.pelaporan.layout.header', $data)->render(),
+            'enable-local-file-access' => true,
         ]);
         return $pdf->inline();
     }
@@ -319,6 +326,74 @@ class PelaporanController extends Controller
             'header-html' => view('app.pelaporan.layout.header', $data)->render(),
             'enable-local-file-access' => true,
         ]);
+
+        return $pdf->inline();
+    }
+    private function penerima_bantuan(array $data)
+    {
+        $data['title'] = 'Usulan Calon Penerima Bantuan';
+        $data['tgl']   = now()->format('d-m-Y');
+
+        $view = view('app.pelaporan.views.penerima_bantuan', $data)->render();
+
+        $pdf = PDF::loadHTML($view)
+            ->setOptions([
+                'margin-top'    => 30,
+                'margin-bottom' => 15,
+                'margin-left'   => 25,
+                'margin-right'  => 20,
+                'header-html' => view('app.pelaporan.layout.header', $data)->render(),
+                'enable-local-file-access' => true,
+            ]);
+
+        return $pdf->inline();
+    }
+
+    private function calon_penerima_bantuan(array $data)
+    {
+        $data['title'] = 'Data Calon Penerima Bantuan';
+        $data['tgl']   = now()->format('Y');
+        $data['kelompokpemanfaat'] = KelompokPemanfaat::with('pemanfaat')->get();
+        $data['profil'] = Profil::first();
+        $data['ttd'] = User::where('level_id', 5)->first();
+
+        $view = view('app.pelaporan.views.calon_penerima_bantuan', $data)->render();
+
+        $pdf = PDF::loadHTML($view)
+            ->setOptions([
+                'margin-top'    => 30,
+                'margin-bottom' => 15,
+                'margin-left'   => 25,
+                'margin-right'  => 20,
+                'header-html' => view('app.pelaporan.layout.header', $data)->render(),
+                'enable-local-file-access' => true,
+            ]);
+
+        return $pdf->inline();
+    }
+
+    private function usulan_penerima_bantuan(array $data)
+    {
+        $data['title'] = 'Daftar Penerima Bantuan Posyandu';
+        $data['tgl']   = now()->format('Y');
+        $data['kelompokpemanfaat'] = KelompokPemanfaat::with(
+            'pemanfaat',
+            'pemanfaat.namaPemanfaat'
+        )->get();
+        $data['profil'] = Profil::first();
+        $data['ttd'] = User::where('level_id', 5)->first();
+
+        $view = view('app.pelaporan.views.usulan_penerima_bantuan', $data)->render();
+
+        $pdf = PDF::loadHTML($view)
+            ->setOptions([
+                'margin-top'    => 30,
+                'margin-bottom' => 15,
+                'margin-left'   => 25,
+                'margin-right'  => 20,
+                'header-html' => view('app.pelaporan.layout.header', $data)->render(),
+                'enable-local-file-access' => true,
+            ]);
 
         return $pdf->inline();
     }
