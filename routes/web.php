@@ -42,6 +42,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::resource('/menu', MenuController::class);
 
     Route::get('/rancang-menu/get-periode/{tanggal}', [RancanganController::class, 'getPeriode']);
+    Route::get('/rancang-menu/approve', [RancanganController::class, 'approve']);
+    Route::get('/rancang-menu/approve-list', [RancanganController::class, 'approveList']);
+    Route::post('/rancang-menu/approve', [RancanganController::class, 'approved']);
     Route::resource('/rancang-menu', RancanganController::class);
 
     Route::resource('/mitra', MitraController::class);

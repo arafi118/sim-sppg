@@ -1,0 +1,15 @@
+[{
+    "nama": "Dashboard",
+    "icon": "bx-home-smile",
+    "url": "/app/dashboard"
+}, {
+    "nama": "Master Data"
+}, {
+    "nama": "Approve Rancangan Menu",
+    "icon": "bx-add-to-queue",
+    "url": "/app/rancang-menu/approve"
+}, {
+    "nama": "Approve RAB",
+    "icon": "bx-add-to-queue",
+    "url": "/app/rab/approve"
+}]

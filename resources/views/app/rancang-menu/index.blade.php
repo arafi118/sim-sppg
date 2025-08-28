@@ -40,6 +40,7 @@
                         <th>Tanggal</th>
                         <th>Kelompok</th>
                         <th>Jumlah</th>
+                        <th>Menu</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -88,6 +89,12 @@
                 {
                     data: 'jumlah',
                     name: 'jumlah'
+                },
+                {
+                    data: 'menu',
+                    name: 'menu',
+                    orderable: false,
+                    searchable: false
                 },
                 {
                     data: 'action',

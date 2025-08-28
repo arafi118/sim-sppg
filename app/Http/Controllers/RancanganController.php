@@ -41,7 +41,17 @@ class RancanganController extends Controller
 
                     return $btn;
                 })
-                ->rawColumns(['action'])
+                ->addColumn('menu', function ($row) {
+                    $menu = '<div class="demo-inline-spacing">';
+                    foreach ($row->rancanganMenu as $rm) {
+                        $_menu = '<span class="badge text-bg-primary">' . $rm->menu->nama . '</span>';
+                        $menu .= $_menu;
+                    }
+                    $menu .= '</div>';
+
+                    return $menu;
+                })
+                ->rawColumns(['action', 'menu'])
                 ->make(true);
         }
 
@@ -52,6 +62,46 @@ class RancanganController extends Controller
 
         $title = 'Rancangan Menu';
         return view('app.rancang-menu.index', compact('title', 'periode'));
+    }
+
+    public function approve()
+    {
+        $periode = PeriodeMasak::orderBy('tanggal_awal', 'desc')->get();
+
+        $title = 'Approve Rancangan Menu';
+        return view('app.rancang-menu.approve', compact('title', 'periode'));
+    }
+
+    public function approveList()
+    {
+        $tanggal = explode(',', request()->get('tanggal'));
+        if (count($tanggal) === 0) {
+            return response()->json(['error' => 'Tanggal tidak boleh kosong.'], 422);
+        }
+
+        if (count($tanggal) < 2) {
+            $tanggal[1] = $tanggal[0];
+        }
+
+        $rancangan = Rancangan::with(['kelompokPemanfaat', 'rancanganMenu.menu'])
+            ->whereBetween('tanggal', [$tanggal[0], $tanggal[1]])
+            ->where('approved', 0)
+            ->orderBy('tanggal', 'ASC')
+            ->get();
+
+        $view = view('app.rancang-menu.approve-list', compact('rancangan'))->render();
+        return response()->json(['view' => $view]);
+    }
+
+    public function approved(Request $request)
+    {
+        $id = $request->id;
+        if (count($id) === 0) {
+            return response()->json(['error' => 'Data tidak boleh kosong.'], 422);
+        }
+
+        $rancangan = Rancangan::whereIn('id', $id)->update(['approved' => 1]);
+        return response()->json(['success' => true, 'message' => 'Rancangan menu berhasil disetujui.']);
     }
 
     /**
