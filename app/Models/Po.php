@@ -16,5 +16,8 @@ class Po extends Model
     {
         return $this->hasMany(PoDetail::class, 'po_id');
     }
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
 }

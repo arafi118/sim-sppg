@@ -20,4 +20,8 @@ class BahanPangan extends Model
     {
         return $this->hasMany(Resep::class);
     }
+      public function poDetail()
+    {
+        return $this->hasMany(PoDetail::class, 'bahan_pangan_id');
+    }
 }

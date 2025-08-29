@@ -275,11 +275,31 @@ class RabController extends Controller
             'total'   => $totalKeseluruhan
         ]);
     }
-
     public function detailPO($id)
     {
         $title = 'Detail Po';
         $po = Po::with('poDetail.bahanPangan')->findOrFail($id);
-        return view('app.rab.po_detail', compact('po', 'title'));
+        return view('app.rab.po_detail', compact('po','title'));
+    }
+    public function daftar_po(Request $request)
+    {
+        $query = Po::with('poDetail.bahanPangan', 'user');  
+
+        if ($request->filled('tanggal_awal') && $request->filled('tanggal_akhir')) {
+            $query->whereBetween('tanggal', [
+                Carbon::parse($request->tanggal_awal)->toDateString(),
+                Carbon::parse($request->tanggal_akhir)->toDateString()
+            ]);
+        }
+
+        if ($request->filled('user_id')) {
+            $query->where('user_id', $request->user_id);
+        }
+
+        $pos = $query->orderBy('tanggal', 'desc')->get();
+
+        $title = 'Daftar PO / Pre-order';
+
+        return view('app.rab.daftar_po', compact('pos', 'title'));
     }
 }

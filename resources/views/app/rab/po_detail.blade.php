@@ -45,7 +45,6 @@
                             $totalHarga += $detail->total_harga;
                         @endphp
                     @endforeach
-
                     {{-- Baris Total --}}
                     <tr class="fw-bold">
                         <td colspan="6" class="text-center">Total</td>

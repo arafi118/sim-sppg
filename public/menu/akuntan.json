@@ -22,27 +22,25 @@
 
     {
         "nama": "Rab",
-        "icon": "bx-file",
-        "url": "/app/rab"
+        "icon": "bx-group",
+        "url": "#",
+        "children": [{
+                "nama": "Pre Order",
+                "icon": "bx-file",
+                "url": "/app/rab"
+            },
+            {
+                "nama": "Daftar Po",
+                "icon": "bx-leaf",
+                "url": "/app/rab/daftar_po"
+            }
+        ]
     },
 
     {
         "nama": "Jurnal Transaksi",
         "icon": "bx-money",
-        "url": "/app/pemanfaat",
-        "children": [{
-            "nama": "Kelompok Pemanfaat",
-            "icon": "bx-group",
-            "url": "/app/kelompok-pemanfaat"
-        }, {
-            "nama": "Data Pemanfaat",
-            "icon": "bx-data",
-            "url": "/app/data-pemanfaat"
-        }, {
-            "nama": "Nama Pemanfaat",
-            "icon": "bx-id-card",
-            "url": "/app/nama-pemanfaat"
-        }]
+        "url": "/app/transaksi"
     },
     {
         "nama": "Laporan",

@@ -20,4 +20,8 @@ class PoDetail extends Model
     {
         return $this->belongsTo(BahanPangan::class, 'bahan_pangan_id');
     }
+     public function transaksi()
+    {
+        return $this->hasMany(Transaksi::class, 'po_detail_id');
+    }
 }

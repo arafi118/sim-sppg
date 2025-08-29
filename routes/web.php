@@ -12,6 +12,7 @@ use App\Http\Controllers\PeriodeMasakController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\RabController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\MitraController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PelaporanController;
@@ -90,9 +91,12 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/rab/po', [RabController::class, 'PO']);
     Route::post('/rab/simpanPO', [RabController::class, 'simpanPO']);
     Route::get('/rab/detailPO/{id}', [RabController::class, 'detailPO']);
+    Route::get('/rab/daftar_po', [RabController::class, 'daftar_po']);
 
 
-
+    //Jurnal Transaksi
+    Route::get('/transaksi', [TransaksiController::class, 'index']);
+    Route::get('/transaksi/store', [TransaksiController::class, 'store']);
 
     Route::post('/auth/logout', [AuthController::class, 'logout']);
 });

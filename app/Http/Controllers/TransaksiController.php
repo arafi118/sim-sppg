@@ -2,65 +2,47 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Transaksi;
 use Illuminate\Http\Request;
+use App\Models\Transaksi;
+use App\Models\PoDetail;
 
 class TransaksiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $title = 'Jurnal Transaksi';
-        return view('app.transaksi.index', compact('title'));
+        $title = 'Transaksi';
+        $poDetails = PoDetail::with('bahanPangan')->get();
+        return view('app.transaksi.index', compact('title','poDetails'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+public function store(Request $request)
+{
+    $request->validate([
+        'tgl_transaksi'   => 'required|date',
+        'po_detail_id'    => 'required|exists:po_details,id',
+        'jumlah'          => 'required|numeric|min:1',
+    ]);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    // Ambil detail PO untuk dapatkan harga_satuan
+$poDetail = \App\Models\PoDetail::with('bahanPangan')
+    ->latest()
+    ->get()
+    ->unique('bahan_pangan_id')
+    ->values();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Transaksi $transaksi)
-    {
-        //
-    }
+    $hargaSatuan = $poDetail->harga_satuan;
+    $nominal     = $request->jumlah * $hargaSatuan;
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Transaksi $transaksi)
-    {
-        //
-    }
+    Transaksi::create([
+        'tgl_transaksi'   => $request->tgl_transaksi,
+        'po_detail_id'    => $request->po_detail_id,
+        'jumlah'          => $request->jumlah,
+        'harga_satuan'    => $hargaSatuan,
+        'nominal'         => $nominal,
+    ]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Transaksi $transaksi)
-    {
-        //
-    }
+    return redirect()->back()->with('success', 'Transaksi berhasil disimpan!');
+}
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Transaksi $transaksi)
-    {
-        //
-    }
+
 }
