@@ -2,38 +2,36 @@
 @section('content')
     <br>
     <div class="judul">Surat Usulan Calon Penerimaan Bantuan</div>
-    <div class="ratakanankiri">
-        <table border="0" width="100%">
-            <tr>
-                <th width="10%">Nomor</th>
-                <th width="1%">:</th>
-                <td width="89%"></td>
-            </tr>
-            <tr>
-                <th width="10%">Sifat</th>
-                <th width="1%">:</th>
-                <td width="89%"></td>
-            </tr>
-            <tr>
-                <th width="10%">Lampiran</th>
-                <th width="1%">:</th>
-                <td width="89%"></td>
-            </tr>
-            <tr>
-                <th width="10%">Hal</th>
-                <th width="1%">:</th>
-                <td width="89%">Usulan Calon Penerimaan Bantuan Kegiatan Program MBG Tahun 2025</td>
-            </tr>
-        </table><br>
-        <table border="0" width="100%">
-            <tr>
-                <td width="100%">Yth. Kepala Badan Gizi Nasional</td>
-            </tr>
-            <tr>
-                <td width="100%">di Tempat</td>
-            </tr>
-        </table>
-    </div><br>
+    <table border="0" width="100%">
+        <tr>
+            <th width="10%">Nomor</th>
+            <th width="1%">:</th>
+            <td width="89%"></td>
+        </tr>
+        <tr>
+            <th width="10%">Sifat</th>
+            <th width="1%">:</th>
+            <td width="89%"></td>
+        </tr>
+        <tr>
+            <th width="10%">Lampiran</th>
+            <th width="1%">:</th>
+            <td width="89%"></td>
+        </tr>
+        <tr>
+            <th width="10%">Hal</th>
+            <th width="1%">:</th>
+            <td width="89%">Usulan Calon Penerimaan Bantuan Kegiatan Program MBG Tahun 2025</td>
+        </tr>
+    </table><br>
+    <table border="0" width="100%">
+        <tr>
+            <td width="100%">Yth. Kepala Badan Gizi Nasional</td>
+        </tr>
+        <tr>
+            <td width="100%">di Tempat</td>
+        </tr>
+    </table><br>
     <div class="ratakanankiri">
         Sehubungan dengan kegiatan Program MBG Tahun 2025 yang bertujuan untuk meningkatkan asupan gizi penerima bantuan
         dalam upaya mendukung terwujudnya Generasi Emas 2045, maka kami sampaikan usulan calon penerima bantuan Program MBG

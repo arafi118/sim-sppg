@@ -16,7 +16,6 @@
             <th style="width:10%;">Harga Satuan</th>
             <th style="width:10%;">Jumlah</th>
         </tr>
-
         <tr>
             <td>1</td>
             <td></td>
@@ -32,14 +31,11 @@
             <td align="left">Rp</td>
         </tr>
     </table>
-
-
     <table class="border-table">
         <tr>
             <th>Keterangan</th>
             <th>Jumlah</th>
         </tr>
-
         <tr>
             <td>Upah Sukarelawan</td>
             <td>Rp</td>

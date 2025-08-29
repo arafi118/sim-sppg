@@ -5,7 +5,6 @@
     <div class="judul">DAFTAR NOMINATIF</div>
     <div class="subjudul">PEMBAYARAN UPAH SUKARELAWAN ...................<br>
         SESUAI SURAT KEPUTUSAN / TUGAS NOMOR .......... TANGGAL ..........</div>
-
     <table class="border-table">
         <tr>
             <th rowspan="2" width="3%">No</th>

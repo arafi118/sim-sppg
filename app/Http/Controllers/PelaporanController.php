@@ -397,4 +397,29 @@ class PelaporanController extends Controller
 
         return $pdf->inline();
     }
+    private function proposal_mingguan(array $data)
+    {
+        $data['title'] = 'Proposal Mingguan';
+        $data['tgl']   = now()->format('Y');
+        $data['kelompokpemanfaat'] = KelompokPemanfaat::with(
+            'pemanfaat',
+            'pemanfaat.namaPemanfaat'
+        )->get();
+        $data['profil'] = Profil::first();
+        $data['ttd'] = User::where('level_id', 5)->first();
+
+        $view = view('app.pelaporan.views.proposal_mingguan', $data)->render();
+
+        $pdf = PDF::loadHTML($view)
+            ->setOptions([
+                'margin-top'    => 30,
+                'margin-bottom' => 15,
+                'margin-left'   => 25,
+                'margin-right'  => 20,
+                'header-html' => view('app.pelaporan.layout.header', $data)->render(),
+                'enable-local-file-access' => true,
+            ]);
+
+        return $pdf->inline();
+    }
 }
