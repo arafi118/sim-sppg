@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PelaporanController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\RancanganController;
+use App\Models\PeriodeMasak;
+use App\Models\Menu;
+use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +34,32 @@ use App\Http\Controllers\RancanganController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    Carbon::setLocale('id');
+
+    $today     = Carbon::today();
+    $yesterday = $today->copy()->subDay();
+    $tomorrow  = $today->copy()->addDay();
+
+    $periode = PeriodeMasak::with([
+        'rancangan.rancanganMenu.menu.resep.bahanPangan',
+    ])->get();
+
+    $getMenuByDate = function ($periode, $date) {
+        return $periode->flatMap(function ($p) use ($date) {
+            return $p->rancangan
+                ->where('tanggal', $date->toDateString())
+                ->flatMap->rancanganMenu
+                ->pluck('menu');
+        });
+    };
+
+    $menus = [
+        'yesterday' => $getMenuByDate($periode, $yesterday),
+        'today'     => $getMenuByDate($periode, $today),
+        'tomorrow'  => $getMenuByDate($periode, $tomorrow),
+    ];
+
+    return view('welcome', compact('menus', 'yesterday', 'today', 'tomorrow'));
 });
 
 Route::get('/auth', [AuthController::class, 'index']);
