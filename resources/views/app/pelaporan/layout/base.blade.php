@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ $title ?? 'Dokumen' }}</title>
-
     <style>
         * {
             font-family: 'Arial', sans-serif;
@@ -152,9 +151,7 @@
 
         .page-break {
             page-break-before: always;
-            /* untuk browser lama */
             break-before: page;
-            /* untuk browser modern */
         }
     </style>
 </head>
