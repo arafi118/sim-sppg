@@ -82,16 +82,16 @@
             <td class="center">{{ $loop->iteration }}</td>
             <td>{{ $nama_bahan }}</td>
             <td class="center">{{ $satuan }}</td>
-            <td class="right">{{ number_format($harga, 0, ',', '.') }}</td>
-            <td class="right">{{ number_format($jumlah, 2, ',', '.') }}</td>
-            <td class="right">{{ number_format($total, 0, ',', '.') }}</td>
+            <td class="right">{{ number_format($harga) }}</td>
+            <td class="right">{{ number_format($jumlah, 2) }}</td>
+            <td class="right">{{ number_format($total) }}</td>
         </tr>
     @endforeach
 
     <tfoot>
         <tr>
             <th colspan="5" class="center">TOTAL</th>
-            <th class="right">{{ number_format($grandTotal, 0, ',', '.') }}</th>
+            <th class="right">{{ number_format($grandTotal) }}</th>
         </tr>
     </tfoot>
 </table>
