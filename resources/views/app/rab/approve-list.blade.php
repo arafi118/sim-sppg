@@ -43,9 +43,9 @@
 
     <div class="d-flex justify-content-end p-3">
         @if ($periode->approved == '0')
-            <button class="btn btn-danger" disabled id="btnReject">Reject</button>
+            <button class="btn btn-danger" disabled>Reject</button>
         @elseif ($periode->approved == '1')
-            <button class="btn btn-primary" disabled id="btnApprove">Approve</button>
+            <button class="btn btn-primary" disabled>Approve</button>
         @else
             <button class="btn btn-danger me-3" id="btnReject">Reject</button>
             <button class="btn btn-primary" id="btnApprove">Approve</button>
