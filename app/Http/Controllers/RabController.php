@@ -292,13 +292,13 @@ class RabController extends Controller
             ]);
         }
 
-        if ($request->filled('user_id')) {
-            $query->where('user_id', $request->user_id);
+        if ($request->filled('tanggal')) {
+            $query->whereDate('tanggal', $request->tanggal);
         }
 
         $pos = $query->orderBy('tanggal', 'desc')->get();
 
-        $title = 'Daftar PO / Pre-order';
+        $title = 'Daftar Pre-order';
 
         return view('app.rab.daftar_po', compact('pos', 'title'));
     }

@@ -8,7 +8,7 @@
 
             @foreach ($pos as $po)
                 <div class="mb-4">
-                    <p>Tanggal PO:
+                    <p>Tanggal
                         {{ \Carbon\Carbon::parse($po->tanggal)->locale('id')->isoFormat('D MMMM Y') }}</p>
                     <table class="table table-bordered">
                         <thead>
