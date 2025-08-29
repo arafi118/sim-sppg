@@ -24,22 +24,20 @@
 
                                     <div class="col-md-6">
                                         <div class="position-relative mb-3">
-                                            <label for="po_detail_id">Nama Barang</label>
-                                            <select class="form-control select2" name="po_detail_id" id="po_detail_id"
+                                            <label for="bahan_pangan_id">Nama Bahan</label>
+                                            <select class="form-control select2" name="bahan_pangan_id" id="bahan_pangan_id"
                                                 style="width: 100%;">
                                                 <option value="">-- Pilih Barang --</option>
-                                                @foreach ($poDetails as $detail)
-                                                    <option value="{{ $detail->id }}"
-                                                        data-harga="{{ $detail->harga_satuan }}">
-                                                        {{ $detail->bahanPangan->nama ?? '-' }}
+                                                @foreach ($bahanpangan as $b)
+                                                    <option value="{{ $b->id }}" data-harga="{{ $b->harga_satuan }}">
+                                                        {{ $b->nama }}
                                                     </option>
                                                 @endforeach
                                             </select>
-
-
                                             <small class="text-danger" id="msg_jenis_transaksi"></small>
                                         </div>
                                     </div>
+
                                 </div>
 
                                 <div class="row" id="kd_rekening">
@@ -88,7 +86,6 @@
 @section('script')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Datepicker
             flatpickr("#tgl_transaksi_display", {
                 dateFormat: "d/m/Y",
                 defaultDate: new Date(),
@@ -100,26 +97,6 @@
                     }
                 }
             });
-
-            // Ambil harga satuan saat pilih barang
-            document.getElementById("po_detail_id").addEventListener("change", function() {
-                let harga = this.options[this.selectedIndex].getAttribute("data-harga");
-                document.getElementById("harga_satuan").value = harga ? harga : '';
-                hitungTotal();
-            });
-
-            // Hitung total saat jumlah berubah
-            document.getElementById("jumlah").addEventListener("input", function() {
-                hitungTotal();
-            });
-
-            function hitungTotal() {
-                let jumlah = parseFloat(document.getElementById("jumlah").value) || 0;
-                let harga = parseFloat(document.getElementById("harga_satuan").value) || 0;
-                document.getElementById("nominal").value = jumlah * harga;
-            }
-
-
         });
     </script>
 @endsection
