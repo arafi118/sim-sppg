@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('periode_ke');
             $table->date('tanggal_awal');
             $table->date('tanggal_akhir');
+            $table->integer('approved')->nullable();
             $table->timestamps();
         });
     }
