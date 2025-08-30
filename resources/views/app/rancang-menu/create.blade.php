@@ -48,19 +48,13 @@
                         <div data-repeater-item>
                             <div class="row">
                                 <div class="col-lg-3 col-12 mb-6">
-                                    <label for="form-repeater-1-1" class="form-label">Kelompok Pemanfaat</label>
-                                    <select id="form-repeater-1-1" name="kelompok_pemanfaat"
+                                    <label for="form-repeater-1-1" class="form-label">Data Pemanfaat</label>
+                                    <select id="form-repeater-1-1" name="data_pemanfaat"
                                         class="select2 form-select form-select-lg" data-allow-clear="true">
-                                        <option value="">-- Pilih Kelompok --</option>
-                                        @foreach ($kelompokPemanfaat as $kp)
-                                            @php
-                                                $jumlahPemanfaat = 0;
-                                                foreach ($kp->pemanfaat as $pemanfaat) {
-                                                    $jumlahPemanfaat += $pemanfaat->jumlah_pemanfaat;
-                                                }
-                                            @endphp
-                                            <option value="{{ $kp->id }}|{{ $jumlahPemanfaat }}">
-                                                {{ $kp->nama }}
+                                        <option value="">-- Pilih Pemanfaat --</option>
+                                        @foreach ($dataPemanfaat as $kp)
+                                            <option value="{{ $kp->id }}|{{ $kp->jumlah_pemanfaat }}">
+                                                {{ $kp->nama_lembaga }}
                                             </option>
                                         @endforeach
                                     </select>

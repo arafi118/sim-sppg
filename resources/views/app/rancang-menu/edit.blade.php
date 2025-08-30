@@ -52,11 +52,11 @@
 
                 <div class="row">
                     <div class="col-lg-3 col-12 mb-6">
-                        <label for="nama_kelompok_pemanfaat" class="form-label">Kelompok Pemanfaat</label>
-                        <input id="nama_kelompok_pemanfaat" name="nama_kelompok_pemanfaat" class="form-control list-menu"
-                            value="{{ $rancang_menu->kelompokPemanfaat->nama }}" readonly />
-                        <input type="hidden" id="kelompok_pemanfaat" name="kelompok_pemanfaat"
-                            class="form-control list-menu" value="{{ $rancang_menu->kelompok_pemanfaat_id }}" />
+                        <label for="nama_lembaga_pemanfaat" class="form-label">Data Pemanfaat</label>
+                        <input id="nama_lembaga_pemanfaat" name="nama_lembaga_pemanfaat" class="form-control list-menu"
+                            value="{{ $rancang_menu->dataPemanfaat->nama_lembaga }}" readonly />
+                        <input type="hidden" id="data_pemanfaat" name="data_pemanfaat" class="form-control list-menu"
+                            value="{{ $rancang_menu->data_pemanfaat_id }}" />
                     </div>
                     <div class="col-lg-9 col-12 mb-6">
                         <label for="pilih-menu" class="form-label">Pilih Menu</label>

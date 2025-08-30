@@ -83,8 +83,8 @@
                     name: 'tanggal'
                 },
                 {
-                    data: 'kelompok_pemanfaat.nama',
-                    name: 'kelompok_pemanfaat.nama'
+                    data: 'data_pemanfaat.nama_lembaga',
+                    name: 'data_pemanfaat.nama_lembaga'
                 },
                 {
                     data: 'jumlah',

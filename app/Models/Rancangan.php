@@ -16,9 +16,9 @@ class  Rancangan extends Model
         return $this->belongsTo(PeriodeMasak::class, 'periode_masak_id');
     }
 
-    public function kelompokPemanfaat()
+    public function dataPemanfaat()
     {
-        return $this->belongsTo(KelompokPemanfaat::class, 'kelompok_pemanfaat_id');
+        return $this->belongsTo(DataPemanfaat::class, 'data_pemanfaat_id');
     }
 
     public function rancanganMenu()

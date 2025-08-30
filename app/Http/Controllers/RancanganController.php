@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DataPemanfaat;
 use App\Models\KelompokPemanfaat;
 use App\Models\Menu;
 use App\Models\PeriodeMasak;
@@ -25,7 +26,7 @@ class RancanganController extends Controller
 
             $rancanganMenu = Rancangan::select('rancangans.*', 'periode_masaks.periode_ke', 'periode_masaks.tanggal_awal', 'periode_masaks.tanggal_akhir')
                 ->join('periode_masaks', 'rancangans.periode_masak_id', '=', 'periode_masaks.id')
-                ->with(['kelompokPemanfaat', 'rancanganMenu.menu.resep.bahanPangan'])
+                ->with(['dataPemanfaat', 'rancanganMenu.menu.resep.bahanPangan'])
                 ->where([
                     ['periode_masaks.tanggal_awal', '>=', $tanggal_awal],
                     ['periode_masaks.tanggal_akhir', '<=', $tanggal_akhir]
@@ -40,6 +41,9 @@ class RancanganController extends Controller
                     $btn .= '<button type="button" class="btn btn-sm btn-danger btn-hapus ms-2" data-id="' . $row->id . '">Hapus</button>';
 
                     return $btn;
+                })
+                ->editColumn('periode_ke', function ($row) {
+                    return 'Periode ke ' . str_pad($row->periode_ke, 2, '0', STR_PAD_LEFT);
                 })
                 ->addColumn('menu', function ($row) {
                     $menu = '<div class="demo-inline-spacing">';
@@ -115,11 +119,11 @@ class RancanganController extends Controller
             ['tanggal_akhir', '>=', $today]
         ])->first();
 
-        $kelompokPemanfaat = KelompokPemanfaat::with('pemanfaat')->get();
+        $dataPemanfaat = DataPemanfaat::orderBy('nama_lembaga', 'asc')->get();
         $menu = Menu::orderBy('nama', 'asc')->get();
 
         $title = 'Tambah Rancangan Menu';
-        return view('app.rancang-menu.create', compact('title', 'periode', 'kelompokPemanfaat', 'menu', 'today'));
+        return view('app.rancang-menu.create', compact('title', 'periode', 'dataPemanfaat', 'menu', 'today'));
     }
 
     public function getPeriode($tanggal_periode)
@@ -187,13 +191,13 @@ class RancanganController extends Controller
             }
 
             foreach ($rancanganMenu as $rm) {
-                $kelompokPemanfaat = explode('|', $rm['kelompok_pemanfaat']);
-                $kelompokPemanfaatId = $kelompokPemanfaat[0];
-                $jumlahPemanfaat = $kelompokPemanfaat[1];
+                $dataPemanfaat = explode('|', $rm['data_pemanfaat']);
+                $dataPemanfaatId = $dataPemanfaat[0];
+                $jumlahPemanfaat = $dataPemanfaat[1];
 
                 $rancangan = Rancangan::create([
                     'periode_masak_id' => $periode_id,
-                    'kelompok_pemanfaat_id' => $kelompokPemanfaatId,
+                    'data_pemanfaat_id' => $dataPemanfaatId,
                     'tanggal' => $tanggal,
                     'jumlah' => $jumlahPemanfaat,
                 ]);
@@ -237,7 +241,7 @@ class RancanganController extends Controller
      */
     public function edit(Rancangan $rancang_menu)
     {
-        $rancang_menu = $rancang_menu->load(['periode', 'kelompokPemanfaat', 'rancanganMenu.menu']);
+        $rancang_menu = $rancang_menu->load(['periode', 'dataPemanfaat', 'rancanganMenu.menu']);
         $menu = Menu::orderBy('nama', 'asc')->get();
 
         $title = 'Edit Rancangan Menu';
