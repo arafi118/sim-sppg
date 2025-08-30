@@ -30,11 +30,11 @@
         "icon": "bx-group",
         "url": "/app/kelompok-pemanfaat"
     }, {
-        "nama": "Data Pemanfaat",
+        "nama": "Lembaga Pemanfaat",
         "icon": "bx-data",
         "url": "/app/data-pemanfaat"
     }, {
-        "nama": "Nama Pemanfaat",
+        "nama": "Data Pemanfaat",
         "icon": "bx-id-card",
         "url": "/app/nama-pemanfaat"
     }]

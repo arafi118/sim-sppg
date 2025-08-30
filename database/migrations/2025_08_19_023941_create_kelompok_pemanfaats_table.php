@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('kelompok_pemanfaats', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('nama');
+            $table->string('kode');
             $table->timestamps();
         });
     }
