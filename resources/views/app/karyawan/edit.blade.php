@@ -104,10 +104,22 @@
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="mb-6">
+                        <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="text" class="form-control" id="password" name="password"
-                                placeholder="Kosongkan jika tidak diganti">
+                            <div class="input-group">
+                                <input type="password" class="form-control" name="password" id="password"
+                                    placeholder="Masukkan password">
+                                <button class="btn btn-outline-secondary d-flex align-items-center" type="button"
+                                    id="togglePassword">
+                                    <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                        fill="currentColor" viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 5c-7.633 0-12 7-12 7s4.367 7 12 7 12-7 12-7-4.367-7-12-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+                                        <line x1="1" y1="1" x2="23" y2="23"
+                                            stroke="currentColor" stroke-width="2" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -131,6 +143,18 @@
 
 @section('script')
     <script>
+        const toggle = document.getElementById('togglePassword');
+        const password = document.getElementById('password');
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        toggle.addEventListener('click', () => {
+            password.type = password.type === 'password' ? 'text' : 'password';
+            eyeIcon.innerHTML = password.type === 'password' ?
+                `<path d="M12 5c-7.633 0-12 7-12 7s4.367 7 12 7 12-7 12-7-4.367-7-12-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>
+           <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="2"/>` :
+                `<path d="M12 5c-7.633 0-12 7-12 7s4.367 7 12 7 12-7 12-7-4.367-7-12-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>`;
+        });
+
         $(".dob-picker").flatpickr({
             monthSelectorType: "static"
         });
