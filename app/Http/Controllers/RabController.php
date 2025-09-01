@@ -19,7 +19,7 @@ class RabController extends Controller
         return view('app.rab.index', compact('title', 'periode'));
     }
 
-    public function generate(Request $request)
+   public function generate(Request $request)
     {
         $tanggalParam = explode(',', $request->get('tanggal'));
 
@@ -31,10 +31,17 @@ class RabController extends Controller
             $tanggalParam[1] = $tanggalParam[0];
         }
 
+        // Hanya ambil rancangan yang sudah approved
         $rancangan = Rancangan::with(['rancanganMenu.menu.resep.bahanPangan'])
             ->whereBetween('tanggal', $tanggalParam)
+            ->where('approved', 1)
             ->orderBy('tanggal', 'ASC')
             ->get();
+
+        // Kalau tidak ada rancangan approved → balik ke index
+        if ($rancangan->isEmpty()) {
+            return redirect()->route('rab.index')->with('error', 'Belum ada rancangan yang disetujui.');
+        }
 
         $jenis = ($tanggalParam[0] === $tanggalParam[1]) ? 'Harian' : 'Periode';
 
@@ -48,14 +55,13 @@ class RabController extends Controller
                     foreach ($menu->resep as $resep) {
                         $bahanPangan = $resep->bahanPangan;
                         if ($bahanPangan) {
-                            if (in_array($bahanPangan->id, array_keys($dataBahanPangan))) {
-                                $gramasi = ($resep->gramasi * $jumlah);
-                                $dataBahanPangan[$bahanPangan->id]['jumlah'] += $gramasi;
+                            if (isset($dataBahanPangan[$bahanPangan->id])) {
+                                $dataBahanPangan[$bahanPangan->id]['jumlah'] += ($resep->gramasi * $jumlah);
                             } else {
                                 $dataBahanPangan[$bahanPangan->id] = [
-                                    'nama' => $bahanPangan->nama,
+                                    'nama'   => $bahanPangan->nama,
                                     'satuan' => $bahanPangan->satuan,
-                                    'harga' => $bahanPangan->harga_jual,
+                                    'harga'  => $bahanPangan->harga_jual,
                                     'jumlah' => ($resep->gramasi * $jumlah),
                                 ];
                             }
@@ -65,15 +71,12 @@ class RabController extends Controller
             }
         }
 
-        uasort($dataBahanPangan, function ($a, $b) {
-            return strcmp($a['nama'], $b['nama']);
-        });
+        uasort($dataBahanPangan, fn($a, $b) => strcmp($a['nama'], $b['nama']));
 
-        // Buat title dinamis untuk PDF
         if ($jenis === 'Harian') {
             $title = "Rab Harian - " . Carbon::parse($tanggalParam[0])->translatedFormat('d F Y');
         } else {
-            $title = "Rab periode - " .
+            $title = "Rab Periode - " .
                 Carbon::parse($tanggalParam[0])->translatedFormat('d F Y') .
                 " s.d " .
                 Carbon::parse($tanggalParam[1])->translatedFormat('d F Y');
@@ -89,9 +92,10 @@ class RabController extends Controller
                 'margin-right'  => 20,
             ])
             ->setPaper('A4', 'portrait')
-            ->setOption('title', $title) // ini yang akan jadi judul PDF di header kiri
+            ->setOption('title', $title)
             ->inline('RAB.pdf');
     }
+
 
     public function approve()
     {
@@ -182,53 +186,67 @@ class RabController extends Controller
         ]);
     }
 
-    public function PO(Request $request)
-    {
-        $tanggalAwal = $request->tanggal_awal;
-        $tanggalAkhir = $request->tanggal_akhir;
-        $tanggal = $request->tanggal;
+  public function PO(Request $request)
+{
+    $tanggalAwal = $request->tanggal_awal;
+    $tanggalAkhir = $request->tanggal_akhir;
+    $tanggal = $request->tanggal;
 
-        if ($tanggal === '-') {
-            $rancangan = Rancangan::with(['rancanganMenu.menu.resep.bahanPangan'])
-                ->whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir])
-                ->orderBy('tanggal', 'ASC')->get();
-        } else {
-            $rancangan = Rancangan::with(['rancanganMenu.menu.resep.bahanPangan'])
-                ->whereDate('tanggal', $tanggal)
-                ->orderBy('tanggal', 'ASC')->get();
-        }
+    // 🔹 cek periode masak approved
+    $periode = PeriodeMasak::where('approved', 1)->first();
+    if (!$periode) {
+        return response('<div class="alert alert-warning">Belum ada periode yang disetujui.</div>');
+    }
 
-        $dataBahanPangan = [];
-        foreach ($rancangan as $r) {
-            $jumlahRancangan = $r->jumlah ?? 1;
-            foreach ($r->rancanganMenu as $rm) {
-                $menu = $rm->menu;
-                if (!$menu) continue;
-                foreach ($menu->resep as $resep) {
-                    $bp = $resep->bahanPangan;
-                    if (!$bp) continue;
+    if ($tanggal === '-') {
+        $rancangan = Rancangan::with(['rancanganMenu.menu.resep.bahanPangan'])
+            ->whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir])
+            ->orderBy('tanggal', 'ASC')
+            ->get();
+    } else {
+        $rancangan = Rancangan::with(['rancanganMenu.menu.resep.bahanPangan'])
+            ->whereDate('tanggal', $tanggal)
+            ->orderBy('tanggal', 'ASC')
+            ->get();
+    }
 
-                    $bpId = $bp->id;
+    if ($rancangan->isEmpty()) {
+        return response('<div class="alert alert-danger">Belum ada rancangan pada periode ini.</div>');
+    }
 
-                    if (!isset($dataBahanPangan[$bpId])) {
-                        $dataBahanPangan[$bpId] = [
-                            'bahan_pangan_id' => $bpId,
-                            'nama' => $bp->nama,
-                            'satuan' => $bp->satuan,
-                            'harga' => $bp->harga_jual ?? 0,
-                            'jumlah' => 0
-                        ];
-                    }
+    $dataBahanPangan = [];
+    foreach ($rancangan as $r) {
+        $jumlahRancangan = $r->jumlah ?? 1;
+        foreach ($r->rancanganMenu as $rm) {
+            $menu = $rm->menu;
+            if (!$menu) continue;
+            foreach ($menu->resep as $resep) {
+                $bp = $resep->bahanPangan;
+                if (!$bp) continue;
 
-                    $dataBahanPangan[$bpId]['jumlah'] += ($resep->gramasi ?? 0) * $jumlahRancangan;
+                $bpId = $bp->id;
+
+                if (!isset($dataBahanPangan[$bpId])) {
+                    $dataBahanPangan[$bpId] = [
+                        'bahan_pangan_id' => $bpId,
+                        'nama' => $bp->nama,
+                        'satuan' => $bp->satuan,
+                        'harga' => $bp->harga_jual ?? 0,
+                        'jumlah' => 0
+                    ];
                 }
+
+                $dataBahanPangan[$bpId]['jumlah'] += ($resep->gramasi ?? 0) * $jumlahRancangan;
             }
         }
-
-        uasort($dataBahanPangan, fn($a, $b) => strcmp($a['nama'], $b['nama']));
-
-        return view('app.rab.po_tabel', compact('dataBahanPangan'));
     }
+
+    uasort($dataBahanPangan, fn($a, $b) => strcmp($a['nama'], $b['nama']));
+
+    // 🔹 return view untuk AJAX
+    return view('app.rab.po_tabel', compact('dataBahanPangan'));
+}
+
 
     public function simpanPO(Request $request)
     {
@@ -277,29 +295,51 @@ class RabController extends Controller
     }
     public function detailPO($id)
     {
-        $title = 'Detail Po';
-        $po = Po::with('poDetail.bahanPangan')->findOrFail($id);
-        return view('app.rab.po_detail', compact('po','title'));
+        $title = 'Detail PO';
+
+        // PO utama
+        $po = Po::findOrFail($id);
+
+        // Semua PO yang memiliki input (jumlah_input > 0)
+        $referensiPOs = Po::with(['poDetail' => function($q) {
+            $q->where('jumlah_input', '>', 0)->with('bahanPangan');
+        }])
+        ->whereHas('poDetail', function($q) {
+            $q->where('jumlah_input', '>', 0);
+        })
+        ->orderBy('tanggal', 'desc')
+        ->get();
+
+        return view('app.rab.po_detail', compact('po', 'referensiPOs', 'title'));
     }
-    public function daftar_po(Request $request)
-    {
-        $query = Po::with('poDetail.bahanPangan', 'user');  
 
-        if ($request->filled('tanggal_awal') && $request->filled('tanggal_akhir')) {
-            $query->whereBetween('tanggal', [
-                Carbon::parse($request->tanggal_awal)->toDateString(),
-                Carbon::parse($request->tanggal_akhir)->toDateString()
-            ]);
-        }
+public function cetakPO()
+{
+    $title = 'Cetak PO';
 
-        if ($request->filled('tanggal')) {
-            $query->whereDate('tanggal', $request->tanggal);
-        }
+    $pos = Po::with(['poDetail' => function($q) {
+        $q->where('jumlah_input', '>', 0)->with('bahanPangan');
+    }])
+    ->whereHas('poDetail', function($q) {
+        $q->where('jumlah_input', '>', 0);
+    })
+    ->orderBy('tanggal', 'asc')
+    ->get();
 
-        $pos = $query->orderBy('tanggal', 'desc')->get();
+    $view = view('app.rab.po_cetak', compact('pos', 'title'))->render();
 
-        $title = 'Daftar Pre-order';
+    return PDF::loadHTML($view)
+        ->setOptions([
+            'margin-top'    => 20,
+            'margin-bottom' => 20,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+        ])
+        ->setPaper('A4', 'portrait')
+        ->setOption('title', $title)
+        ->inline('RAB.pdf');
+}
 
-        return view('app.rab.daftar_po', compact('pos', 'title'));
-    }
+
+
 }

@@ -15,6 +15,10 @@ class Transaksi extends Model
     {
         return $this->belongsTo(PoDetail::class, 'po_detail_id');
     }
+      public function po()
+    {
+        return $this->belongsTo(Po::class, 'po_id');
+    }
 
     public function user()
     {
@@ -24,5 +28,16 @@ class Transaksi extends Model
     public function mitra()
     {
         return $this->belongsTo(Mitra::class, 'mitra_id');
+    }
+      public function getProgressAttribute()
+    {
+        $totalTransaksi = $this->transaksi()->sum('jumlah');
+        return $this->total_harga > 0 ? ($totalTransaksi / $this->total_harga) * 100 : 0;
+    }
+
+    // Helper untuk cek apakah lunas
+    public function isPaid()
+    {
+        return $this->transaksi()->sum('jumlah') >= $this->total_harga;
     }
 }
