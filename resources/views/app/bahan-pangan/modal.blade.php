@@ -35,7 +35,7 @@
                                 <small id="msg_satuan" class="text-danger"></small>
                             </div>
                             <div class="col-12 col-md-6">
-                                <label class="form-label" for="harga_jual">Harga Jual</label>
+                                <label class="form-label" for="harga_jual">Harga</label>
                                 <input type="text" id="harga_jual" name="harga_jual" class="form-control"
                                     placeholder="Harga Jual" />
                                 <small id="msg_harga_jual" class="text-danger"></small>

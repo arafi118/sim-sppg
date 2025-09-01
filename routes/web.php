@@ -86,6 +86,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/bahan-pangan/list', [BahanPanganController::class, 'list']);
     Route::resource('/bahan-pangan', BahanPanganController::class);
 
+    Route::get('/kelompok-pangan/next-code', [KelompokPanganController::class, 'getNextCode']);
     Route::resource('/kelompok-pangan', KelompokPanganController::class);
 
     Route::resource('/kelompok-pemanfaat', KelompokPemanfaatController::class);

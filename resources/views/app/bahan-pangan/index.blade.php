@@ -16,7 +16,7 @@
                         <th>Kelompok Pangan</th>
                         <th>Nama Bahan Pangan</th>
                         <th>Satuan</th>
-                        <th>Harga Jual</th>
+                        <th>Harga</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>

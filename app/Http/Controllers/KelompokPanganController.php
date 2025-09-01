@@ -25,6 +25,21 @@ class KelompokPanganController extends Controller
         return view('app.kelompok-Pangan.index', ['title' => 'Kelompok Pangan']);
     }
 
+    public function getNextCode(Request $request)
+    {
+        $initials = strtoupper($request->get('initials', ''));
+
+        $last = KelompokPangan::selectRaw("CAST(SUBSTRING_INDEX(kode, '-', -1) AS UNSIGNED) as num")
+            ->orderByDesc('num')
+            ->first();
+
+        $nextNumber = $last ? str_pad($last->num + 1, 3, '0', STR_PAD_LEFT) : '001';
+
+        return response()->json([
+            'kode' => $initials . '-' . $nextNumber
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -40,10 +55,12 @@ class KelompokPanganController extends Controller
     {
         $data = $request->only([
             'nama',
+            'kode',
         ]);
 
         $rules = [
             'nama' => 'required',
+            'kode' => 'required',
         ];
 
         $validate = Validator::make($data, $rules);
@@ -53,6 +70,7 @@ class KelompokPanganController extends Controller
 
         $MKPangan = KelompokPangan::create([
             'nama' => $request->nama,
+            'kode' => $request->kode,
         ]);
 
         return response()->json([
@@ -84,10 +102,12 @@ class KelompokPanganController extends Controller
     {
         $data = $request->only([
             'nama',
+            'kode',
         ]);
 
         $rules = [
             'nama' => 'required',
+            'kode' => 'required',
         ];
 
         $validate = Validator::make($data, $rules);
@@ -97,6 +117,7 @@ class KelompokPanganController extends Controller
 
         $kelompokPangan->update([
             'nama' => $request->nama,
+            'kode' => $request->kode,
         ]);
 
         return response()->json([

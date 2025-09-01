@@ -13,8 +13,9 @@
             <table id="kelompokP" class="dt-responsive-child table table-bordered">
                 <thead>
                     <tr>
-                        <th>kode</th>
-                        <th>Nama</th>
+                        <th>no</th>
+                        <th>Kelompok Pangan</th>
+                        <th>Kode</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -31,6 +32,22 @@
 @endsection
 @section('script')
     <script>
+        //buat isi kode
+        $('#nama').on('input', function() {
+            const initials = $(this).val().split(' ')
+                .map(w => w[0]?.toUpperCase() || '')
+                .join('');
+
+            $('#kode').val(initials ? '' : '');
+
+            if (initials) {
+                $.get(`/app/kelompok-pangan/next-code?initials=${initials}`, res => {
+                    $('#kode').val(res.kode);
+
+                });
+            }
+        });
+
         const tb = document.querySelector("#kelompokP");
         let cl;
 
@@ -42,11 +59,19 @@
                     url: "/app/kelompok-pangan",
                 },
                 columns: [{
-                        data: row => Math.random().toString(36).substring(2, 6).toUpperCase(),
-                        name: 'id'
+                        data: null,
+                        name: 'no',
+                        orderable: false,
+                        searchable: false,
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
                     }, {
                         data: 'nama',
                         name: 'nama'
+                    }, {
+                        data: 'kode',
+                        name: 'kode'
                     },
                     {
                         data: null,
@@ -56,7 +81,8 @@
                             return `<div class="d-inline-flex gap-1">
                                 <button class="btn btn-sm btn-primary btnEdit"
                                     data-id="${data.id}"
-                                    data-nama="${data.nama}">
+                                    data-nama="${data.nama}"
+                                    data-kode="${data.kode}">
                                     Edit
                                 </button>
                                 <button class="btn btn-sm btn-danger btn-delete" data-id="${data.id}" title="Hapus">
@@ -85,6 +111,7 @@
             const form = $('#FormKelompokPangan');
             $('#id_MK').val(d.id);
             $('#nama').val(d.nama);
+            $('#kode').val(d.kode);
             form.attr('action', `/app/kelompok-pangan/${d.id}`);
             form.find('input[name="_method"]').remove();
             form.append('<input type="hidden" name="_method" value="PUT">');
