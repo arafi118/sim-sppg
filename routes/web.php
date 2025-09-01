@@ -112,6 +112,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/pelaporan/simpan-saldo/{tahun}/{bulan?}', [PelaporanController::class, 'simpanSaldo']);
 
     //Rab
+    Route::get('/app/rab', [RABController::class, 'index'])->name('rab.index');
     Route::get('/rab/approve', [RabController::class, 'approve']);
     Route::get('/rab/approve-list', [RabController::class, 'approveList']);
     Route::post('/rab/approve', [RabController::class, 'approved']);
@@ -121,6 +122,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::post('/rab/simpanPO', [RabController::class, 'simpanPO']);
     Route::get('/rab/detailPO/{id}', [RabController::class, 'detailPO']);
     Route::get('/rab/daftar_po', [RabController::class, 'daftar_po']);
+    Route::get('/rab/po/cetak/{id}', [RabController::class, 'cetakPO']);
+    Route::put('/rab/update', [RabController::class, 'updatePO'])->name('rab.update');
 
 
     //Jurnal Transaksi
