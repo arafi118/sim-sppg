@@ -1,0 +1,100 @@
+[{
+    "nama": "Dashboard",
+    "icon": "bx-home-smile",
+    "url": "/app/dashboard"
+}, {
+    "nama": "Master Mitra"
+}, {
+    "nama": "Mitra",
+    "icon": "bx-broadcast",
+    "url": "/app/mitra"
+}, {
+    "nama": "Master Admin"
+}, {
+    "nama": "Karyawan",
+    "icon": "bx-user",
+    "url": "/app/karyawan"
+}, {
+    "nama": "Program Pangan",
+    "icon": "bx-basket",
+    "url": "/app/program-pangan",
+    "children": [{
+        "nama": "Kelompok Pangan",
+        "icon": "bx-group",
+        "url": "/app/kelompok-pangan"
+    }, {
+        "nama": "Bahan Pangan",
+        "icon": "bx-leaf",
+        "url": "/app/bahan-pangan"
+    }]
+}, {
+    "nama": "Pemanfaat",
+    "icon": "bx-user-check",
+    "url": "/app/pemanfaat",
+    "children": [{
+        "nama": "Kelompok Pemanfaat",
+        "icon": "bx-group",
+        "url": "/app/kelompok-pemanfaat"
+    }, {
+        "nama": "Lembaga Pemanfaat",
+        "icon": "bx-data",
+        "url": "/app/data-pemanfaat"
+    }, {
+        "nama": "Data Pemanfaat",
+        "icon": "bx-id-card",
+        "url": "/app/nama-pemanfaat"
+    }]
+}, {
+    "nama": "Periode Masak",
+    "icon": "bx-calendar",
+    "url": "/app/periode-masak"
+}, {
+    "nama": "Master Ahli Gizi"
+}, {
+    "nama": "Menu",
+    "icon": "bx-food-menu",
+    "url": "/app/menu"
+}, {
+    "nama": "Rancang Menu",
+    "icon": "bx-add-to-queue",
+    "url": "/app/rancang-menu"
+}, {
+    "nama": "Master Akuntan"
+}, {
+    "nama": "Presensi",
+    "icon": "bx-calendar-check",
+    "url": "#",
+    "children": [{
+            "nama": "Upload Presensi",
+            "icon": "bx-group",
+            "url": "/app/upload-presensi"
+        },
+        {
+            "nama": "Hitung Penggajian",
+            "icon": "bx-leaf",
+            "url": "/app/hitung-pengajian"
+        }
+    ]
+}, {
+    "nama": "Rab",
+    "icon": "bx-group",
+    "url": "/app/rab"
+}, {
+    "nama": "Jurnal Transaksi",
+    "icon": "bx-money",
+    "url": "/app/transaksi"
+}, {
+    "nama": "Laporan",
+    "icon": "bx-food-menu",
+    "url": "/app/laporan"
+}, {
+    "nama": "Master Kepala"
+}, {
+    "nama": "Approve Rancangan Menu",
+    "icon": "bx-add-to-queue",
+    "url": "/app/rancang-menu/approve"
+}, {
+    "nama": "Approve RAB",
+    "icon": "bx-add-to-queue",
+    "url": "/app/rab/approve"
+}]
