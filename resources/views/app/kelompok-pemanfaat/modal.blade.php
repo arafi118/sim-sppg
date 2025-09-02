@@ -11,11 +11,19 @@
                         @csrf
                         <input type="hidden" id="id_KP" name="id_KP">
 
-                        <div class="col-12 col-md-12">
-                            <label class="form-label" for="nama">Name</label>
-                            <input type="text" id="nama" name="nama" class="form-control"
-                                placeholder="sekolah" />
-                            <small id="msg_nama" class="text-danger"></small>
+                        <div class="row">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="nama">Kelompok Pemanfaat</label>
+                                <input type="text" id="nama" name="nama" class="form-control"
+                                    placeholder="sekolah" />
+                                <small id="msg_nama" class="text-danger"></small>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label" for="kode">Kode</label>
+                                <input type="text" id="kode" name="kode" class="form-control"
+                                    placeholder="sekolah" />
+                                <small id="msg_kode" class="text-danger"></small>
+                            </div>
                         </div>
                         <div class="d-flex justify-content-end gap-2 mt-4">
                             <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

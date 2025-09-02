@@ -89,6 +89,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/kelompok-pangan/next-code', [KelompokPanganController::class, 'getNextCode']);
     Route::resource('/kelompok-pangan', KelompokPanganController::class);
 
+    Route::get('/kelompok-pemanfaat/next-code', [KelompokPemanfaatController::class, 'NextCode']);
     Route::resource('/kelompok-pemanfaat', KelompokPemanfaatController::class);
 
     Route::get('/data-pemanfaat/list', [DataPemanfaatController::class, 'list']);

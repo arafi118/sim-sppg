@@ -151,7 +151,7 @@
                         const modalEl = document.getElementById('MK-Pangan');
                         const modalInstance = bootstrap.Modal.getInstance(modalEl);
                         modalInstance.hide();
-                        if (typeof table !== 'undefined') table.ajax.reload();
+                        if (cl) cl.ajax.reload(null, false);
                     } else {
                         Toast.fire({
                             icon: 'error',
