@@ -24,12 +24,6 @@
                     </a>
                 </div>
             </div>
-
-            <div class="d-flex justify-content-center mt-3">
-                <div class="col-md-4 col-12">
-                    <input type="text" class="form-control" id="tanggal" />
-                </div>
-            </div>
         </div>
         <div class="card-datatable">
             <table class="table table-bordered" id="table-rancang-menu">
@@ -51,16 +45,6 @@
 
 @section('script')
     <script>
-        $('#tanggal').flatpickr({
-            enableTime: false,
-            dateFormat: "Y-m-d",
-            mode: "range",
-            defaultDate: ["{{ $tanggal_awal }}", "{{ $tanggal_akhir }}"],
-            locale: {
-                rangeSeparator: " - "
-            }
-        })
-
         var table = setDataTable('#table-rancang-menu', {
             processing: true,
             serverSide: true,
@@ -103,16 +87,6 @@
                     orderable: false
                 }
             ],
-        });
-
-        $(document).on('change', '#tanggal', function() {
-            var dates = $(this).val().split(' - ');
-            if (dates.length === 2) {
-                var startDate = dates[0];
-                var endDate = dates[1];
-
-                table.ajax.url('/app/rancang-menu?tanggal_awal=' + startDate + '&tanggal_akhir=' + endDate).load();
-            }
         });
 
         $(document).on('click', '.btn-hapus', function() {
