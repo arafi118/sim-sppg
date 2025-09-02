@@ -30,13 +30,15 @@
                                 @endphp
                                 <optgroup label="{{ $kp->nama }}">
                                     @foreach ($kp->bahanPangan as $bp)
-                                        <option value="{{ $bp->id }}">
+                                        <option value="{{ $bp->id }}|{{ number_format($bp->harga_jual) }}">
                                             {{ $bp->nama }} ({{ $bp->satuan }})
                                         </option>
                                     @endforeach
                                 </optgroup>
                             @endforeach
                         </select>
+
+                        <input type="hidden" id="bahan_pangan_id" name="bahan_pangan_id">
                     </div>
                     <div class="col-lg-3 col-12 mb-6">
                         <label for="harga_beli" class="form-label">Harga Beli Bahan</label>
@@ -79,6 +81,13 @@
             allowNegative: false,
             precision: 0,
         });
+
+        $(document).on('change', '#nama_bahan', function() {
+            var bahan = $(this).val().split('|');
+
+            $('#bahan_pangan_id').val(bahan[0] || '');
+            $('#harga_beli').val(bahan[1] || 0);
+        })
 
         $(document).on('click', '#simpanMitra', function(e) {
             e.preventDefault();

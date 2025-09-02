@@ -55,6 +55,7 @@ class MitraController extends Controller
     public function store(Request $request)
     {
         $data = $request->only([
+            'bahan_pangan_id',
             "nama_bahan",
             "harga_beli",
             "nama_mitra",
@@ -75,15 +76,15 @@ class MitraController extends Controller
         }
 
         $mitra = Mitra::create([
-            'bahan_pangan_id' => $data['nama_bahan'],
+            'bahan_pangan_id' => $data['bahan_pangan_id'],
             'nama' => $data['nama_mitra'],
             'alamat' => $data['alamat'],
             'telpon' => $data['telpon'],
             'harga_beli' => str_replace(',', '', $data['harga_beli']),
         ]);
 
-        $hargaBahanTertinggi = Mitra::where('bahan_pangan_id', $data['nama_bahan'])->orderBy('harga_beli', 'desc')->first();
-        BahanPangan::where('id', $data['nama_bahan'])->update([
+        $hargaBahanTertinggi = Mitra::where('bahan_pangan_id', $data['bahan_pangan_id'])->orderBy('harga_beli', 'desc')->first();
+        BahanPangan::where('id', $data['bahan_pangan_id'])->update([
             'harga_jual' => $hargaBahanTertinggi->harga_beli,
         ]);
 
@@ -122,6 +123,7 @@ class MitraController extends Controller
     public function update(Request $request, Mitra $mitra)
     {
         $data = $request->only([
+            "bahan_pangan_id",
             "nama_bahan",
             "harga_beli",
             "nama_mitra",
@@ -142,15 +144,15 @@ class MitraController extends Controller
         }
 
         Mitra::where('id', $mitra->id)->update([
-            'bahan_pangan_id' => $data['nama_bahan'],
+            'bahan_pangan_id' => $data['bahan_pangan_id'],
             'nama' => $data['nama_mitra'],
             'alamat' => $data['alamat'],
             'telpon' => $data['telpon'],
             'harga_beli' => str_replace(',', '', $data['harga_beli']),
         ]);
 
-        $hargaBahanTertinggi = Mitra::where('bahan_pangan_id', $data['nama_bahan'])->orderBy('harga_beli', 'desc')->first();
-        BahanPangan::where('id', $data['nama_bahan'])->update([
+        $hargaBahanTertinggi = Mitra::where('bahan_pangan_id', $data['bahan_pangan_id'])->orderBy('harga_beli', 'desc')->first();
+        BahanPangan::where('id', $data['bahan_pangan_id'])->update([
             'harga_jual' => $hargaBahanTertinggi->harga_beli,
         ]);
 
