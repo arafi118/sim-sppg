@@ -12,19 +12,13 @@
 
                         <input type="hidden" id="id_PM" name="id_PM">
                         <div class="row">
-                            <div class="col-12 col-md-4">
-                                <label class="form-label" for="periode_ke">Periode Ke</label>
-                                <input type="number" id="periode_ke" name="periode_ke" class="form-control"
-                                    placeholder="Masukkan periode ke" />
-                                <small id="msg_periode_ke" class="text-danger"></small>
-                            </div>
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-6">
                                 <label class="form-label" for="tanggal_awal">Tanggal Mulai</label>
                                 <input type="text" id="tanggal_awal" name="tanggal_awal"
                                     class="form-control dob-picker" placeholder="Masukkan tanggal awal" />
                                 <small id="msg_tanggal_awal" class="text-danger"></small>
                             </div>
-                            <div class="col-12 col-md-4">
+                            <div class="col-12 col-md-6">
                                 <label class="form-label" for="tanggal_akhir">Tanggal Selesai</label>
                                 <input type="text" id="tanggal_akhir" name="tanggal_akhir"
                                     class="form-control dob-picker" placeholder="Masukkan tanggal akhir" />

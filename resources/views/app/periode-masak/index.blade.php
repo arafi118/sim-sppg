@@ -44,7 +44,10 @@
                 },
                 columns: [{
                         data: 'periode_ke',
-                        name: 'periode_ke'
+                        name: 'periode_ke',
+                        render: function(data) {
+                            return data ? `Periode ke - ${data}` : '-';
+                        }
                     },
                     {
                         data: 'tanggal_awal',
@@ -64,7 +67,6 @@
                             <button 
                                 class="btn btn-sm btn-primary btnEdit"
                                 data-id="${data.id}"
-                                data-periode_ke="${data.periode_ke}"
                                 data-tanggal_awal="${data.tanggal_awal}"
                                 data-tanggal_akhir="${data.tanggal_akhir}">
                                 Edit
@@ -80,13 +82,30 @@
             });
         }
 
-        $(".dob-picker").flatpickr({
+        $("#tanggal_awal").flatpickr({
+            monthSelectorType: "static",
+            appendTo: document.body,
+            onOpen: function(selectedDates, dateStr, instance) {
+                instance.calendarContainer.style.zIndex = 2000;
+            },
+            onChange: function(selectedDates, dateStr, instance) {
+                if (selectedDates.length > 0) {
+                    let endDate = new Date(selectedDates[0]);
+                    endDate.setDate(endDate.getDate() + 13);
+                    let formattedEnd = instance.formatDate(endDate, "Y-m-d");
+                    $("#tanggal_akhir").val(formattedEnd);
+                }
+            }
+        });
+
+        $(".dob-picker").not("#tanggal_awal").flatpickr({
             monthSelectorType: "static",
             appendTo: document.body,
             onOpen: function(selectedDates, dateStr, instance) {
                 instance.calendarContainer.style.zIndex = 2000;
             }
         });
+
 
         $('#btnTambah').click(() => {
             const form = $('#FormPeriodeMasak');
@@ -108,7 +127,6 @@
             const form = $('#FormPeriodeMasak');
 
             $('#id_PM').val(d.id);
-            $('#periode_ke').val(d.periode_ke);
             $('#tanggal_awal').val(d.tanggal_awal);
             $('#tanggal_akhir').val(d.tanggal_akhir);
 
