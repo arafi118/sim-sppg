@@ -296,8 +296,8 @@
                                         @forelse ($menu->resep as $resep)
                                             <li>
                                                 {{ $resep->bahanPangan?->nama ?? '-' }}
-                                                {{ number_format((float) $resep->gramasi, 3) }}
-                                                {{ $resep->bahanPangan?->satuan ?? '' }}
+                                                {{-- {{ number_format((float) $resep->gramasi, 3) }}
+                                                {{ $resep->bahanPangan?->satuan ?? '' }} --}}
                                             </li>
                                         @empty
                                             <li><em>Tidak ada resep</em></li>
