@@ -125,6 +125,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/rab/daftar_po', [RabController::class, 'daftar_po']);
     Route::get('/rab/po/cetak/{id}', [RabController::class, 'cetakPO']);
     Route::put('/rab/update', [RabController::class, 'updatePO'])->name('rab.update');
+    Route::get('/rab/po/cetak_detail/{id}', [RabController::class, 'cetak_detail']);
+    Route::post('/rab/bayar', [RabController::class, 'bayar'])->name('rab.bayar');
 
 
     //Jurnal Transaksi
