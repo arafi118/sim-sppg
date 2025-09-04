@@ -1,9 +1,10 @@
 @extends('app.layouts.app')
 
 @section('content')
-    <form action="/app/menu" method="post" id="formMenu">
+    <form action="/app/storemekanisme" method="post" id="formPenyiapanMekanisme">
         @csrf
 
+        <input type="hidden" name="penyiapan_id" value="{{ $tahapan->id }}">
         <div class="card">
             <div class="card-header">
                 <div class="card-title mb-0">
@@ -13,52 +14,44 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-4">
                         <div class="mb-6">
-                            <label class="form-label" for="nama_menu">Nama Menu</label>
-                            <input type="text" class="form-control" id="nama_menu" name="nama_menu"
-                                placeholder="Nama Menu" autocomplete="off">
+                            <label class="form-label" for="tahapan">Tahapan</label>
+                            <input type="text" class="form-control" id="tahapan" name="tahapan"
+                                placeholder="Masukkan Tahapan Penyiapan" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="mb-6">
+                            <label class="form-label" for="waktu_mulai">Waktu Mulai</label>
+                            <input type="time" step="1" class="form-control" id="waktu_mulai" name="waktu_mulai"
+                                placeholder="Waktu Mulai" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="mb-6">
+                            <label class="form-label" for="waktu_selesai">Waktu Selesai</label>
+                            <input type="time" step="1" class="form-control" id="waktu_selesai"
+                                name="waktu_selesai" placeholder="Waktu Selesai" autocomplete="off">
                         </div>
                     </div>
                 </div>
-
                 <div class="divider">
-                    <div class="divider-text">Bahan - Bahan</div>
+                    <div class="divider-text">Pelaksana atau Relawan</div>
                 </div>
                 <div class="col-12 form-repeater">
-                    <div data-repeater-list="bahan">
+                    <div data-repeater-list="pelaksana">
                         <div data-repeater-item>
                             <div class="row">
-                                <div class="col-lg-7 col-12 mb-6 bahan">
-                                    <label for="form-repeater-1-1" class="form-label">Nama Bahan</label>
-                                    <select id="form-repeater-1-1" name="nama_bahan"
-                                        class="select2 form-select form-select-lg" data-allow-clear="true">
-                                        <option value="">-- Pilih Bahan --</option>
-                                        @foreach ($kelompokPangan as $kp)
-                                            @php
-                                                if (count($kp->bahanPangan) == 0) {
-                                                    continue;
-                                                }
-                                            @endphp
-                                            <optgroup label="{{ $kp->nama }}">
-                                                @foreach ($kp->bahanPangan as $bp)
-                                                    @php
-                                                        $bahan = json_encode($bp);
-                                                    @endphp
-                                                    <option value="{{ $bahan }}">
-                                                        {{ $bp->nama }} ({{ $bp->satuan }})
-                                                    </option>
-                                                @endforeach
-                                            </optgroup>
+                                <div class="col-lg-10 col-12 mb-6 pelaksana">
+                                    <label for="form-repeater-1-1" class="form-label">Nama Pelaksana</label>
+                                    <select id="form-repeater-1-1" name="user_id" class="select2 form-select form-select-lg"
+                                        data-allow-clear="true">
+                                        <option value="">-- Pilih Karyawan --</option>
+                                        @foreach ($karyawan as $user)
+                                            <option value="{{ $user->id }}">{{ $user->nama }}</option>
                                         @endforeach
                                     </select>
-                                </div>
-                                <div class="col-lg-3 col-12 mb-6 jumlah">
-                                    <label for="form-repeater-1-2" class="form-label">Jumlah</label>
-                                    <div class="input-group input-group-merge">
-                                        <input type="number" class="form-control" id="form-repeater-1-2" name="jumlah">
-                                        <span class="input-group-text">-</span>
-                                    </div>
                                 </div>
                                 <div class="col-lg-2 col-12 d-flex align-items-end mb-6">
                                     <button type="button" class="btn btn-label-danger w-100" data-repeater-delete>
@@ -78,7 +71,7 @@
                         <div class="d-flex">
                             <button type="button" class="btn btn-outline-primary" data-repeater-create>
                                 <i class="icon-base bx bx-plus me-1"></i>
-                                <span class="align-middle">Tambahkan Bahan</span>
+                                <span class="align-middle">Tambahkan Pelaksana</span>
                             </button>
 
                             <button type="button" id="SimpanMekanisme" class="btn btn-primary ms-2">
@@ -142,24 +135,20 @@
             });
         }
 
-        $(document).on('change', '.bahan select', function() {
-            const selectedOption = $(this).find('option:selected');
-            const bahanData = JSON.parse(selectedOption.val());
-
-            var inputGroup = $(this).closest('.bahan').next('.jumlah');
-            inputGroup.find('span.input-group-text').text(bahanData.satuan);
+        $(document).on('change', '.pelaksana select', function() {
+            const userId = $(this).val();
         });
 
         $(document).on('click', '#SimpanMekanisme', function() {
             Swal.fire({
-                title: "Simpan Menu?",
+                title: "Simpan Penyiapan?",
                 icon: "question",
                 showCancelButton: true,
                 confirmButtonText: "Ya, Simpan",
                 cancelButtonText: "Tidak"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    var form = $('#formMenu');
+                    var form = $('#formPenyiapanMekanisme');
                     $.ajax({
                         url: form.attr('action'),
                         type: 'POST',
@@ -168,7 +157,7 @@
                             if (response.success) {
                                 Swal.fire({
                                     title: 'Sukses',
-                                    text: 'Menu berhasil disimpan. Tambahkan Menu Baru?',
+                                    text: 'Penyiapan berhasil disimpan. Tambahkan Penyiapan Baru?',
                                     icon: "success",
                                     showCancelButton: true,
                                     confirmButtonText: "Ya, Tambahkan",
@@ -178,7 +167,7 @@
                                         $('[data-repeater-item]').remove();
                                         $('[data-repeater-create]').trigger('click');
                                     } else {
-                                        window.location.href = '/app/menu';
+                                        window.location.href = '/app/penyiapan-mbg';
                                     }
                                 })
                             } else {

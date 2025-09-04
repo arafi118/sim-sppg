@@ -18,8 +18,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PelaporanController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\RancanganController;
+use App\Http\Controllers\PenyiapanController;
+use App\Http\Controllers\PelaksanaController;
+use App\Http\Controllers\TahapanController;
 use App\Models\PeriodeMasak;
 use App\Models\Menu;
+use App\Models\Penyiapan;
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -140,6 +144,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/rab/po/cetak_detail/{id}', [RabController::class, 'cetak_detail']);
     Route::post('/rab/bayar', [RabController::class, 'bayar'])->name('rab.bayar');
 
+    //Mekanisme Pelaksanaan
+    Route::post('/storemekanisme', [PenyiapanController::class, 'Storemekanisme']);
+    Route::get('/create-mekanisme/{id}', [PenyiapanController::class, 'mekanisme']);
+    Route::resource('/penyiapan-mbg', PenyiapanController::class);
 
     //Jurnal Transaksi
     Route::get('/transaksi', [TransaksiController::class, 'index']);

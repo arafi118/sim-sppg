@@ -1,0 +1,11 @@
+[{
+    "nama": "Dashboard",
+    "icon": "bx-home-smile",
+    "url": "/app/dashboard"
+}, {
+    "nama": "Master Mekanisme"
+}, {
+    "nama": "Penyiapan MBG",
+    "icon": "bx-broadcast",
+    "url": "/app/penyiapan-mbg"
+}]
