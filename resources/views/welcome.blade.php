@@ -293,32 +293,15 @@
                                 @if ($menu)
                                     <p class="fw-bold">{{ $menu->nama }}</p>
                                     <ul>
-                                        @php $adaResep = false; @endphp
                                         @forelse ($menu->resep as $resep)
-                                            @php $adaResep = true; @endphp
-                                            @php $adaBahan = false; @endphp
-                                            @forelse ($resep->bahanPangan as $bahan)
-                                                <li>
-                                                    {{ $bahan?->nama ?? '-' }}
-                                                    @if (!empty($bahan?->pivot?->jumlah))
-                                                        - {{ $bahan->pivot->jumlah }}
-                                                    @endif
-                                                    @if (!empty($bahan?->satuan))
-                                                        {{ $bahan->satuan }}
-                                                    @endif
-                                                </li>
-                                            @empty
-                                                <li><em>Tidak ada bahan</em></li>
-                                            @endforelse
-                                            @if (!$adaBahan)
-                                                <li><em>Tidak ada bahan</em></li>
-                                            @endif
+                                            <li>
+                                                {{ $resep->bahanPangan?->nama ?? '-' }}
+                                                {{-- {{ number_format((float) $resep->gramasi, 3) }}
+                                                {{ $resep->bahanPangan?->satuan ?? '' }} --}}
+                                            </li>
                                         @empty
                                             <li><em>Tidak ada resep</em></li>
                                         @endforelse
-                                        @if (!$adaResep)
-                                            <li><em>Tidak ada resep</em></li>
-                                        @endif
                                     </ul>
                                 @endif
                             @empty
@@ -485,8 +468,7 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                </div><!-- swiper-wrapper -->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -497,66 +479,75 @@
         <section id="landingTeam" class="section-py landing-team">
             <div class="container">
                 <div class="text-center mb-4">
-                    <span class="badge bg-label-primary">Our Great Team</span>
+                    <span class="badge bg-label-primary">Program Makan Bergizi Gratis</span>
                 </div>
                 <h4 class="text-center mb-1">
-                    <span class="position-relative fw-extrabold z-1">Our Dedicated Team
-                    </span>
+                    <span class="position-relative fw-extrabold z-1">Tim Pelaksana</span>
                 </h4>
-                <p class="text-center mb-md-11 pb-0 pb-xl-12">Tim hebat di balik program kami yang berdedikasi
-                    membangun solusi dan pelayanan terbaik.</p>
-                <div class="row gy-12 mt-2">
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="card mt-3 mt-lg-0 shadow-none">
-                            <div
-                                class="bg-label-primary border border-bottom-0 border-primary-subtle position-relative team-image-box">
-                                {{-- <img src="/assets/img/front-pages/landing-page/team-member-1.png"
-                                    class="position-absolute card-img-position bottom-0 start-50" alt="human image" /> --}}
+                <p class="text-center mb-md-11 pb-0 pb-xl-12">
+                    Tim relawan berdedikasi yang bekerja untuk menyediakan makanan bergizi dan pelayanan terbaik bagi
+                    masyarakat.
+                </p>
+                @php
+                    $grouped = $karyawan->groupBy(fn($u) => $u->level->nama);
+                    $balanced = collect();
+                    $maxCount = $grouped->max(fn($g) => $g->count());
+                    for ($i = 0; $i < $maxCount; $i++) {
+                        foreach ($grouped as $users) {
+                            if (isset($users[$i])) {
+                                $balanced->push($users[$i]);
+                            }
+                        }
+                    }
+                    $chunks = $balanced->chunk(4)->map(function ($chunk) use ($balanced) {
+                        if ($chunk->count() < 4) {
+                            return $chunk->merge($balanced->take(4 - $chunk->count()));
+                        }
+                        return $chunk;
+                    });
+                @endphp
+                <div id="teamCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000"
+                    data-bs-wrap="true">
+                    <div class="carousel-inner">
+                        @foreach ($chunks as $chunkIndex => $chunk)
+                            <div class="carousel-item @if ($chunkIndex == 0) active @endif">
+                                <div class="row g-3">
+                                    @foreach ($chunk as $i => $user)
+                                        <div
+                                            class="col-12 col-sm-6 col-lg-3 @if ($i > 0) d-none d-sm-block @endif">
+                                            <div class="card shadow-none h-100">
+                                                <div class="border border-bottom-0 border-primary-subtle team-image-box"
+                                                    style="background-image: url('{{ $levelImages[$user->level->nama] ?? '/assets/img/landing-page/default.png' }}');background-size:cover;background-position:center;background-repeat:no-repeat;height:150px;">
+                                                </div>
+                                                <div class="card-body border border-top-0 border-primary-subtle text-center d-flex flex-column justify-content-center"
+                                                    style="min-height:120px;">
+                                                    <h5 class="card-title text-dark fw-bold mb-1 text-truncate"
+                                                        style="max-width:100%;font-size:clamp(0.8rem,1.2vw,1rem);">
+                                                        {{ $user->nama }}</h5>
+                                                    <h6 class="text-secondary mb-0">{{ $user->level->nama }}</h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
-                            <div class="card-body border border-top-0 border-primary-subtle text-center py-5">
-                                <h5 class="card-title mb-0">Sophie Gilbert</h5>
-                                <p class="text-body-secondary mb-0">Project Manager</p>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="card mt-3 mt-lg-0 shadow-none">
-                            <div
-                                class="bg-label-info border border-bottom-0 border-info-subtle position-relative team-image-box">
-                                {{-- <img src="/assets/img/front-pages/landing-page/team-member-2.png"
-                                    class="position-absolute card-img-position bottom-0 start-50" alt="human image" /> --}}
-                            </div>
-                            <div class="card-body border border-top-0 border-info-subtle text-center py-5">
-                                <h5 class="card-title mb-0">Paul Miles</h5>
-                                <p class="text-body-secondary mb-0">UI Designer</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="card mt-3 mt-lg-0 shadow-none">
-                            <div
-                                class="bg-label-danger border border-bottom-0 border-danger-subtle position-relative team-image-box">
-                                <img src="/assets/img/landing-page/team-member-3.png"
-                                    class="position-absolute card-img-position bottom-0 start-50" alt="human image" />
-                            </div>
-                            <div class="card-body border border-top-0 border-danger-subtle text-center py-5">
-                                <h5 class="card-title mb-0">Nannie Ford</h5>
-                                <p class="text-body-secondary mb-0">Development Lead</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <div class="card mt-3 mt-lg-0 shadow-none">
-                            <div
-                                class="bg-label-success border border-bottom-0 border-success-subtle position-relative team-image-box">
-                                {{-- <img src="/assets/img/front-pages/landing-page/team-member-4.png"
-                                    class="position-absolute card-img-position bottom-0 start-50" alt="human image" /> --}}
-                            </div>
-                            <div class="card-body border border-top-0 border-success-subtle text-center py-5">
-                                <h5 class="card-title mb-0">Chris Watkins</h5>
-                                <p class="text-body-secondary mb-0">Marketing Manager</p>
-                            </div>
-                        </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#teamCarousel"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon bg-dark rounded-circle p-3"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#teamCarousel"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon bg-dark rounded-circle p-3"></span>
+                    </button>
+                    <div class="carousel-indicators">
+                        @foreach ($chunks as $chunkIndex => $chunk)
+                            <button type="button" data-bs-target="#teamCarousel"
+                                data-bs-slide-to="{{ $chunkIndex }}"
+                                class="@if ($chunkIndex == 0) active @endif"
+                                style="width:12px;height:12px;border-radius:50%;"></button>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -606,8 +597,7 @@
                                             <div>
                                                 <p class="mb-0">Telepon</p>
                                                 <h6 class="mb-0">
-                                                    <a href="tel:+6281234567890" class="text-heading">+62 812 3456
-                                                        7890</a>
+                                                    <a href="#" class="text-heading">+62 812</a>
                                                 </h6>
                                             </div>
                                         </div>

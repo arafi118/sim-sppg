@@ -20,6 +20,7 @@ use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\RancanganController;
 use App\Models\PeriodeMasak;
 use App\Models\Menu;
+use App\Models\User;
 use Carbon\Carbon;
 
 /*
@@ -41,7 +42,7 @@ Route::get('/', function () {
     $tomorrow  = $today->copy()->addDay();
 
     $periode = PeriodeMasak::with([
-        'rancangan.rancanganMenu.menu.resep.bahanPangan',
+        'rancangan.rancanganMenu.menu.resep.bahanPangan'
     ])->get();
 
     $getMenuByDate = function ($periode, $date) {
@@ -59,7 +60,18 @@ Route::get('/', function () {
         'tomorrow'  => $getMenuByDate($periode, $tomorrow),
     ];
 
-    return view('welcome', compact('menus', 'yesterday', 'today', 'tomorrow'));
+    $karyawan = User::with('level')->get();
+    $levelImages = [
+        'Admin'      => '/assets/img/landing-page/admin.png',
+        'SuperAdmin' => '/assets/img/landing-page/superadmin.png',
+        'Mitra'      => '/assets/img/landing-page/mitra.png',
+        'Ahli Gizi'  => '/assets/img/landing-page/ahligizi.png',
+        'Akuntan'    => '/assets/img/landing-page/akuntan.png',
+        'Kepala'     => '/assets/img/landing-page/kepala.png',
+        'Karyawan'   => '/assets/img/landing-page/karyawan.png',
+    ];
+
+    return view('welcome', compact('menus', 'levelImages', 'periode',  'karyawan', 'yesterday', 'today', 'tomorrow'));
 });
 
 Route::get('/auth', [AuthController::class, 'index']);

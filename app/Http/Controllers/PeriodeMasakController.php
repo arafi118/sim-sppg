@@ -38,12 +38,10 @@ class PeriodeMasakController extends Controller
     public function store(Request $request)
     {
         $data = $request->only([
-            'periode_ke',
             'tanggal_awal',
             'tanggal_akhir',
         ]);
         $rules = [
-            'periode_ke'    => 'required',
             'tanggal_awal'  => 'required',
             'tanggal_akhir' => 'required',
         ];
@@ -53,8 +51,11 @@ class PeriodeMasakController extends Controller
             return response()->json($validate->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
+        $periode_ke = PeriodeMasak::max('periode_ke') + 1;
+
+        dd($periode_ke, $request->tanggal_akhir, $request->tanggal_awal);
         $periodeMasak = PeriodeMasak::create([
-            'periode_ke'    => $request->periode_ke,
+            'periode_ke'    => $periode_ke,
             'tanggal_awal'  => $request->tanggal_awal,
             'tanggal_akhir' => $request->tanggal_akhir,
         ]);
@@ -87,12 +88,10 @@ class PeriodeMasakController extends Controller
     public function update(Request $request, PeriodeMasak $periodeMasak)
     {
         $data = $request->only([
-            'periode_ke',
             'tanggal_awal',
             'tanggal_akhir',
         ]);
         $rules = [
-            'periode_ke'    => 'required',
             'tanggal_awal'  => 'required',
             'tanggal_akhir' => 'required',
         ];
@@ -103,7 +102,6 @@ class PeriodeMasakController extends Controller
         }
 
         $periodeMasak->update([
-            'periode_ke'    => $request->periode_ke,
             'tanggal_awal'  => $request->tanggal_awal,
             'tanggal_akhir' => $request->tanggal_akhir,
         ]);
