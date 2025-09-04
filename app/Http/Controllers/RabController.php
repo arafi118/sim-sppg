@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Rancangan;
 use App\Models\Po;
+use App\Models\PoDetail;
+use App\Models\Mitra;
 use App\Models\PeriodeMasak;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Carbon\Carbon;
@@ -185,72 +187,72 @@ class RabController extends Controller
             'message' => 'RAB periode ke ' . $periode->periode_ke . ' berhasil ' . ($request->approve ? 'disetujui' : 'ditolak')
         ]);
     }
+    public function PO(Request $request)
+    {
+        $tanggalAwal = $request->tanggal_awal;
+        $tanggalAkhir = $request->tanggal_akhir;
 
-  public function PO(Request $request)
-{
-    $tanggalAwal = $request->tanggal_awal;
-    $tanggalAkhir = $request->tanggal_akhir;
-    $tanggal = $request->tanggal;
+        $periode = PeriodeMasak::where('approved', 1)
+            ->where('tanggal_awal', '<=', $tanggalAkhir)
+            ->where('tanggal_akhir', '>=', $tanggalAwal)
+            ->first();
 
-    // 🔹 cek periode masak approved
-    $periode = PeriodeMasak::where('approved', 1)->first();
-    if (!$periode) {
-        return response('<div class="alert alert-warning">Belum ada periode yang disetujui.</div>');
-    }
+        if (!$periode) {
+            return response('<div class="alert alert-warning">Belum ada periode yang disetujui.</div>');
+        }
 
-    if ($tanggal === '-') {
-        $rancangan = Rancangan::with(['rancanganMenu.menu.resep.bahanPangan'])
+        $rancangan = Rancangan::with(['rancanganMenu.menu.resep.bahanPangan.mitra'])
             ->whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir])
             ->orderBy('tanggal', 'ASC')
             ->get();
-    } else {
-        $rancangan = Rancangan::with(['rancanganMenu.menu.resep.bahanPangan'])
-            ->whereDate('tanggal', $tanggal)
-            ->orderBy('tanggal', 'ASC')
-            ->get();
-    }
 
-    if ($rancangan->isEmpty()) {
-        return response('<div class="alert alert-danger">Belum ada rancangan pada periode ini.</div>');
-    }
+        if ($rancangan->isEmpty()) {
+            return response()->json([
+                'status' => 'warning',
+                'message' => 'Belum ada rancangan pada periode ini.'
+            ]);
+        }   
+        $dataBahanPangan = [];
 
-    $dataBahanPangan = [];
-    foreach ($rancangan as $r) {
-        $jumlahRancangan = $r->jumlah ?? 1;
-        foreach ($r->rancanganMenu as $rm) {
-            $menu = $rm->menu;
-            if (!$menu) continue;
-            foreach ($menu->resep as $resep) {
-                $bp = $resep->bahanPangan;
-                if (!$bp) continue;
+        foreach ($rancangan as $r) {
+            $jumlahRancangan = $r->jumlah ?? 1;
 
-                $bpId = $bp->id;
+            foreach ($r->rancanganMenu as $rm) {
+                $menu = $rm->menu;
+                if (!$menu) continue;
 
-                if (!isset($dataBahanPangan[$bpId])) {
-                    $dataBahanPangan[$bpId] = [
-                        'bahan_pangan_id' => $bpId,
-                        'nama' => $bp->nama,
-                        'satuan' => $bp->satuan,
-                        'harga' => $bp->harga_jual ?? 0,
-                        'jumlah' => 0
-                    ];
+                foreach ($menu->resep as $resep) {
+                    $bp = $resep->bahanPangan;
+                    if (!$bp) continue;
+
+                    $bpId = $bp->id;
+
+                    if (!isset($dataBahanPangan[$bpId])) {
+                        $mitraList = [];
+                        foreach ($bp->mitra as $mitra) {
+                            $mitraList[] = $mitra; 
+                        }
+
+                        $dataBahanPangan[$bpId] = [
+                            'bahan_pangan_id' => $bpId,
+                            'nama' => $bp->nama,
+                            'satuan' => $bp->satuan,
+                            'harga' => $bp->harga_jual ?? 0,
+                            'jumlah' => 0,
+                            'mitra' => $mitraList,
+                        ];
+                    }
+
+                    $dataBahanPangan[$bpId]['jumlah'] += ($resep->gramasi ?? 0) * $jumlahRancangan;
                 }
-
-                $dataBahanPangan[$bpId]['jumlah'] += ($resep->gramasi ?? 0) * $jumlahRancangan;
             }
         }
+
+        $title = 'PO';
+        return view('app.rab.po_tabel', compact('dataBahanPangan', 'title'));
     }
-
-    uasort($dataBahanPangan, fn($a, $b) => strcmp($a['nama'], $b['nama']));
-
-    // 🔹 return view untuk AJAX
-    return view('app.rab.po_tabel', compact('dataBahanPangan'));
-}
-
-
     public function simpanPO(Request $request)
     {
-        // Ambil PO hari ini, buat baru jika belum ada
         $po = \App\Models\Po::firstOrCreate(
             ['tanggal' => now()->toDateString()], // kondisi
             ['total_harga' => 0, 'status_bayar' => 'unpaid'] // default jika baru
@@ -310,35 +312,100 @@ class RabController extends Controller
         ->orderBy('tanggal', 'desc')
         ->get();
 
-        return view('app.rab.po_detail', compact('po', 'referensiPOs', 'title'));
+        // 🔹 Ambil semua bahan pangan untuk dropdown modal edit
+        $bahanPangan = \App\Models\BahanPangan::orderBy('nama')->get();
+
+        return view('app.rab.po_detail', compact('po', 'referensiPOs', 'title', 'bahanPangan'));
     }
 
-public function cetakPO()
+    public function updatePO(Request $request)
+    {
+            $request->validate([
+            'id' => 'required|exists:po_details,id',
+            'bahan_pangan_id' => 'required|exists:bahan_pangans,id',
+            'harga_satuan' => 'required|numeric|min:0',
+            'jumlah_input' => 'required|numeric|min:0',
+        ]);
+
+
+        $detail = PoDetail::findOrFail($request->id);
+        $detail->bahan_pangan_id = $request->bahan_pangan_id;
+        $detail->harga_satuan    = $request->harga_satuan;
+        $detail->jumlah_input    = $request->jumlah_input;
+        $detail->total_harga     = $request->harga_satuan * $request->jumlah_input;
+        $detail->save();
+
+        // Update total PO
+        $total = PoDetail::where('po_id', $detail->po_id)->sum('total_harga');
+        $detail->po->update(['total_harga' => $total]);
+
+        return redirect()->back()->with('success', 'Detail PO berhasil diperbarui.');
+    }
+    public function cetak_detail($id)
+    {
+        // Ambil detail PO
+        $detail = PoDetail::with('po')->findOrFail($id);
+
+        // Ambil PO master dari detail
+        $po = Po::with('poDetail.bahanPangan')->findOrFail($detail->po->id);
+        $title = 'Cetak Po';
+        return view('app.rab.po_cetak_detail', compact('po','title'));
+    }
+
+public function bayar(Request $request)
 {
-    $title = 'Cetak PO';
+    $request->validate([
+        'po_detail_id' => 'required|exists:po_detail,id',
+        'jumlah_bayar' => 'required|numeric|min:1'
+    ]);
 
-    $pos = Po::with(['poDetail' => function($q) {
-        $q->where('jumlah_input', '>', 0)->with('bahanPangan');
-    }])
-    ->whereHas('poDetail', function($q) {
-        $q->where('jumlah_input', '>', 0);
-    })
-    ->orderBy('tanggal', 'asc')
-    ->get();
+    $detail = PoDetail::findOrFail($request->po_detail_id);
 
-    $view = view('app.rab.po_cetak', compact('pos', 'title'))->render();
+    // Update jumlah_input (bayar sebagian)
+    $detail->jumlah_input = ($detail->jumlah_input ?? 0) + $request->jumlah_bayar;
 
-    return PDF::loadHTML($view)
-        ->setOptions([
-            'margin-top'    => 20,
-            'margin-bottom' => 20,
-            'margin-left'   => 25,
-            'margin-right'  => 20,
-        ])
-        ->setPaper('A4', 'portrait')
-        ->setOption('title', $title)
-        ->inline('RAB.pdf');
+    // Batasi agar tidak lebih dari total_harga
+    if ($detail->jumlah_input >= $detail->total_harga) {
+        $detail->jumlah_input = $detail->total_harga;
+        $detail->status_bayar = 'PAID';
+    } elseif ($detail->jumlah_input > 0) {
+        $detail->status_bayar = 'PARTIAL';
+    } else {
+        $detail->status_bayar = 'UNPAID';
+    }
+
+    $detail->save();
+
+    return back()->with('success', 'Pembayaran berhasil disimpan');
 }
+
+    public function cetakPO()
+    {
+        $title = 'Cetak PO';
+
+        $pos = Po::with(['poDetail' => function($q) {
+            $q->where('jumlah_input', '>', 0)->with('bahanPangan');
+        }])
+        ->whereHas('poDetail', function($q) {
+            $q->where('jumlah_input', '>', 0);
+        })
+        ->orderBy('tanggal', 'asc')
+        ->get();
+
+        $view = view('app.rab.po_cetak', compact('pos', 'title'))->render();
+
+        return PDF::loadHTML($view)
+            ->setOptions([
+                'margin-top'    => 20,
+                'margin-bottom' => 20,
+                'margin-left'   => 25,
+                'margin-right'  => 20,
+            ])
+            ->setPaper('A4', 'portrait')
+            ->setOption('title', $title)
+            ->inline('RAB.pdf');
+    }
+
 
 
 

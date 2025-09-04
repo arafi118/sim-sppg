@@ -25,4 +25,8 @@ class BahanPangan extends Model
     {
         return $this->hasMany(PoDetail::class, 'bahan_pangan_id');
     }
+    public function mitra()
+{
+    return $this->hasMany(Mitra::class, 'bahan_pangan_id', 'id');
+}
 }

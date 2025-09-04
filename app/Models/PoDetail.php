@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PoDetail extends Model
 {
     use HasFactory;
-    protected $table = 'po_detail';
+    protected $table = 'po_details';
     protected $guarded = [];
     
     public function po()
