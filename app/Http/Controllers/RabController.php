@@ -21,7 +21,7 @@ class RabController extends Controller
         return view('app.rab.index', compact('title', 'periode'));
     }
 
-   public function generate(Request $request)
+    public function generate(Request $request)
     {
         $tanggalParam = explode(',', $request->get('tanggal'));
 
@@ -195,7 +195,7 @@ class RabController extends Controller
         $periode = PeriodeMasak::where('approved', 1)
             ->where('tanggal_awal', '<=', $tanggalAkhir)
             ->where('tanggal_akhir', '>=', $tanggalAwal)
-            ->first();
+            ->get();
 
         if (!$periode) {
             return response('<div class="alert alert-warning">Belum ada periode yang disetujui.</div>');
@@ -254,39 +254,46 @@ class RabController extends Controller
     public function simpanPO(Request $request)
     {
         $po = \App\Models\Po::firstOrCreate(
-            ['tanggal' => now()->toDateString()], // kondisi
-            ['total_harga' => 0, 'status_bayar' => 'unpaid'] // default jika baru
+            ['tanggal' => now()->toDateString()],
+            ['total_harga' => 0, 'status_bayar' => 'unpaid']
         );
 
-        $jumlahs     = $request->input('jumlah_input');       // jumlah input user
-        $hargaSatuan = $request->input('harga_satuan');      // harga satuan
-        $kebutuhans  = $request->input('jumlah_kebutuhan');  // kebutuhan dari rancangan
+        $jumlahs     = $request->input('jumlah_input');
+        $hargaSatuan = $request->input('harga_satuan');
+        $kebutuhans  = $request->input('jumlah_kebutuhan');
+        $mitraIds    = $request->input('mitra_id');
 
         $totalKeseluruhan = 0;
 
         foreach ($jumlahs as $bpId => $jmlInput) {
-            $harga      = $hargaSatuan[$bpId] ?? 0;
-            $kebutuhan  = $kebutuhans[$bpId] ?? 0;
-            $total      = $harga * $jmlInput;
+        $mitraId = $mitraIds[$bpId] ?? null;
 
-            $totalKeseluruhan += $total;
+        // Abaikan jika input 0 atau mitra_id null
+        if ($jmlInput <= 0 || !$mitraId) continue;
 
-            \App\Models\PoDetail::updateOrCreate(
-                [
-                    'po_id'           => $po->id,
-                    'bahan_pangan_id' => $bpId
-                ],
-                [
-                    'harga_satuan' => $harga,
-                    'jumlah'       => $kebutuhan,   // kebutuhan dari rancangan
-                    'jumlah_input' => $jmlInput,    // input user
-                    'total_harga'  => $total,
-                    'status_bayar' => 'unpaid'
-                ]
-            );
+        $harga     = $hargaSatuan[$bpId] ?? 0;
+        $kebutuhan = $kebutuhans[$bpId] ?? 0;
+        $total     = $harga * $jmlInput;
+
+        $totalKeseluruhan += $total;
+
+        \App\Models\PoDetail::updateOrCreate(
+            [
+                'po_id'           => $po->id,
+                'bahan_pangan_id' => $bpId,
+            ],
+            [
+                'harga_satuan' => $harga,
+                'jumlah'       => $kebutuhan,
+                'jumlah_input' => $jmlInput,
+                'total_harga'  => $total,
+                'status_bayar' => 'unpaid',
+                'mitra_id'     => $mitraId,
+            ]
+        );
         }
 
-        // Update total_harga di PO master
+
         $po->update(['total_harga' => $totalKeseluruhan]);
 
         return response()->json([
@@ -295,29 +302,23 @@ class RabController extends Controller
             'total'   => $totalKeseluruhan
         ]);
     }
+
     public function detailPO($id)
     {
         $title = 'Detail PO';
 
-        // PO utama
-        $po = Po::findOrFail($id);
+        // Ambil PO utama beserta detail yang jumlah_input > 0
+        $po = Po::with(['poDetail' => function($q) {
+            $q->where('jumlah_input', '>', 0)
+            ->with(['bahanPangan', 'mitra']);
+        }])->findOrFail($id);
 
-        // Semua PO yang memiliki input (jumlah_input > 0)
-        $referensiPOs = Po::with(['poDetail' => function($q) {
-            $q->where('jumlah_input', '>', 0)->with('bahanPangan');
-        }])
-        ->whereHas('poDetail', function($q) {
-            $q->where('jumlah_input', '>', 0);
-        })
-        ->orderBy('tanggal', 'desc')
-        ->get();
-
-        // 🔹 Ambil semua bahan pangan untuk dropdown modal edit
+        // Gunakan PO yang sama sebagai referensi untuk Blade
+        $referensiPOs = collect([$po]);
         $bahanPangan = \App\Models\BahanPangan::orderBy('nama')->get();
 
         return view('app.rab.po_detail', compact('po', 'referensiPOs', 'title', 'bahanPangan'));
     }
-
     public function updatePO(Request $request)
     {
             $request->validate([
@@ -352,32 +353,32 @@ class RabController extends Controller
         return view('app.rab.po_cetak_detail', compact('po','title'));
     }
 
-public function bayar(Request $request)
-{
-    $request->validate([
-        'po_detail_id' => 'required|exists:po_detail,id',
-        'jumlah_bayar' => 'required|numeric|min:1'
-    ]);
+    public function bayar(Request $request)
+    {
+        $request->validate([
+            'po_detail_id' => 'required|exists:po_detail,id',
+            'jumlah_bayar' => 'required|numeric|min:1'
+        ]);
 
-    $detail = PoDetail::findOrFail($request->po_detail_id);
+        $detail = PoDetail::findOrFail($request->po_detail_id);
 
-    // Update jumlah_input (bayar sebagian)
-    $detail->jumlah_input = ($detail->jumlah_input ?? 0) + $request->jumlah_bayar;
+        // Update jumlah_input (bayar sebagian)
+        $detail->jumlah_input = ($detail->jumlah_input ?? 0) + $request->jumlah_bayar;
 
-    // Batasi agar tidak lebih dari total_harga
-    if ($detail->jumlah_input >= $detail->total_harga) {
-        $detail->jumlah_input = $detail->total_harga;
-        $detail->status_bayar = 'PAID';
-    } elseif ($detail->jumlah_input > 0) {
-        $detail->status_bayar = 'PARTIAL';
-    } else {
-        $detail->status_bayar = 'UNPAID';
+        // Batasi agar tidak lebih dari total_harga
+        if ($detail->jumlah_input >= $detail->total_harga) {
+            $detail->jumlah_input = $detail->total_harga;
+            $detail->status_bayar = 'PAID';
+        } elseif ($detail->jumlah_input > 0) {
+            $detail->status_bayar = 'PARTIAL';
+        } else {
+            $detail->status_bayar = 'UNPAID';
+        }
+
+        $detail->save();
+
+        return back()->with('success', 'Pembayaran berhasil disimpan');
     }
-
-    $detail->save();
-
-    return back()->with('success', 'Pembayaran berhasil disimpan');
-}
 
     public function cetakPO()
     {

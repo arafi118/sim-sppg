@@ -44,7 +44,7 @@
     <!-- Card untuk PO -->
     <div id="poCard" class="card mt-3" style="display:none;">
         <div class="card-body">
-            <h5 class="card-title"></h5>
+            <h5 class="card-title">Pemesanan (PO)</h5>
             <div id="poTabel"></div>
         </div>
     </div>

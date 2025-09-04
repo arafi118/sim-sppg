@@ -3,58 +3,45 @@
     .select2-selection__placeholder {
         text-align: center !important;
     }
+
+    /* Tinggi select2 dan input sama */
+    .select2-container .select2-selection--single {
+        height: 38px;
+        /* sesuaikan tinggi select2 */
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 38px;
+        /* agar teks di tengah */
+    }
+
+    .jumlah-input,
+    #tableBahan td input[type="text"] {
+        height: 38px;
+        /* samakan dengan select2 */
+    }
 </style>
+
 <form id="formPO">
     @csrf
-
-    <!-- Baris Pemesanan PO + Filter Mitra -->
-    <div class="mb-2 d-flex align-items-center justify-content-between">
-        <!-- Teks Pemesanan PO di kiri -->
-        <div>
-            <strong style="font-size:20px;">Pemesanan (PO)</strong>
-        </div>
-
-        <!-- Filter Mitra di kanan -->
-        <div class="d-flex justify-content-end" style="gap:10px; min-width:340px;">
-            <label for="filterMitra" class="form-label visually-hidden">Filter Mitra:</label>
-            <select id="filterMitra" class="form-select form-select-sm w-100">
-                <option value="">-- Semua Mitra --</option>
-                @php
-                    $mitraUnique = collect();
-                    foreach ($dataBahanPangan as $b) {
-                        foreach ($b['mitra'] as $m) {
-                            $mitraUnique->push($m);
-                        }
-                    }
-                    $mitraUnique = $mitraUnique->unique('id');
-                @endphp
-                @foreach ($mitraUnique as $m)
-                    <option value="{{ $m->id }}">{{ $m->nama }}</option>
-                @endforeach
-            </select>
-        </div>
-    </div>
 
     <!-- Tabel Bahan Pangan -->
     <table class="table table-bordered align-middle" id="tableBahan">
         <thead class="table-light">
             <tr style="text-align: center;">
-                {{-- <th style="width:3%;">No</th> --}}
-                <th style="width:13%;">Bahan Pangan</th>
+                <th style="width:15%;">Bahan Pangan</th>
                 <th style="width:7%;">Satuan</th>
-                <th style="width:15%;">Harga Satuan</th>
-                <th style="width:15%;">Jumlah Kebutuhan</th>
+                <th style="width:10%;">Harga</th>
+                <th style="width:10%;">Kebutuhan</th>
+                <th style="width:15%;">Mitra</th>
                 <th style="width:15%;">Jumlah</th>
                 <th style="width:15%;">Total Harga</th>
             </tr>
             <meta name="csrf-token" content="{{ csrf_token() }}">
-
         </thead>
         <tbody>
-            @php $no = 1; @endphp
             @foreach ($dataBahanPangan as $b)
                 <tr data-mitra="{{ implode(',', collect($b['mitra'])->pluck('id')->toArray()) }}">
-                    {{-- <td>{{ $no }}</td> --}}
                     <td>{{ $b['nama'] }}</td>
                     <td>{{ $b['satuan'] }}</td>
                     <td class="text-end">{{ number_format($b['harga'], 0, ',', '.') }}</td>
@@ -62,6 +49,15 @@
                         {{ number_format($b['jumlah'], 2, ',', '.') }}
                         <input type="hidden" name="jumlah_kebutuhan[{{ $b['bahan_pangan_id'] }}]"
                             value="{{ $b['jumlah'] }}">
+                    </td>
+                    <td>
+                        <select class="form-select form-select-sm mitra-select" style="width:100%">
+                            <option value="">-- Pilih Mitra --</option>
+                            @foreach ($b['mitra'] as $m)
+                                <option value="{{ $m->id }}">{{ $m->nama }}</option>
+                            @endforeach
+                        </select>
+                        <input type="hidden" name="mitra_id[{{ $b['bahan_pangan_id'] }}]" class="mitra-hidden">
                     </td>
                     <td>
                         <input type="number" name="jumlah_input[{{ $b['bahan_pangan_id'] }}]"
@@ -76,18 +72,15 @@
                             value="{{ $b['harga'] }}">
                     </td>
                 </tr>
-                @php $no++; @endphp
             @endforeach
         </tbody>
     </table>
 
     <div class="d-flex justify-content-end mt-2">
-        <button type="button" id="btnSimpanPO" class="btn btn-success">
-            <i class="icon-base bx bx-folder me-1"></i> Simpan PO
+        <button type="button" id="btnSimpanPO" class="btn btn-success"> Simpan PO
         </button>
     </div>
 </form>
-
 <script>
     $(document).ready(function() {
         // CSRF untuk AJAX
@@ -97,14 +90,70 @@
             }
         });
 
-        // Simpan PO
+        // Inisialisasi Select2 per baris & sinkron hidden input + filter baris
+        $('.mitra-select').each(function() {
+            $(this).select2({
+                placeholder: "-- Pilih Mitra --",
+                allowClear: true,
+                width: '100%'
+            });
+
+            $(this).on('change', function() {
+                const selectedMitra = $(this).val();
+                $(this).siblings('.mitra-hidden').val(selectedMitra);
+
+                // Filter tabel: tampilkan baris yang punya mitra yg dipilih
+                $('#tableBahan tbody tr').each(function() {
+                    const mitraIds = $(this).data('mitra').toString().split(',');
+                    if (selectedMitra === '' || mitraIds.includes(selectedMitra)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+        });
+
+        // Hitung total harga otomatis
+        $('.jumlah-input').each(function() {
+            const input = $(this);
+
+            function hitung() {
+                const harga = parseFloat(input.data('harga')) || 0;
+                const jumlah = parseFloat(input.val()) || 0;
+                const total = harga * jumlah;
+                $('#total_harga_' + input.data('id')).val(total.toLocaleString('id-ID', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }));
+            }
+            input.on('input', hitung);
+            hitung();
+        });
+
+        // Simpan PO via AJAX
         $('#btnSimpanPO').on('click', function() {
-            let formData = $('#formPO').serialize();
+            let formData = [];
+
+            // Loop tiap baris tabel
+            $('#tableBahan tbody tr').each(function() {
+                const mitraId = $(this).find('.mitra-hidden').val();
+
+                // Hanya ambil baris yang punya mitra dipilih
+                if (mitraId) {
+                    $(this).find('input[name], select[name]').each(function() {
+                        formData.push({
+                            name: $(this).attr('name'),
+                            value: $(this).val()
+                        });
+                    });
+                }
+            });
 
             $.ajax({
                 url: '{{ url('/app/rab/simpanPO') }}',
                 type: 'POST',
-                data: formData,
+                data: $.param(formData),
                 success: function(res) {
                     Swal.fire({
                         title: 'Berhasil!',
@@ -127,39 +176,6 @@
                 }
             });
         });
-    });
-    $(document).ready(function() {
-        // Inisialisasi Select2
-        $('#filterMitra').select2({
-            placeholder: "-- Semua Mitra --",
-            allowClear: true,
-            width: '200px' // lebar bisa disesuaikan
-        });
 
-        // Filter mitra tetap jalan
-        $('#filterMitra').on('change', function() {
-            const selectedMitra = $(this).val();
-            $('#tableBahan tbody tr').each(function() {
-                const mitraIds = $(this).data('mitra').toString().split(',');
-                $(this).toggle(selectedMitra === '' || mitraIds.includes(selectedMitra));
-            });
-        });
-
-        // Hitung total harga otomatis
-        $('.jumlah-input').each(function() {
-            const input = $(this);
-
-            function hitung() {
-                const harga = parseFloat(input.data('harga')) || 0;
-                const jumlah = parseFloat(input.val()) || 0;
-                const total = harga * jumlah;
-                $('#total_harga_' + input.data('id')).val(total.toLocaleString('id-ID', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                }));
-            }
-            input.on('input', hitung);
-            hitung();
-        });
     });
 </script>

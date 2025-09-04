@@ -24,4 +24,8 @@ class PoDetail extends Model
     {
         return $this->hasMany(Transaksi::class, 'po_detail_id');
     }
+      public function mitra()
+    {
+        return $this->belongsTo(Mitra::class);
+    }
 }
