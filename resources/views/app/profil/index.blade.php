@@ -10,7 +10,7 @@
                         <small class="text-uppercase text-body-secondary">Profile Saya</small>
                         <div class="card mb-4 text-center">
                             <div class="p-4 d-flex flex-column align-items-center">
-                                <img src="../../assets/img/avatars/1.png" alt="user image"
+                                <img src="/assets/img/landing-page/user.png" alt="user image"
                                     class="rounded-circle object-fit-cover mb-3" style="width: 120px; height: 120px;" />
                                 <h4 class="mb-1">{{ $user->nama }}</h4>
                                 <span class="text-muted">{{ $user->level->nama }}</span>
