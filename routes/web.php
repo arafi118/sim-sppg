@@ -143,6 +143,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::put('/rab/update', [RabController::class, 'updatePO'])->name('rab.update');
     Route::get('/rab/po/cetak_detail/{id}', [RabController::class, 'cetak_detail']);
     Route::post('/rab/bayar', [RabController::class, 'bayar'])->name('rab.bayar');
+    Route::post('/rab/bayar_po', [RabController::class, 'bayarPO']);
+
 
     //Mekanisme Pelaksanaan
     Route::post('/storemekanisme', [PenyiapanController::class, 'Storemekanisme']);

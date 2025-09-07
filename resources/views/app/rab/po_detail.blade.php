@@ -22,14 +22,33 @@
                                 <th>Kebutuhan</th>
                                 <th>Jumlah</th>
                                 <th>Total Harga</th>
+                                {{-- <th>Sudah Bayar</th> --}}
+                                {{-- <th>Sisa Tagihan</th> --}}
+                                <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @php
                                 $totalHarga = 0;
+                                $totalBayar = 0;
+                                $totalSisa = 0;
                             @endphp
                             @foreach ($refPo->poDetail as $detail)
+                                @php
+                                    $sisa = $detail->total_harga - $detail->jumlah_bayar;
+                                    $totalHarga += $detail->total_harga;
+                                    $totalBayar += $detail->jumlah_bayar;
+                                    $totalSisa += $sisa;
+
+                                    if ($detail->jumlah_bayar == 0) {
+                                        $status = '<span class="badge bg-danger">UNPAID</span>';
+                                    } elseif ($detail->jumlah_bayar < $detail->total_harga) {
+                                        $status = '<span class="badge bg-warning text-dark">PARTIAL</span>';
+                                    } else {
+                                        $status = '<span class="badge bg-success">PAID</span>';
+                                    }
+                                @endphp
                                 <tr>
                                     <td>{{ $detail->bahanPangan->nama ?? '-' }}</td>
                                     <td>{{ $detail->mitra->nama ?? '-' }}</td>
@@ -38,6 +57,9 @@
                                     <td align="center">{{ number_format($detail->jumlah, 2, ',', '.') }} (Kg)</td>
                                     <td align="center">{{ number_format($detail->jumlah_input, 2, ',', '.') }} (Kg)</td>
                                     <td class="text-end">{{ number_format($detail->total_harga, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($detail->jumlah_bayar, 0, ',', '.') }}</td>
+                                    <td class="text-end">{{ number_format($sisa, 0, ',', '.') }}</td>
+                                    <td>{!! $status !!}</td>
                                     <td align="center">
                                         <div class="btn-group">
                                             <button type="button"
@@ -74,29 +96,38 @@
                                                         data-harga="{{ $detail->harga_satuan }}"
                                                         data-kebutuhan="{{ $detail->jumlah }}"
                                                         data-total="{{ $detail->total_harga }}"
-                                                        data-sisa="{{ $detail->total_harga - $detail->jumlah_input }}">
-                                                        <i class="bx bx-credit-card me-1"></i> Dibayar
+                                                        data-sisa="{{ $detail->total_harga - $detail->jumlah_bayar }}">
+                                                        <i class="bx bx-credit-card me-1"></i>Dibayar
                                                     </a>
                                                 </li>
+
                                             </ul>
                                         </div>
                                     </td>
                                 </tr>
-                                @php $totalHarga += $detail->total_harga; @endphp
                             @endforeach
 
                             <tr class="fw-bold">
                                 <td colspan="6" class="text-center">Total</td>
                                 <td class="text-end">{{ number_format($totalHarga, 0, ',', '.') }}</td>
+                                <td class="text-end">{{ number_format($totalBayar, 0, ',', '.') }}</td>
+                                <td class="text-end">{{ number_format($totalSisa, 0, ',', '.') }}</td>
+                                <td colspan="2"></td>
                             </tr>
                         </tbody>
                     </table>
                 @endif
             @endforeach
-
             <div class="mt-3 d-flex justify-content-end">
+                <!-- Tombol Bayar PO -->
+                <button class="btn btn-success me-2" id="btnBayarPO" data-bs-toggle="modal" data-bs-target="#modalBayarPO">
+                    Bayar PO
+                </button>
+
+                <!-- Tombol Kembali -->
                 <a href="{{ url('/app/rab') }}" class="btn btn-primary">Kembali</a>
             </div>
+
         </div>
     </div>
 
@@ -201,7 +232,6 @@
 
                     <div class="modal-body">
                         <div class="row g-2">
-                            <!-- Baris 1: Bahan & Mitra -->
                             <div class="col-md-6">
                                 <label class="form-label">Bahan</label>
                                 <input type="text" class="form-control" id="bayar_bahan" readonly>
@@ -210,8 +240,6 @@
                                 <label class="form-label">Mitra</label>
                                 <input type="text" class="form-control" id="bayar_mitra" readonly>
                             </div>
-
-                            <!-- Baris 2: Satuan, Harga, Kebutuhan -->
                             <div class="col-md-6">
                                 <label class="form-label">Satuan</label>
                                 <input type="text" class="form-control" id="bayar_satuan" readonly>
@@ -224,8 +252,10 @@
                                 <label class="form-label">Kebutuhan</label>
                                 <input type="text" class="form-control" id="bayar_kebutuhan" readonly>
                             </div>
-
-                            <!-- Baris 3: Sisa Tagihan & Jumlah Bayar -->
+                            <div class="col-md-6">
+                                <label class="form-label">Total Tagihan</label>
+                                <input type="text" class="form-control" id="bayar_total" readonly>
+                            </div>
                             <div class="col-md-6">
                                 <label class="form-label">Sisa Tagihan</label>
                                 <input type="text" class="form-control" id="bayar_sisa" readonly>
@@ -235,17 +265,48 @@
                                 <input type="number" step="0.01" class="form-control" name="jumlah_bayar"
                                     id="bayar_jumlah_bayar" required>
                             </div>
-                            <!-- Baris 4: Total Tagihan -->
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-success">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Bayar PO -->
+    <div class="modal fade" id="modalBayarPO" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form action="app/rab/bayar_po" method="POST">
+                    @csrf
+                    <input type="hidden" name="po_id" value="{{ $po->id }}"> <!-- ID PO -->
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Pembayaran Seluruh PO</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="row g-2">
                             <div class="col-md-6">
-                                <label class="form-label">Total Tagihan</label>
-                                <input type="text" class="form-control" id="bayar_total" readonly>
+                                <label class="form-label">Total Sisa PO</label>
+                                <input type="text" class="form-control" id="bayarPO_totalSisa" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Jumlah Bayar</label>
+                                <input type="number" step="0.01" class="form-control" name="jumlah_bayar"
+                                    id="bayarPO_jumlahBayar" required>
                             </div>
                         </div>
                     </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Tutup</button>
-                        <button type="submit" class="btn btn-success">Bayar</button>
+                        <button type="submit" class="btn btn-success">Simpan Pembayaran</button>
                     </div>
                 </form>
             </div>
@@ -355,37 +416,70 @@
                 });
             });
             // Modal Bayar
-            const jumlahBayarInput = document.getElementById('bayar_jumlah_bayar');
-            const sisaInput = document.getElementById('bayar_sisa');
-            const totalBayarInput = document.getElementById('bayar_total');
-
             document.querySelectorAll('.btn-bayar').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.getElementById('bayar_id').value = this.dataset.id;
                     document.getElementById('bayar_bahan').value = this.dataset.bahan;
                     document.getElementById('bayar_mitra').value = this.dataset.mitra ?? '-';
                     document.getElementById('bayar_satuan').value = this.dataset.satuan;
-                    document.getElementById('bayar_harga').value = parseFloat(this.dataset.harga)
+
+                    // harga, kebutuhan, total => tetap diformat ribuan
+                    document.getElementById('bayar_harga').value = parseInt(this.dataset.harga)
                         .toLocaleString('id-ID');
-                    document.getElementById('bayar_kebutuhan').value = this.dataset.kebutuhan;
-                    totalBayarInput.value = parseFloat(this.dataset.total).toLocaleString('id-ID');
-                    const sisaAwal = parseFloat(this.dataset.sisa) || 0;
-                    sisaInput.value = sisaAwal.toLocaleString('id-ID');
-                    jumlahBayarInput.value = '';
+                    document.getElementById('bayar_kebutuhan').value = parseFloat(this.dataset
+                        .kebutuhan).toLocaleString('id-ID');
+                    document.getElementById('bayar_total').value = parseInt(this.dataset.total)
+                        .toLocaleString('id-ID');
+
+                    // ✅ hapus titik sebelum parseFloat
+                    const sisaAwal = parseInt(this.dataset.sisa.toString().replace(/\./g, '')) || 0;
+
+                    document.getElementById('bayar_sisa').value = sisaAwal.toLocaleString('id-ID');
+                    document.getElementById('bayar_sisa').dataset.sisaAwal = sisaAwal;
+
+                    document.getElementById('bayar_jumlah_bayar').value = '';
+                });
+            });
+
+            // input jumlah bayar
+            const jumlahBayarInput = document.getElementById('bayar_jumlah_bayar');
+            const sisaInput = document.getElementById('bayar_sisa');
+
+            if (jumlahBayarInput) {
+                jumlahBayarInput.addEventListener('input', function() {
+                    const sisaAwal = parseInt(sisaInput.dataset.sisaAwal) || 0;
+                    const bayarBaru = parseInt(this.value) || 0;
+
+                    let sisa = sisaAwal - bayarBaru;
+                    if (sisa < 0) sisa = 0;
+
+                    sisaInput.value = sisa.toLocaleString('id-ID');
+                });
+            }
+
+            // Bayar Per PO
+            document.addEventListener('DOMContentLoaded', function() {
+                const btnBayarPO = document.getElementById('btnBayarPO');
+                const totalSisaInput = document.getElementById('bayarPO_totalSisa');
+
+                btnBayarPO.addEventListener('click', function() {
+                    let totalSisa = 0;
+
+                    // Loop semua baris tabel untuk hitung sisa
+                    document.querySelectorAll('tbody tr').forEach(tr => {
+                        const sisaText = tr.querySelector('td:nth-child(9)')?.textContent
+                            .replace(/\./g, '').replace(',', '.') || 0;
+                        totalSisa += parseFloat(sisaText) || 0;
+                    });
+
+                    totalSisaInput.value = totalSisa.toLocaleString('id-ID');
+                    document.getElementById('bayarPO_jumlahBayar').value = '';
                 });
             });
 
 
-            if (jumlahBayarInput) {
-                jumlahBayarInput.addEventListener('input', function() {
-                    const total = parseFloat(totalBayarInput.value.replace(/\./g, '').replace(/,/g, '')) ||
-                        0;
-                    const bayar = parseFloat(this.value) || 0;
-                    let sisa = total - bayar;
-                    if (sisa < 0) sisa = 0;
-                    sisaInput.value = sisa.toLocaleString('id-ID');
-                });
-            }
+
+
         });
     </script>
 @endsection

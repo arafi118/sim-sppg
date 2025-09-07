@@ -303,22 +303,32 @@ class RabController extends Controller
         ]);
     }
 
-    public function detailPO($id)
-    {
-        $title = 'Detail PO';
+   public function detailPO($id)
+{
+    $title = 'Detail PO';
 
-        // Ambil PO utama beserta detail yang jumlah_input > 0
-        $po = Po::with(['poDetail' => function($q) {
+    // Ambil PO utama beserta detail yang jumlah_input > 0
+    $po = Po::with(['poDetail' => function($q) {
+        $q->where('jumlah_input', '>', 0)
+          ->with(['bahanPangan', 'mitra']);
+    }])->findOrFail($id);
+
+    // Ambil semua PO yang punya detail jumlah_input > 0
+    $referensiPOs = Po::with(['poDetail' => function($q) {
             $q->where('jumlah_input', '>', 0)
-            ->with(['bahanPangan', 'mitra']);
-        }])->findOrFail($id);
+              ->with(['bahanPangan', 'mitra']);
+        }])
+        ->whereHas('poDetail', function($q) {
+            $q->where('jumlah_input', '>', 0);
+        })
+        ->orderBy('tanggal', 'asc')
+        ->get();
 
-        // Gunakan PO yang sama sebagai referensi untuk Blade
-        $referensiPOs = collect([$po]);
-        $bahanPangan = \App\Models\BahanPangan::orderBy('nama')->get();
+    $bahanPangan = \App\Models\BahanPangan::orderBy('nama')->get();
 
-        return view('app.rab.po_detail', compact('po', 'referensiPOs', 'title', 'bahanPangan'));
-    }
+    return view('app.rab.po_detail', compact('po', 'referensiPOs', 'title', 'bahanPangan'));
+}
+
     public function updatePO(Request $request)
     {
             $request->validate([
@@ -356,20 +366,20 @@ class RabController extends Controller
     public function bayar(Request $request)
     {
         $request->validate([
-            'po_detail_id' => 'required|exists:po_detail,id',
+            'po_detail_id' => 'required|exists:po_details,id',
             'jumlah_bayar' => 'required|numeric|min:1'
         ]);
 
         $detail = PoDetail::findOrFail($request->po_detail_id);
 
-        // Update jumlah_input (bayar sebagian)
-        $detail->jumlah_input = ($detail->jumlah_input ?? 0) + $request->jumlah_bayar;
+        // Tambah jumlah bayar
+        $detail->jumlah_bayar = ($detail->jumlah_bayar ?? 0) + $request->jumlah_bayar;
 
-        // Batasi agar tidak lebih dari total_harga
-        if ($detail->jumlah_input >= $detail->total_harga) {
-            $detail->jumlah_input = $detail->total_harga;
+        // Batasi supaya tidak lebih dari total tagihan
+        if ($detail->jumlah_bayar >= $detail->total_harga) {
+            $detail->jumlah_bayar = $detail->total_harga;
             $detail->status_bayar = 'PAID';
-        } elseif ($detail->jumlah_input > 0) {
+        } elseif ($detail->jumlah_bayar > 0) {
             $detail->status_bayar = 'PARTIAL';
         } else {
             $detail->status_bayar = 'UNPAID';
@@ -379,6 +389,29 @@ class RabController extends Controller
 
         return back()->with('success', 'Pembayaran berhasil disimpan');
     }
+
+    public function bayarPO(Request $request)
+{
+    $po = Po::with('poDetail')->findOrFail($request->po_id);
+    $jumlahBayar = $request->jumlah_bayar;
+
+    // Distribusikan pembayaran ke setiap baris sesuai sisa
+    foreach ($po->poDetail as $detail) {
+        $sisa = $detail->total_harga - $detail->jumlah_bayar;
+        if ($jumlahBayar <= 0) break;
+
+        $bayarSekarang = min($sisa, $jumlahBayar);
+        $detail->jumlah_bayar += $bayarSekarang;
+        $detail->save();
+
+        $jumlahBayar -= $bayarSekarang;
+    }
+
+    return redirect()->back()->with('success', 'Pembayaran PO berhasil.');
+}
+
+
+
 
     public function cetakPO()
     {
