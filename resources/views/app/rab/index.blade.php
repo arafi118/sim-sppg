@@ -142,6 +142,8 @@
                         $('html, body').animate({
                             scrollTop: $('#poCard').offset().top
                         }, 500);
+
+                        setSelect2()
                     },
                     error: function() {
                         Swal.fire('Error', 'Gagal menampilkan PO', 'error');

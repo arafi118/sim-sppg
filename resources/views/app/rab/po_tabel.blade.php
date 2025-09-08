@@ -51,7 +51,7 @@
                             value="{{ $b['jumlah'] }}">
                     </td>
                     <td>
-                        <select class="form-select form-select-sm mitra-select" style="width:100%">
+                        <select class="form-select form-select-sm select2" style="width:100%">
                             <option value="">-- Pilih Mitra --</option>
                             @foreach ($b['mitra'] as $m)
                                 <option value="{{ $m->id }}">{{ $m->nama }}</option>
@@ -88,30 +88,6 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
-        });
-
-        // Inisialisasi Select2 per baris & sinkron hidden input + filter baris
-        $('.mitra-select').each(function() {
-            $(this).select2({
-                placeholder: "-- Pilih Mitra --",
-                allowClear: true,
-                width: '100%'
-            });
-
-            $(this).on('change', function() {
-                const selectedMitra = $(this).val();
-                $(this).siblings('.mitra-hidden').val(selectedMitra);
-
-                // Filter tabel: tampilkan baris yang punya mitra yg dipilih
-                $('#tableBahan tbody tr').each(function() {
-                    const mitraIds = $(this).data('mitra').toString().split(',');
-                    if (selectedMitra === '' || mitraIds.includes(selectedMitra)) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                });
-            });
         });
 
         // Hitung total harga otomatis
