@@ -44,9 +44,9 @@
                 <tr data-mitra="{{ implode(',', collect($b['mitra'])->pluck('id')->toArray()) }}">
                     <td>{{ $b['nama'] }}</td>
                     <td>{{ $b['satuan'] }}</td>
-                    <td class="text-end">{{ number_format($b['harga'], 0, ',', '.') }}</td>
+                    <td class="text-end">{{ number_format($b['harga'], 0) }}</td>
                     <td class="text-end">
-                        {{ number_format($b['jumlah'], 2, ',', '.') }}
+                        {{ number_format($b['jumlah'], 2) }}
                         <input type="hidden" name="jumlah_kebutuhan[{{ $b['bahan_pangan_id'] }}]"
                             value="{{ $b['jumlah'] }}">
                     </td>
@@ -67,7 +67,7 @@
                     <td>
                         <input type="text" id="total_harga_{{ $b['bahan_pangan_id'] }}"
                             class="form-control form-control-sm text-end"
-                            value="{{ number_format($b['jumlah'] * $b['harga'], 2, ',', '.') }}" readonly>
+                            value="{{ number_format($b['jumlah'] * $b['harga'], 2) }}" readonly>
                         <input type="hidden" name="harga_satuan[{{ $b['bahan_pangan_id'] }}]"
                             value="{{ $b['harga'] }}">
                     </td>
@@ -76,8 +76,8 @@
         </tbody>
     </table>
 
-    <div class="d-flex justify-content-end mt-2">
-        <button type="button" id="btnSimpanPO" class="btn btn-success"> Simpan PO
+    <div class="d-flex justify-content-end mt-3">
+        <button type="button" id="btnSimpanPO" class="btn btn-primary"> Simpan PO
         </button>
     </div>
 </form>
