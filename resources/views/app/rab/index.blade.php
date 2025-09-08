@@ -31,10 +31,10 @@
             <input type="hidden" name="jenis" id="jenis" value="Periode">
 
             <div class="d-flex justify-content-end mt-3">
-                <button type="button" class="btn btn-primary" id="btnGeneratePO">
+                <button type="button" class="btn btn-outline-primary" id="btnGeneratePO">
                     <i class="icon-base bx bx-folder me-1"></i> Pemesanan (PO)
                 </button>
-                <button type="button" class="btn btn-danger ms-3" id="btnCetakRAB">
+                <button type="button" class="btn btn-primary ms-3" id="btnCetakRAB">
                     <i class="icon-base bx bx-printer me-1"></i> Cetak (RAB)
                 </button>
             </div>
