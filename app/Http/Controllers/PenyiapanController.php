@@ -19,12 +19,26 @@ class PenyiapanController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Penyiapan::get();
-
+            $data = Penyiapan::with(
+                'tahapan',
+                'tahapan.pelaksana.karyawan'
+            );
             return DataTables::of($data)->make(true);
         }
 
         return view('app.penyiapan-mbg.index', ['title' => 'Mekanisme Penyiapan MBG']);
+    }
+
+    public function detail($id)
+    {
+        $tahapan = Tahapan::with(
+            'penyiapan',
+            'pelaksana.karyawan'
+        )->findOrFail($id);
+        return view('app.penyiapan-mbg.detail', [
+            'title'   => 'Detail Tahapan Penyiapan',
+            'tahapan' => $tahapan
+        ]);
     }
 
     /**
@@ -61,7 +75,51 @@ class PenyiapanController extends Controller
         ]);
     }
 
-    public function mekanisme($id)
+    /**
+     * Display the specified resource.
+     */
+    public function show(Penyiapan $penyiapan_mbg)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Penyiapan $penyiapan_mbg)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Penyiapan $penyiapan_mbg)
+    {
+        $data = $request->only([
+            'tanggal',
+        ]);
+
+        $rules = [
+            'tanggal' => 'required',
+        ];
+
+        $validate = Validator::make($data, $rules);
+        if ($validate->fails()) {
+            return response()->json($validate->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        $penyiapan_mbg->update([
+            'tanggal' => $request->tanggal,
+        ]);
+
+        return response()->json([
+            'success'   => true,
+            'msg'       => 'Data berhasil diperbarui!',
+        ]);
+    }
+
+    //Mekanisme Pelaksanaan
+    public function CreateMekanisme($id)
     {
         $tahapan = Penyiapan::where('id', $id)->first();
 
@@ -115,46 +173,99 @@ class PenyiapanController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Penyiapan $penyiapan_mbg)
+    public function EditMekanisme($id)
     {
-        //
+        $tahapan = Tahapan::with(
+            'penyiapan',
+            'pelaksana',
+            'pelaksana.karyawan'
+        )->findOrFail($id);
+
+        $karyawan = User::where('level_id', 6)->get();
+
+        $title = 'Edit Tahapan Mekanisme Penyiapan MBG';
+        return view('app.penyiapan-mbg.Edit', compact('tahapan', 'title', 'karyawan'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Penyiapan $penyiapan_mbg)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Penyiapan $penyiapan_mbg)
+    public function Updatemekanisme(Request $request, $id)
     {
         $data = $request->only([
-            'tanggal',
+            'penyiapan_id',
+            'tahapan',
+            'waktu_mulai',
+            'waktu_selesai',
+            'pelaksana',
         ]);
 
         $rules = [
-            'tanggal' => 'required',
+            'penyiapan_id'  => 'required|integer',
+            'tahapan'       => 'required|string',
+            'waktu_mulai'   => 'required',
+            'waktu_selesai' => 'required',
+            'pelaksana'     => 'nullable|array',
+            'pelaksana.*.user_id' => 'nullable|integer|exists:users,id',
         ];
 
         $validate = Validator::make($data, $rules);
+
         if ($validate->fails()) {
-            return response()->json($validate->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
+            return response()->json([
+                'success' => false,
+                'errors'  => $validate->errors(),
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
-        $penyiapan_mbg->update([
-            'tanggal' => $request->tanggal,
+
+        $tahapan = Tahapan::findOrFail($id);
+
+        $tahapan->update([
+            'penyiapan_id'  => $request->penyiapan_id,
+            'tahapan'       => $request->tahapan,
+            'waktu_mulai'   => $request->waktu_mulai,
+            'waktu_selesai' => $request->waktu_selesai,
         ]);
 
+        if ($request->has('pelaksana') && count($request->pelaksana) > 0) {
+            $newUserIds = [];
+            foreach ($request->pelaksana as $p) {
+                if (!empty($p['user_id'])) {
+                    $newUserIds[] = $p['user_id'];
+                    Pelaksana::updateOrCreate(
+                        [
+                            'tahapan_id' => $tahapan->id,
+                            'user_id'    => $p['user_id'],
+                        ],
+                        [
+                            'tahapan_id' => $tahapan->id,
+                            'user_id'    => $p['user_id'],
+                        ]
+                    );
+                }
+            }
+
+            Pelaksana::where('tahapan_id', $tahapan->id)
+                ->whereNotIn('user_id', $newUserIds)
+                ->delete();
+        }
+
         return response()->json([
-            'success'   => true,
-            'msg'       => 'Data berhasil diperbarui!',
+            'success' => true,
+            'msg'     => 'Data berhasil diperbarui!',
+            'data'    => $tahapan->id,
+        ]);
+    }
+
+
+    public function DestroyMekanisme($id)
+    {
+        $tahapan = Tahapan::findOrFail($id);
+
+        Pelaksana::where('tahapan_id', $tahapan->id)->delete();
+
+        $tahapan->delete();
+
+        return response()->json([
+            'success' => true,
+            'msg'     => 'Data berhasil dihapus!',
         ]);
     }
 

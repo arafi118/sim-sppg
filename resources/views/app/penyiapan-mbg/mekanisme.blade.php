@@ -1,7 +1,7 @@
 @extends('app.layouts.app')
 
 @section('content')
-    <form action="/app/storemekanisme" method="post" id="formPenyiapanMekanisme">
+    <form action="/app/store-mekanisme" method="post" id="formPenyiapanMekanisme">
         @csrf
 
         <input type="hidden" name="penyiapan_id" value="{{ $tahapan->id }}">
@@ -63,7 +63,7 @@
                         </div>
                     </div>
                     <div class="mb-0 d-flex justify-content-between align-items-center">
-                        <a href="/app/menu" class="btn btn-outline-secondary">
+                        <a href="/app/penyiapan-mbg" class="btn btn-outline-secondary">
                             <i class="icon-base bx bx-left-arrow-alt me-1"></i>
                             <span class="align-middle">Kembali</span>
                         </a>

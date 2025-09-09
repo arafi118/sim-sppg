@@ -14,11 +14,11 @@ class Pelaksana extends Model
 
     public function tahapan()
     {
-        return $this->belongsTo(Tahapan::class,  'tahapan_id');
+        return $this->belongsTo(Tahapan::class,  'tahapan_id', 'id');
     }
 
     public function karyawan()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

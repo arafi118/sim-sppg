@@ -183,8 +183,8 @@
                     data-speed="1" />
                 <div class="container">
                     <div class="hero-text-box text-center position-relative">
-                        <h1 class="text-primary hero-title display-6 fw-extrabold">“Sistem Informasi Program
-                            Makan Gratis dan Bergizi”</h1>
+                        <h1 class="text-primary hero-title display-6 fw-extrabold">“Sistem Informasi Satuan Pelayanan
+                            Pemenuhan Gizi (SPPG)”</h1>
                         <h2 class="hero-sub-title h6 mb-6">
                             hadir sebagai upaya mewujudkan akses pangan sehat, seimbang, dan bergizi bagi seluruh
                             masyarakat, khususnya generasi muda, agar tercipta kualitas hidup yang lebih baik,

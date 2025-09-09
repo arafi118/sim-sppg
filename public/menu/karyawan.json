@@ -3,9 +3,9 @@
     "icon": "bx-home-smile",
     "url": "/app/dashboard"
 }, {
-    "nama": "Master Mekanisme"
+    "nama": "Master Data"
 }, {
-    "nama": "Penyiapan MBG",
+    "nama": "Tahapan Pelayanan",
     "icon": "bx-broadcast",
     "url": "/app/penyiapan-mbg"
 }]

@@ -5,7 +5,7 @@
         <div class="card-header pb-0">
             <div class="d-flex justify-content-end">
                 <button id="btnTambah" class="btn btn-primary">
-                    <i class="bx bx-plus"></i> Tambah Penyiapan Mekanisme
+                    <i class="bx bx-plus"></i> Tanggal Pelayanan
                 </button>
             </div>
         </div>
@@ -13,6 +13,7 @@
             <table id="Penyiapan" class="dt-responsive-child table table-bordered">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>No</th>
                         <th>Tanggal</th>
                         <th>Aksi</th>
@@ -28,6 +29,20 @@
     </form>
 
     @include('app.penyiapan-mbg.modal')
+
+    <div class="modal fade" id="modalUserDetail" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-group" id="userList"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('script')
     <script>
@@ -39,17 +54,18 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "/app/penyiapan-mbg",
+                    url: "/app/penyiapan-mbg"
                 },
                 columns: [{
+                        data: null
+                    },
+                    {
                         data: null,
-                        name: 'no',
                         orderable: false,
                         searchable: false,
-                        render: function(data, type, row, meta) {
-                            return meta.row + meta.settings._iDisplayStart + 1;
-                        }
-                    }, {
+                        render: (d, t, r, m) => m.row + m.settings._iDisplayStart + 1
+                    },
+                    {
                         data: 'tanggal',
                         name: 'tanggal'
                     },
@@ -57,23 +73,71 @@
                         data: null,
                         orderable: false,
                         searchable: false,
-                        render: function(data) {
-                            return `<div class="d-inline-flex gap-1">
-                                <a href="/app/create-mekanisme/${data.id}" class="btn btn-sm btn-info title="input mekanisme">
-                                    Mekanisme
-                                </a>
-                                <button class="btn btn-sm btn-warning btnEdit"
-                                    data-id="${data.id}"
-                                    data-tanggal="${data.tanggal}">
-                                    Edit
-                                </button>
-                                <button class="btn btn-sm btn-danger btn-delete" data-id="${data.id}" title="Hapus">
-                                    Hapus
-                                </button>
-                            </div>`;
-                        }
+                        render: d => `
+                                <div class="d-inline-flex gap-1">
+                                    <a href="/app/create-mekanisme/${d.id}" class="btn btn-sm btn-primary"><i class="bx bx-plus"></i> Tahapan Pelayanan</a>
+                                    <button class="btn btn-sm btn-warning btnEdit" data-id="${d.id}" data-tanggal="${d.tanggal}">Edit</button>
+                                    <button class="btn btn-sm btn-danger btn-delete" data-id="${d.id}">Hapus</button>
+                                </div>`
                     }
                 ],
+                columnDefs: [{
+                    className: "dt-control",
+                    targets: 0,
+                    orderable: false,
+                    searchable: false,
+                    defaultContent: ""
+                }]
+            });
+
+            // Detail
+            cl.on("click", "td.dt-control", e => {
+                const row = cl.row(e.target.closest("tr")),
+                    d = row.data();
+                if (row.child.isShown()) return row.child.hide();
+
+                let html = `<small class="fw-medium">Detail Tahapan</small>
+                <ul class="list-group list-group mt-2">`;
+                if (d.tahapan?.length) {
+                    d.tahapan.forEach(t => {
+                        html += `
+                        <li class="list-group-item d-flex align-items-center gap-2">
+                            <span class="w-px-30 h-px-30 rounded-circle d-flex justify-content-center align-items-center 
+                                        bg-label-success cursor-pointer btnUserDetail" 
+                                    data-id="${t.id}" title="Lihat Pelaksana">
+                                <i class="icon-base bx bx-walk icon-18px"></i>
+                            </span>
+                            <div>
+                                <b>${t.tahapan}</b>  
+                                <small class="text-muted">(Mulai: ${t.waktu_mulai} - Selesai: ${t.waktu_selesai})</small>
+                            </div>
+                            <a href="/app/penyiapan-mbg/detail/${t.id}" class="btn btn-sm btn-info ms-auto" title="Edit Tahapan">
+                                Detail Tahapan
+                            </a>
+                        </li>`;
+                    });
+                } else {
+                    html += `<li class="list-group-item text-muted">Belum ada tahapan</li>`;
+                }
+                html += `</ul>`;
+                row.child(html).show();
+            });
+
+            // modal pelaksana
+            $(document).on("click", ".btnUserDetail", function() {
+                const id = $(this).data("id");
+                const tahapan = cl.data().toArray().flatMap(r => r.tahapan || []).find(t => t.id == id);
+                $("#modalUserDetail .modal-title").text("Pelaksana " + (tahapan?.tahapan || ""));
+                let html = "";
+                if (tahapan?.pelaksana?.length) {
+                    tahapan.pelaksana.forEach(p => {
+                        html += `<li class="list-group-item">${p.karyawan?.nama || "Tanpa Nama"}</li>`;
+                    });
+                } else {
+                    html = `<li class="list-group-item text-muted">Belum ada pelaksana</li>`;
+                }
+                $("#userList").html(html);
+                $("#modalUserDetail").modal("show");
             });
         }
 

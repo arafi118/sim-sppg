@@ -19,6 +19,6 @@ class Tahapan extends Model
 
     public function pelaksana()
     {
-        return $this->hasMany(Pelaksana::class);
+        return $this->hasMany(Pelaksana::class, 'tahapan_id', 'id');
     }
 }
