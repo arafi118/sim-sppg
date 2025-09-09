@@ -29,13 +29,13 @@
     <table class="table table-bordered align-middle" id="tableBahan">
         <thead class="table-light">
             <tr style="text-align: center;">
-                <th style="width:15%;">Bahan Pangan</th>
+                <th style="width:15%;">Bahan</th>
                 <th style="width:7%;">Satuan</th>
                 <th style="width:10%;">Harga</th>
                 <th style="width:10%;">Kebutuhan</th>
                 <th style="width:15%;">Mitra</th>
                 <th style="width:15%;">Jumlah</th>
-                <th style="width:15%;">Total Harga</th>
+                <th style="width:15%;">Total</th>
             </tr>
             <meta name="csrf-token" content="{{ csrf_token() }}">
         </thead>
@@ -88,6 +88,16 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
+        });
+
+        // Inisialisasi Select2 + sinkronisasi ke hidden input
+        $('.select2').select2({
+            placeholder: "-- Pilih Mitra --",
+            allowClear: true,
+            width: '100%'
+        }).on('change', function() {
+            const selectedMitra = $(this).val();
+            $(this).closest('td').find('.mitra-hidden').val(selectedMitra);
         });
 
         // Hitung total harga otomatis
