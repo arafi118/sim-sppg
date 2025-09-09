@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Penyiapan;
 use App\Models\Tahapan;
-use App\models\Pelaksana;
+use App\Models\Pelaksana;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
