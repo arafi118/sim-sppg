@@ -16,7 +16,7 @@ class RabController extends Controller
 {
     public function index()
     {
-        $periode = PeriodeMasak::orderBy('tanggal_awal', 'desc')->get();
+        $periode = PeriodeMasak::orderBy('periode_ke', 'ASC')->get();
         $title = 'Rencana Anggaran Biaya (RAB)';
         return view('app.rab.index', compact('title', 'periode'));
     }
@@ -303,31 +303,31 @@ class RabController extends Controller
         ]);
     }
 
-   public function detailPO($id)
-{
-    $title = 'Detail PO';
+    public function detailPO($id)
+    {
+        $title = 'Detail PO';
 
-    // Ambil PO utama beserta detail yang jumlah_input > 0
-    $po = Po::with(['poDetail' => function($q) {
-        $q->where('jumlah_input', '>', 0)
-          ->with(['bahanPangan', 'mitra']);
-    }])->findOrFail($id);
-
-    // Ambil semua PO yang punya detail jumlah_input > 0
-    $referensiPOs = Po::with(['poDetail' => function($q) {
+        // Ambil PO utama beserta detail yang jumlah_input > 0
+        $po = Po::with(['poDetail' => function($q) {
             $q->where('jumlah_input', '>', 0)
-              ->with(['bahanPangan', 'mitra']);
-        }])
-        ->whereHas('poDetail', function($q) {
-            $q->where('jumlah_input', '>', 0);
-        })
-        ->orderBy('tanggal', 'asc')
-        ->get();
+            ->with(['bahanPangan', 'mitra']);
+        }])->findOrFail($id);
 
-    $bahanPangan = \App\Models\BahanPangan::orderBy('nama')->get();
+        // Ambil semua PO yang punya detail jumlah_input > 0
+        $referensiPOs = Po::with(['poDetail' => function($q) {
+                $q->where('jumlah_input', '>', 0)
+                ->with(['bahanPangan', 'mitra']);
+            }])
+            ->whereHas('poDetail', function($q) {
+                $q->where('jumlah_input', '>', 0);
+            })
+            ->orderBy('tanggal', 'asc')
+            ->get();
 
-    return view('app.rab.po_detail', compact('po', 'referensiPOs', 'title', 'bahanPangan'));
-}
+        $bahanPangan = \App\Models\BahanPangan::orderBy('nama')->get();
+
+        return view('app.rab.po_detail', compact('po', 'referensiPOs', 'title', 'bahanPangan'));
+    }
 
     public function updatePO(Request $request)
     {
@@ -391,27 +391,24 @@ class RabController extends Controller
     }
 
     public function bayarPO(Request $request)
-{
-    $po = Po::with('poDetail')->findOrFail($request->po_id);
-    $jumlahBayar = $request->jumlah_bayar;
+    {
+        $po = Po::with('poDetail')->findOrFail($request->po_id);
+        $jumlahBayar = $request->jumlah_bayar;
 
-    // Distribusikan pembayaran ke setiap baris sesuai sisa
-    foreach ($po->poDetail as $detail) {
-        $sisa = $detail->total_harga - $detail->jumlah_bayar;
-        if ($jumlahBayar <= 0) break;
+        // Distribusikan pembayaran ke setiap baris sesuai sisa
+        foreach ($po->poDetail as $detail) {
+            $sisa = $detail->total_harga - $detail->jumlah_bayar;
+            if ($jumlahBayar <= 0) break;
 
-        $bayarSekarang = min($sisa, $jumlahBayar);
-        $detail->jumlah_bayar += $bayarSekarang;
-        $detail->save();
+            $bayarSekarang = min($sisa, $jumlahBayar);
+            $detail->jumlah_bayar += $bayarSekarang;
+            $detail->save();
 
-        $jumlahBayar -= $bayarSekarang;
+            $jumlahBayar -= $bayarSekarang;
+        }
+
+        return redirect()->back()->with('success', 'Pembayaran PO berhasil.');
     }
-
-    return redirect()->back()->with('success', 'Pembayaran PO berhasil.');
-}
-
-
-
 
     public function cetakPO()
     {
@@ -439,8 +436,6 @@ class RabController extends Controller
             ->setOption('title', $title)
             ->inline('RAB.pdf');
     }
-
-
 
 
 }
