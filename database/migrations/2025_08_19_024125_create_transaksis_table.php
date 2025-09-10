@@ -15,13 +15,14 @@ return new class extends Migration
     {
         Schema::create('transaksis', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(User::class)->nullable();
             $table->foreignIdFor(Mitra::class)->nullable();
             $table->date('tanggal');
             $table->string('rekening_debit');
             $table->string('rekening_kredit');
             $table->string('keterangan');
             $table->integer('jumlah');
+            $table->integer('urutan')->default(0);
             $table->timestamps();
         });
     }
