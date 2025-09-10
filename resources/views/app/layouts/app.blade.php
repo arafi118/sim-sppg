@@ -157,7 +157,7 @@
                     },
                     topEnd: {
                         search: {
-                            placeholder: ""
+                            placeholder: "Cari disini..."
                         }
                     },
                     bottomStart: {

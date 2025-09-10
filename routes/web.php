@@ -156,8 +156,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::resource('/penyiapan-mbg', PenyiapanController::class);
 
     //Jurnal Transaksi
-    Route::get('/transaksi', [TransaksiController::class, 'index']);
-    Route::get('/transaksi/store', [TransaksiController::class, 'store']);
+    Route::resource('/transaksi', TransaksiController::class);
 
     Route::post('/auth/logout', [AuthController::class, 'logout']);
 });

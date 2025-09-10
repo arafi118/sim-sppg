@@ -5,52 +5,48 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Transaksi;
 use App\Models\BahanPangan;
+use App\Models\JenisTransaksi;
 use App\Models\Po;
+use App\Models\Rekening;
 
 class TransaksiController extends Controller
 {
-public function index()
-{
-    $title = 'Transaksi';
-    $bahanpangan = BahanPangan::all(); // daftar barang
+    public function index()
+    {
+        $title = 'Transaksi';
+        $jenisTransaksi = JenisTransaksi::all();
+        $rekening = Rekening::orderBy('kode_akun', 'asc')->get();
 
-    return view('app.transaksi.index', compact('title', 'bahanpangan'));
-}
+        return view('app.transaksi.index', compact('title', 'jenisTransaksi', 'rekening'));
+    }
 
-public function store(Request $request)
-{
-    $request->validate([
-        'bahan_pangan_id' => 'required|exists:bahan_pangans,id',
-        'jumlah' => 'required|numeric|min:1',
-    ]);
+    public function store(Request $request)
+    {
+        $data = $request->only([
+            "tanggal",
+            "sumber_dana",
+            "disimpan_ke",
+            "keterangan",
+            "nominal",
+        ]);
 
-    // Ambil bahan
-    $bahan = BahanPangan::findOrFail($request->bahan_pangan_id);
+        $request->validate([
+            'tanggal' => 'required',
+            'sumber_dana' => 'required',
+            'disimpan_ke' => 'required',
+            'keterangan' => 'required',
+            'nominal' => 'required',
+        ]);
 
-    // Hitung total harga
-    $totalHarga = $bahan->harga_jual * $request->jumlah;
+        Transaksi::create([
+            'user_id' => auth()->user()->id,
+            'tanggal_transaksi' => $data['tanggal'],
+            'rekening_debit' => $data['disimpan_ke'],
+            'rekening_kredit' => $data['sumber_dana'],
+            'keterangan' => $data['keterangan'],
+            'jumlah' => floatval(str_replace(',', '', $data['nominal'])),
+        ]);
 
-    // Buat PO baru
-    $po = Po::create([
-        'user_id'      => auth()->id(),
-        'tanggal'      => $request->tanggal_transaksi ?? now(),
-        'total_harga'  => $totalHarga,
-        'status_bayar' => 'UNPAID',
-    ]);
-
-    // Buat transaksi sekaligus lunas sebagian (opsional)
-    Transaksi::create([
-        'user_id'           => auth()->id(),
-        'mitra_id'          => $bahan->mitra_id ?? null, // jika ada
-        'po_id'             => $po->id,
-        'tanggal_transaksi' => $request->tanggal_transaksi ?? now(),
-        'jumlah'            => 0, // bisa langsung bayar atau cicilan
-        'keterangan'        => 'Cicilan awal',
-    ]);
-
-    return redirect()->route('transaksi.index')->with('success', 'PO dan transaksi berhasil dibuat!');
-}
-
-
-
+        return response()->json(['success' => true, 'message' => 'Transaksi berhasil disimpan.']);
+    }
 }
