@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="card-datatable">
-            <table id="dokumentasi" class="table table-bordered">
+            <table id="dokumentasi" class="dt-responsive-child table table-bordered">
                 <thead>
                     <tr>
                         <th>Gambar</th>
@@ -33,28 +33,35 @@
 
 @section('script')
     <script>
-        let table = $('#dokumentasi').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: "{{ route('dokumentasi-kegiatan.index') }}",
-            columns: [{
-                    data: 'gambar',
-                    name: 'gambar'
+        const tb = document.querySelector("#dokumentasi");
+        let table;
+
+        if (tb) {
+            table = setDataTable(tb, {
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "/app/dokumentasi-kegiatan",
                 },
-                {
-                    data: 'judul',
-                    name: 'judul'
-                },
-                {
-                    data: 'deskripsi',
-                    name: 'deskripsi'
-                },
-                {
-                    data: null,
-                    orderable: false,
-                    searchable: false,
-                    render: function(data) {
-                        return `
+                columns: [{
+                        data: 'gambar',
+                        name: 'gambar'
+                    },
+                    {
+                        data: 'judul',
+                        name: 'judul'
+                    },
+                    {
+                        data: 'deskripsi',
+                        name: 'deskripsi'
+                    },
+                    {
+                        data: null,
+                        orderable: false,
+                        searchable: false,
+                        render: function(data) {
+                            return `
+                        <div class="d-inline-flex gap-1">
                     <button class="btn btn-sm btn-primary btnEdit"
                         data-id="${data.id}"
                         data-judul="${data.judul}"
@@ -62,14 +69,16 @@
                         data-gambar="${data.gambar_raw}">
                         Edit
                     </button>
-                    <button class="btn btn-sm btn-danger btn-delete" data-id="${data.id}">
-                        Hapus
-                    </button>
-                `;
+
+                            <button class="btn btn-sm btn-danger btn-delete" data-id="${data.id}">
+                                Hapus
+                            </button>
+                        </div>`;
+                        }
                     }
-                }
-            ],
-        });
+                ],
+            });
+        }
 
         // tambah
         $('#btnTambah').click(() => {
@@ -94,6 +103,7 @@
 
             if (d.gambar) {
                 $('#previewGambar').attr('src', d.gambar).show();
+                $('#textUpload').addClass('d-none');
             } else {
                 $('#previewGambar').hide();
             }
@@ -116,9 +126,11 @@
                 contentType: false,
                 success: function(result) {
                     if (result.success) {
-                        Swal.fire("Berhasil!", result.msg, "success");
-                        $('#DokumentasiModal').modal('hide');
-                        if (table) table.ajax.reload();
+                        Swal.fire("Berhasil!", result.msg, "success").then(() => {
+                            $('#DokumentasiModal').modal('hide');
+                            if (table) table.ajax.reload();
+                            window.location.href = '/app/dokumentasi-kegiatan';
+                        });
                     } else {
                         Swal.fire("Gagal!", result.msg, "error");
                     }
@@ -129,6 +141,7 @@
                 }
             });
         });
+
 
         // hapus
         $(document).on('click', '.btn-delete', function() {

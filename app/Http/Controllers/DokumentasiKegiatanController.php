@@ -18,7 +18,7 @@ class DokumentasiKegiatanController extends Controller
             return DataTables::of($data)
                 ->addColumn('gambar', function ($row) {
                     return $row->gambar
-                        ? '<img src="' . asset('storage/' . $row->gambar) . '" width="80" class="img-thumbnail"/>'
+                        ? '<img src="' . asset('storage/' . $row->gambar) . '" style="width:50px; height:50px; object-fit:cover; border-radius:8px;" class="img-thumbnail"/>'
                         : '-';
                 })
                 ->addColumn('gambar_raw', function ($row) {
@@ -67,8 +67,8 @@ class DokumentasiKegiatanController extends Controller
         ]);
 
         return response()->json([
-            'success' => true,
-            'msg' => 'Data berhasil ditambahkan'
+            'success'   => true,
+            'msg'       => 'Data berhasil ditambahkan'
         ]);
     }
 
@@ -87,15 +87,15 @@ class DokumentasiKegiatanController extends Controller
         $data = $request->only([
             'judul',
             'deskripsi',
-            'gambar',
         ]);
+
         $rules = [
             'judul'     => 'required',
             'deskripsi' => 'required',
             'gambar'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ];
 
-        $validate = Validator::make($data, $rules);
+        $validate = Validator::make($request->all(), $rules);
         if ($validate->fails()) {
             return response()->json($validate->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
@@ -107,15 +107,11 @@ class DokumentasiKegiatanController extends Controller
             $data['gambar'] = $request->file('gambar')->store('dokumentasi', 'public');
         }
 
-        $dokumentasi_kegiatan->update([
-            'judul'     => $request->judul,
-            'deskripsi' => $request->deskripsi,
-            'gambar'    => $data['gambar'],
-        ]);
+        $dokumentasi_kegiatan->update($data);
 
         return response()->json([
-            'success' => true,
-            'msg' => 'Data berhasil diperbarui'
+            'success'   => true,
+            'msg'       => 'Data berhasil diperbarui'
         ]);
     }
 
@@ -127,6 +123,9 @@ class DokumentasiKegiatanController extends Controller
 
         $dokumentasi_kegiatan->delete();
 
-        return response()->json(['success' => true, 'msg' => 'Data berhasil dihapus']);
+        return response()->json([
+            'success'   => true,
+            'msg'       => 'Data berhasil dihapus'
+        ]);
     }
 }
