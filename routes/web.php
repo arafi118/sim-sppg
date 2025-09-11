@@ -20,6 +20,7 @@ use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\RancanganController;
 use App\Http\Controllers\PenyiapanController;
 use App\Http\Controllers\PelaksanaController;
+use App\Http\Controllers\DokumentasiKegiatanController;
 use App\Http\Controllers\TahapanController;
 use App\Models\PeriodeMasak;
 use App\Models\Menu;
@@ -80,6 +81,17 @@ Route::get('/', function () {
 
 Route::get('/auth', [AuthController::class, 'index']);
 Route::post('/auth', [AuthController::class, 'auth']);
+Route::get('/link', function () {
+    $target = __DIR__ . '/../storage/app/public';
+    $shortcut = __DIR__ . '/../public/storage';
+
+    try {
+        symlink($target, $shortcut);
+        return response()->json("Symlink created successfully.");
+    } catch (\Exception $e) {
+        return response()->json("Failed to create symlink: " . $e->getMessage());
+    }
+});
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
@@ -115,6 +127,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::resource('/nama-pemanfaat', NamaPemanfaatController::class);
 
     Route::resource('/periode-masak', PeriodeMasakController::class);
+
+    Route::resource('dokumentasi-kegiatan', DokumentasiKegiatanController::class);
 
     //Presensi
     Route::get('/presensi', [PresensiController::class, 'index']);

@@ -42,4 +42,8 @@
     "nama": "Periode Masak",
     "icon": "bx-calendar",
     "url": "/app/periode-masak"
+}, {
+    "nama": "Dokumentasi kegiatan",
+    "icon": "bx-photo-album",
+    "url": "/app/dokumentasi-kegiatan"
 }]
