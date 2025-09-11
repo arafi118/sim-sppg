@@ -29,11 +29,10 @@
     <table class="table table-bordered align-middle" id="tableBahan">
         <thead class="table-light">
             <tr style="text-align: center;">
-                <th style="width:15%;">Bahan</th>
-                <th style="width:7%;">Satuan</th>
+                <th style="width:18%;">Bahan Pangan</th>
                 <th style="width:10%;">Harga</th>
-                <th style="width:10%;">Kebutuhan</th>
-                <th style="width:15%;">Mitra</th>
+                <th style="width:9%;">Kebutuhan</th>
+                <th style="width:16%;">Mitra</th>
                 <th style="width:15%;">Jumlah</th>
                 <th style="width:15%;">Total</th>
             </tr>
@@ -43,13 +42,13 @@
             @foreach ($dataBahanPangan as $b)
                 <tr data-mitra="{{ implode(',', collect($b['mitra'])->pluck('id')->toArray()) }}">
                     <td>{{ $b['nama'] }}</td>
-                    <td>{{ $b['satuan'] }}</td>
-                    <td class="text-end">{{ number_format($b['harga'], 0) }}</td>
+                    <td class="text-end">{{ number_format($b['harga'], 2) }}</td>
                     <td class="text-end">
-                        {{ number_format($b['jumlah'], 2) }}
+                        {{ $b['jumlah'] }}
                         <input type="hidden" name="jumlah_kebutuhan[{{ $b['bahan_pangan_id'] }}]"
-                            value="{{ $b['jumlah'] }}">
+                            value="{{ $b['jumlah'] }}"> ({{ $b['satuan'] }})
                     </td>
+
                     <td>
                         <select class="form-select form-select-sm select2" style="width:100%">
                             <option value="">-- Pilih Mitra --</option>
@@ -59,7 +58,7 @@
                         </select>
                         <input type="hidden" name="mitra_id[{{ $b['bahan_pangan_id'] }}]" class="mitra-hidden">
                     </td>
-                    <td>
+                    <td class="text-end">
                         <input type="number" name="jumlah_input[{{ $b['bahan_pangan_id'] }}]"
                             value="{{ $b['jumlah'] }}" class="form-control form-control-sm jumlah-input"
                             data-harga="{{ $b['harga'] }}" data-id="{{ $b['bahan_pangan_id'] }}" step="0.01">
