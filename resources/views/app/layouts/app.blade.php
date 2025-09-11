@@ -142,6 +142,12 @@
     <script src="/assets/js/main.js"></script>
 
     <script>
+        $(".nominal").maskMoney({
+            allowZero: true,
+            allowNegative: false,
+            precision: 2,
+        });
+
         function setDataTable(target, options = {}) {
             return new DataTable(target, {
                 ...options,
@@ -178,6 +184,24 @@
                     }
                 }
             });
+        }
+
+        function numberFormat(value, decimal = 2) {
+            var formatter = new Intl.NumberFormat('en-US', {
+                minimumFractionDigits: decimal,
+                maximumFractionDigits: decimal,
+            })
+
+            return formatter.format(value);
+        }
+
+        function numberUnformat(value, decimal = 2) {
+            if (typeof value === "number") return value;
+
+            let normalized = value.replace(/,/g, "");
+            let number = parseFloat(normalized);
+
+            return Number(number.toFixed(decimal));
         }
 
         setTimeout(() => {

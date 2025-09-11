@@ -8,6 +8,7 @@
                     <form action="/app/transaksi" method="post" id="FormTransaksi">
                         @csrf
 
+                        <input type="hidden" name="transaksi" id="transaksi" value="jurnal_umum">
                         <div class="row">
                             <div class="col-md-6 mb-6">
                                 <label for="tanggal" class="form-label">Tanggal</label>
@@ -41,15 +42,45 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row" id="form-jurnal-umum">
                             <div class="col-12 mb-6">
                                 <label for="keterangan" class="form-label">Keterangan</label>
-                                <textarea class="form-control" id="keterangan" name="keterangan" rows="3"></textarea>
+                                <textarea class="form-control" id="keterangan_transaksi" name="jurnal_umum[keterangan]" rows="3"></textarea>
                             </div>
                             <div class="col-12 mb-6">
                                 <label for="nominal" class="form-label">Nominal</label>
-                                <input type="text" class="form-control" id="nominal" name="nominal" autocomplete="off"
-                                    value="0.00" />
+                                <input type="text" class="form-control nominal" id="nominal"
+                                    name="jurnal_umum[nominal]" autocomplete="off" value="0.00" />
+                            </div>
+                        </div>
+
+                        <div class="row" id="form-beli-inventaris" style="display: none;">
+                            <input type="hidden" id="jenis_inventaris" name="beli_inventaris[jenis_inventaris]">
+                            <input type="hidden" id="kategori_inventaris" name="beli_inventaris[kategori_inventaris]">
+                            <div class="col-md-12 mb-6">
+                                <label for="nama_barang" class="form-label">Nama Barang</label>
+                                <input type="text" class="form-control" id="nama_barang"
+                                    name="beli_inventaris[nama_barang]" autocomplete="off" />
+                            </div>
+                            <div class="col-md-6 mb-6">
+                                <label for="harga_satuan" class="form-label">Harga Satuan</label>
+                                <input type="text" class="form-control nominal" id="harga_satuan"
+                                    name="beli_inventaris[harga_satuan]" autocomplete="off" value="0.00" />
+                            </div>
+                            <div class="col-md-6 mb-6">
+                                <label for="umur_ekonomis" class="form-label">Umur Eko. (bulan)</label>
+                                <input type="number" class="form-control" id="umur_ekonomis"
+                                    name="beli_inventaris[umur_ekonomis]" autocomplete="off" value="0" />
+                            </div>
+                            <div class="col-md-6 mb-6">
+                                <label for="jumlah_unit" class="form-label">Jumlah Unit</label>
+                                <input type="number" class="form-control" id="jumlah_unit"
+                                    name="beli_inventaris[jumlah_unit]" autocomplete="off" value="0" />
+                            </div>
+                            <div class="col-md-6 mb-6">
+                                <label for="harga_perolehan" class="form-label">Harga Perolehan</label>
+                                <input type="text" class="form-control nominal" id="harga_perolehan"
+                                    name="beli_inventaris[harga_perolehan]" autocomplete="off" value="0.00" />
                             </div>
                         </div>
 
@@ -68,11 +99,6 @@
         const REKENING = @json($rekening);
 
         $('#tanggal').flatpickr();
-        $("#nominal").maskMoney({
-            allowZero: true,
-            allowNegative: false,
-            precision: 2,
-        });
 
         $(document).on('change', '#jenis_transaksi', function(e) {
             e.preventDefault();
@@ -99,7 +125,7 @@
                                 '4.1.01')) {
                             acc.push({
                                 id: item.id,
-                                text: item.kode_akun + '. ' + item.nama_akun
+                                text: (item.kode_akun + '. ' + item.nama_akun)
                             });
                         }
                     }
@@ -111,7 +137,7 @@
                     if (item.lev1 == '1') {
                         acc.push({
                             id: item.id,
-                            text: item.kode_akun + '. ' + item.nama_akun
+                            text: (item.kode_akun + '. ' + item.nama_akun)
                         });
                     }
 
@@ -127,7 +153,7 @@
                         if (!item.kode_akun.startsWith('2.1.04')) {
                             acc.push({
                                 id: item.id,
-                                text: item.kode_akun + '. ' + item.nama_akun
+                                text: (item.kode_akun + '. ' + item.nama_akun)
                             });
                         }
                     }
@@ -139,7 +165,7 @@
                     if (item.lev1 == '2' || item.lev1 == '3' || item.lev1 == '5') {
                         acc.push({
                             id: item.id,
-                            text: item.kode_akun + '. ' + item.nama_akun
+                            text: (item.kode_akun + '. ' + item.nama_akun)
                         });
                     }
 
@@ -153,7 +179,7 @@
                 sumber_dana = REKENING.reduce((acc, item) => {
                     acc.push({
                         id: item.id,
-                        text: item.kode_akun + '. ' + item.nama_akun
+                        text: (item.kode_akun + '. ' + item.nama_akun)
                     });
 
                     return acc;
@@ -162,7 +188,7 @@
                 disimpan_ke = REKENING.reduce((acc, item) => {
                     acc.push({
                         id: item.id,
-                        text: item.kode_akun + '. ' + item.nama_akun
+                        text: (item.kode_akun + '. ' + item.nama_akun)
                     });
 
                     return acc;
@@ -217,7 +243,23 @@
                 }
             }
 
-            $('#keterangan').val(keterangan);
+            $('#keterangan_transaksi').val(keterangan);
+
+            if (data_sumber_dana && data_disimpan_ke) {
+                handleFormTransaksi(data_sumber_dana, data_disimpan_ke, jenis_transaksi);
+            }
+        })
+
+        $(document).on('input', '#harga_satuan, #jumlah_unit', function() {
+            var harga_satuan = $('#harga_satuan').val() || 0;
+            var jumlah_unit = $('#jumlah_unit').val() || 0;
+
+            if (harga_satuan != 0) {
+                harga_satuan = numberUnformat(harga_satuan);
+            }
+
+            var harga_perolehan = harga_satuan * jumlah_unit;
+            $('#harga_perolehan').val(numberFormat(harga_perolehan));
         })
 
         $(document).on('submit', '#FormTransaksi', function(e) {
@@ -241,6 +283,44 @@
                 }
             })
         })
+
+        function handleFormTransaksi(sumber_dana, disimpan_ke, jenis_transaksi) {
+            var form_jurnal_umum = $('#form-jurnal-umum');
+            var form_beli_inventaris = $('#form-beli-inventaris');
+            var form_hapus_inventaris = $('#form-hapus-inventaris');
+
+            if (sumber_dana.kode_akun.startsWith('1.2.01') && disimpan_ke.kode_akun.startsWith('5.3.02.01') &&
+                jenis_transaksi == '2') {
+                form_jurnal_umum.hide();
+                form_beli_inventaris.hide();
+                form_hapus_inventaris.show();
+
+                $('#transaksi').val('hapus_inventaris');
+                return;
+            }
+
+            if (disimpan_ke.kode_akun.startsWith('1.2.01') || disimpan_ke.kode_akun.startsWith('1.2.03')) {
+                form_jurnal_umum.hide();
+                form_beli_inventaris.show();
+                form_hapus_inventaris.hide();
+
+                $('#jenis_inventaris').val('ati');
+                if (disimpan_ke.kode_akun.startsWith('1.2.03')) {
+                    $('#jenis_inventaris').val('atb');
+                }
+
+                $('#kategori_inventaris').val(disimpan_ke.kode_akun.split(".").pop());
+                $('#transaksi').val('beli_inventaris');
+                return;
+            }
+
+            form_jurnal_umum.show();
+            form_beli_inventaris.hide();
+            form_hapus_inventaris.hide();
+
+            $('#transaksi').val('jurnal_umum');
+            return;
+        }
 
         function setFormSelect2(target, value = []) {
             var formSelect = $(target);
