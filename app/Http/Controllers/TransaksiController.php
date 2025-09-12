@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Transaksi;
-use App\Models\BahanPangan;
 use App\Models\Inventaris;
 use App\Models\JenisTransaksi;
-use App\Models\Po;
 use App\Models\Rekening;
 
 class TransaksiController extends Controller
@@ -19,6 +17,21 @@ class TransaksiController extends Controller
         $rekening = Rekening::orderBy('kode_akun', 'asc')->get();
 
         return view('app.transaksi.index', compact('title', 'jenisTransaksi', 'rekening'));
+    }
+
+    public function daftarInventaris()
+    {
+        $tanggal_transaksi = request()->get('tanggal_transaksi');
+        $jenis = request()->get('jenis');
+        $kategori = request()->get('kategori');
+
+        $inventaris = Inventaris::where([
+            ['jenis', $jenis],
+            ['kategori', $kategori],
+            ['tgl_beli', '<=', $tanggal_transaksi],
+        ])->where(function ($query) {
+            $query->where('status', 'Baik')->orwhere('status', 'Rusak');
+        })->get();
     }
 
     public function store(Request $request)
