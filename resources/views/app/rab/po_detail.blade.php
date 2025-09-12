@@ -2,6 +2,18 @@
 
 @section('content')
     <style>
+        /* Hilangkan panah bawaan <select> */
+        #edit_bahan {
+            -webkit-appearance: none;
+            /* untuk Safari/Chrome */
+            -moz-appearance: none;
+            /* untuk Firefox */
+            appearance: none;
+            /* standar */
+            background-image: none !important;
+            /* hilangkan ikon bawaan bootstrap */
+        }
+
         /* Paksa tabel tanpa jarak antar cell */
         .table {
             border-collapse: collapse !important;
