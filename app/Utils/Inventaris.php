@@ -11,15 +11,15 @@ class Inventaris
   {
     $tgl_beli = $inv->tgl_beli;
 
-    $unit = (int) $inv->unit;
-    $harga_perolehan = (float) $inv->harsat * $unit;
+    $jumlah = (int) $inv->jumlah;
+    $harga_perolehan = (float) $inv->harga_satuan * $jumlah;
     $umur = max(1, (int) $inv->umur_ekonomis);
 
-    if ($inv->kategori == 1 && $inv->jenis == 1) {
+    if ($inv->kategori == 1 && $inv->jenis == 'ati') {
       return $harga_perolehan;
     }
 
-    $penyusutan_per_bulan = $inv->harsat <= 0 ? 0 : round($harga_perolehan / $umur, 2);
+    $penyusutan_per_bulan = $inv->harga_satuan <= 0 ? 0 : round($harga_perolehan / $umur, 2);
 
     $ak_umur = self::bulan($tgl_beli, $tgl);
     $ak_susut = $penyusutan_per_bulan * $ak_umur;
@@ -31,8 +31,8 @@ class Inventaris
   public static function bulan($start, $end, $periode = 'bulan')
   {
     $batasan = date('t');
-    $thn_awal    = substr($start, 0, 4);
-    $bln_awal    = substr($start, 5, 2);
+    $thn_awal    = intval(substr($start, 0, 4));
+    $bln_awal    = intval(substr($start, 5, 2));
     $tgl_awal    = 01;
 
     if ($tgl_awal <= $batasan) {
@@ -48,7 +48,7 @@ class Inventaris
       $tgl_awal = $tgl_awal;
     }
 
-    $start = "$thn_awal-$bln_awal-$tgl_awal";
+    $start = $thn_awal . '-' . str_pad($bln_awal, 2, '0', STR_PAD_LEFT) . '-' . $tgl_awal;
     try {
       $d1 = new \DateTime($start);
       $d2 = new \DateTime($end);
@@ -76,12 +76,12 @@ class Inventaris
     $th_lalu = (int) $tahun - 1;
 
     $totals = [
-      't_unit' => 0,
+      't_jumlah' => 0,
       't_harga' => 0,
       't_penyusutan' => 0,
       't_akum_susut' => 0,
       't_nilai_buku' => 0,
-      'j_unit' => 0,
+      'j_jumlah' => 0,
       'j_harga' => 0,
       'j_penyusutan' => 0,
       'j_akum_susut' => 0,
@@ -93,15 +93,15 @@ class Inventaris
       ['status', '!=', '0'],
       ['tgl_beli', '<=', $tgl_kondisi],
       ['tgl_beli', 'NOT LIKE', ''],
-      ['harsat', '>', '0'],
+      ['harga_satuan', '>', '0'],
       ['kategori', $kategori]
     ])->orderBy('tgl_beli', 'ASC')->get();
 
     foreach ($inventaris as $inv) {
-      $harga = (float) $inv->harsat * (int) $inv->unit;
+      $harga = (float) $inv->harga_satuan * (int) $inv->jumlah;
 
       if ($kategori == '1') {
-        $totals['t_unit'] += $inv->unit;
+        $totals['t_jumlah'] += $inv->jumlah;
         $totals['t_harga'] += $harga;
         $totals['t_nilai_buku'] += $harga;
 
@@ -111,7 +111,7 @@ class Inventaris
         }
 
         if (in_array($inv->status, ['Dijual', 'Hilang', 'Dihapus'])) {
-          $totals['j_unit'] += $inv->unit;
+          $totals['j_jumlah'] += $inv->jumlah;
           $totals['j_harga'] += $harga;
           $totals['j_nilai_buku'] += $harga;
         }
@@ -120,7 +120,7 @@ class Inventaris
       }
 
       $umur_ekonomis = max(1, (int) $inv->umur_ekonomis);
-      $satuan_susut = $inv->harsat <= 0 ? 0 : round($harga / $umur_ekonomis, 2);
+      $satuan_susut = $inv->harga_satuan <= 0 ? 0 : round($harga / $umur_ekonomis, 2);
 
       if (!empty($inv->tgl_validasi) && $tgl_kondisi >= $inv->tgl_validasi && $inv->status !== 'Baik') {
         $umur = self::bulan($inv->tgl_beli, $inv->tgl_validasi);
@@ -154,7 +154,7 @@ class Inventaris
         $umur_pakai = 0;
       }
 
-      $totals['t_unit'] += $inv->unit;
+      $totals['t_jumlah'] += $inv->jumlah;
       $totals['t_harga'] += $harga;
       $totals['t_penyusutan'] += $penyusutan;
       $totals['t_akum_susut'] += $akum_susut;
@@ -162,7 +162,7 @@ class Inventaris
 
       $tahun_validasi = !empty($inv->tgl_validasi) ? substr($inv->tgl_validasi, 0, 4) : null;
       if ($nilai_buku == 0 && $tahun_validasi !== null && $tahun_validasi < $tahun) {
-        $totals['j_unit'] += $inv->unit;
+        $totals['j_jumlah'] += $inv->jumlah;
         $totals['j_harga'] += $harga;
         $totals['j_penyusutan'] += $penyusutan;
         $totals['j_akum_susut'] += $akum_susut;

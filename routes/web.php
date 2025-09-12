@@ -170,6 +170,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::resource('/penyiapan-mbg', PenyiapanController::class);
 
     //Jurnal Transaksi
+    Route::get('/transaksi/daftar-inventaris', [TransaksiController::class, 'daftarInventaris']);
     Route::resource('/transaksi', TransaksiController::class);
 
     Route::post('/auth/logout', [AuthController::class, 'logout']);

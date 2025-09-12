@@ -7,6 +7,7 @@ use App\Models\Transaksi;
 use App\Models\Inventaris;
 use App\Models\JenisTransaksi;
 use App\Models\Rekening;
+use App\Utils\Inventaris as UtilsInventaris;
 
 class TransaksiController extends Controller
 {
@@ -21,17 +22,26 @@ class TransaksiController extends Controller
 
     public function daftarInventaris()
     {
-        $tanggal_transaksi = request()->get('tanggal_transaksi');
+        $tanggal = request()->get('tanggal');
         $jenis = request()->get('jenis');
         $kategori = request()->get('kategori');
 
         $inventaris = Inventaris::where([
             ['jenis', $jenis],
-            ['kategori', $kategori],
-            ['tgl_beli', '<=', $tanggal_transaksi],
+            ['kategori', intval($kategori)],
+            ['tanggal_beli', '<=', $tanggal],
         ])->where(function ($query) {
-            $query->where('status', 'Baik')->orwhere('status', 'Rusak');
+            $query->where('status', 'baik')->orwhere('status', 'busak');
         })->get();
+
+        $inventarisArray = $inventaris->toArray();
+        foreach ($inventaris as $index => $inv) {
+            $nilaiBuku = UtilsInventaris::nilaiBuku($tanggal, $inv);
+
+            $inventarisArray[$index]['nilai_buku'] = $nilaiBuku;
+        }
+
+        return response()->json($inventarisArray);
     }
 
     public function store(Request $request)

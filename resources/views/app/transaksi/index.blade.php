@@ -84,6 +84,45 @@
                             </div>
                         </div>
 
+                        <div class="row" id="form-hapus-inventaris" style="display: none;">
+                            <div class="col-md-12 mb-6">
+                                <label for="daftar_barang" class="form-label">Daftar Barang</label>
+                                <select id="daftar_barang" name="hapus_inventaris[daftar_barang]"
+                                    class="select2 form-select form-select-lg">
+                                    <option value="">Select Value</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-6">
+                                <label for="alasan" class="form-label">Alasan</label>
+                                <select id="alasan" name="hapus_inventaris[alasan]"
+                                    class="select2 form-select form-select-lg">
+                                    <option value="">Select Value</option>
+                                    <option value="jual">Jual</option>
+                                    <option value="hapus">Hapus</option>
+                                    <option value="hilang">Hilang</option>
+                                    <option value="revaluasi">Revaluasi</option>
+                                    <option value="rusak">Rusak</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-6">
+                                <label for="jumlah_unit_inventaris" class="form-label">Jumlah Unit</label>
+                                <input type="number" class="form-control" id="jumlah_unit_inventaris"
+                                    name="hapus_inventaris[jumlah_unit_inventaris]" autocomplete="off" value="0"
+                                    max="0" min="0" />
+                            </div>
+
+                            <div class="col-md-12 mb-6" id="input-nilai-buku">
+                                <label for="nilai_buku" class="form-label">Nilai Buku</label>
+                                <input type="text" class="form-control nominal" id="nilai_buku"
+                                    name="hapus_inventaris[nilai_buku]" readonly autocomplete="off" value="0.00" />
+                            </div>
+                            <div class="col-md-6 mb-6" id="input-harga-jual" style="display: none;">
+                                <label for="harga_jual" class="form-label">Harga Jual</label>
+                                <input type="text" class="form-control nominal" id="harga_jual"
+                                    name="hapus_inventaris[harga_jual]" autocomplete="off" value="0.00" />
+                            </div>
+                        </div>
+
                         <div class="d-flex justify-content-end">
                             <button class="btn btn-primary" type="submit">Simpan Transaksi</button>
                         </div>
@@ -97,8 +136,19 @@
 @section('script')
     <script>
         const REKENING = @json($rekening);
+        const INVENTARIS = {
+            id: 0,
+            jumlah: 0,
+            nilai_buku: 0
+        }
 
         $('#tanggal').flatpickr();
+
+        $(document).on('change', '#tanggal', function() {
+            var tanggal = $(this).val();
+
+            ambilDaftarInventaris(tanggal);
+        });
 
         $(document).on('change', '#jenis_transaksi', function(e) {
             e.preventDefault();
@@ -250,6 +300,43 @@
             }
         })
 
+        $(document).on('change', '#daftar_barang', function() {
+            var inventaris = $(this).val().split('#');
+
+            INVENTARIS.id = inventaris[0];
+            INVENTARIS.jumlah = inventaris[1];
+            INVENTARIS.nilai_buku = inventaris[2];
+
+            $('#jumlah_unit_inventaris').attr('max', INVENTARIS.jumlah);
+
+            $('#jumlah_unit_inventaris').val('0');
+            $('#nilai_buku').val(numberFormat(INVENTARIS.nilai_buku));
+            $('#harga_jual').val(numberFormat(INVENTARIS.nilai_buku));
+        })
+
+        $(document).on('change', '#jumlah_unit_inventaris', function() {
+            var jumlah_unit = $(this).val();
+            if (Number(jumlah_unit) > Number(INVENTARIS.jumlah)) {
+                $('#jumlah_unit_inventaris').val(INVENTARIS.jumlah);
+            }
+
+            if (Number(jumlah_unit) < 0) {
+                $('#jumlah_unit_inventaris').val(0);
+            }
+        })
+
+        $(document).on('change', '#alasan', function() {
+            var alasan = $(this).val();
+
+            if (alasan == 'jual' || alasan == 'revaluasi') {
+                $('#input-nilai-buku').removeClass('col-md-12').addClass('col-md-6');
+                $('#input-harga-jual').show();
+            } else {
+                $('#input-nilai-buku').removeClass('col-md-6').addClass('col-md-12');
+                $('#input-harga-jual').hide();
+            }
+        })
+
         $(document).on('input', '#harga_satuan, #jumlah_unit', function() {
             var harga_satuan = $('#harga_satuan').val() || 0;
             var jumlah_unit = $('#jumlah_unit').val() || 0;
@@ -295,7 +382,15 @@
                 form_beli_inventaris.hide();
                 form_hapus_inventaris.show();
 
+                $('#jenis_inventaris').val('ati');
+                if (sumber_dana.kode_akun.startsWith('1.2.03')) {
+                    $('#jenis_inventaris').val('atb');
+                }
+
+                $('#kategori_inventaris').val(sumber_dana.kode_akun.split(".").pop());
                 $('#transaksi').val('hapus_inventaris');
+
+                ambilDaftarInventaris($('#tanggal').val());
                 return;
             }
 
@@ -320,6 +415,44 @@
 
             $('#transaksi').val('jurnal_umum');
             return;
+        }
+
+        function ambilDaftarInventaris(tanggal) {
+            var jenis = $('#jenis_inventaris').val();
+            var kategori = $('#kategori_inventaris').val();
+
+            if (!jenis || !kategori) {
+                return;
+            }
+
+            $.ajax({
+                url: `/app/transaksi/daftar-inventaris`,
+                type: 'GET',
+                data: {
+                    tanggal: tanggal,
+                    jenis: jenis,
+                    kategori: kategori
+                },
+                success: function(result) {
+                    const options = result.map((item) => {
+                        const id = item.id + "#" + item.jumlah + "#" + item.nilai_buku;
+                        const text = item.id + ". " + item.nama + " (" + item.jumlah +
+                            " unit x " + numberFormat(item.harga_satuan) + ") | NB. " +
+                            numberFormat(item.nilai_buku);
+
+                        return {
+                            id: id,
+                            text: text
+                        }
+                    })
+
+                    setFormSelect2('#daftar_barang', options);
+                },
+                error: function(xhr) {
+                    let msg = xhr.responseJSON?.error || "Terjadi kesalahan pada server.";
+                    Swal.fire("Gagal!", msg, "error");
+                }
+            })
         }
 
         function setFormSelect2(target, value = []) {
