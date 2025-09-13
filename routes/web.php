@@ -24,7 +24,7 @@ use App\Http\Controllers\DokumentasiKegiatanController;
 use App\Http\Controllers\TahapanController;
 use App\Models\PeriodeMasak;
 use App\Models\Menu;
-use App\Models\Penyiapan;
+use App\Models\DokumentasiKegiatan;
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -38,6 +38,7 @@ use Carbon\Carbon;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
 
 Route::get('/', function () {
     Carbon::setLocale('id');
@@ -76,8 +77,12 @@ Route::get('/', function () {
         'Karyawan'   => '/assets/img/landing-page/karyawan.png',
     ];
 
-    return view('welcome', compact('menus', 'levelImages', 'periode',  'karyawan', 'yesterday', 'today', 'tomorrow'));
+    $dokumentasi = DokumentasiKegiatan::latest()->get();
+    $dokumentasiChunks = $dokumentasi->chunk(4);
+
+    return view('welcome', compact('menus', 'levelImages', 'periode', 'dokumentasiChunks', 'karyawan', 'yesterday', 'today', 'tomorrow'));
 });
+
 
 Route::get('/auth', [AuthController::class, 'index']);
 Route::post('/auth', [AuthController::class, 'auth']);

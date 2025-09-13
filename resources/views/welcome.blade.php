@@ -125,6 +125,9 @@
                             <a class="nav-link fw-medium" href="#landingMenu">Menu</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link fw-medium" href="#landingDocumentation">Dokumentasi</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link fw-medium" href="#landingReviews">Tanggapan</a>
                         </li>
                         <li class="nav-item">
@@ -312,6 +315,80 @@
                 </div>
             </div>
         @endforeach
+
+        <section id="landingDocumentation" class="section-py landing-team">
+            <div class="container">
+                <div class="text-center mb-4">
+                    <span class="badge bg-label-primary">Dokumentasi Kegiatan</span>
+                </div>
+                <h4 class="text-center mb-1">
+                    <span class="position-relative fw-extrabold z-1">Galeri Kegiatan</span>
+                </h4>
+                <p class="text-center mb-md-11 pb-0 pb-xl-12">
+                    Dokumentasi kegiatan yang telah dilaksanakan sebagai bentuk transparansi dan informasi kepada
+                    masyarakat.
+                </p>
+
+                <div id="dokumentasiCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000"
+                    data-bs-wrap="true">
+                    <div class="carousel-inner">
+                        @foreach ($dokumentasiChunks as $chunkIndex => $chunk)
+                            <div class="carousel-item @if ($chunkIndex == 0) active @endif">
+                                <div class="row g-3">
+                                    @foreach ($chunk as $i => $item)
+                                        <div
+                                            class="col-12 col-sm-6 col-lg-3 @if ($i > 0) d-none d-sm-block @endif">
+                                            <div class="card shadow-none h-100">
+                                                <div class="border border-bottom-0 border-primary-subtle"
+                                                    style="background-image: url('{{ $item->gambar ? asset('storage/' . $item->gambar) : asset('assets/img/landing-page/default.png') }}');
+                                                        background-size: cover;
+                                                        background-position: center;
+                                                        background-repeat: no-repeat;
+                                                        width: 100%;
+                                                        height: 180px;
+                                                        border-radius: 8px;">
+                                                </div>
+                                                <div class="card-body border border-top-0 border-primary-subtle text-center d-flex flex-column justify-content-center"
+                                                    style="min-height:120px;">
+                                                    <h5 class="card-title text-dark fw-bold mb-1 text-truncate"
+                                                        style="max-width:100%;font-size:clamp(0.8rem,1.2vw,1rem);">
+                                                        {{ $item->judul }}
+                                                    </h5>
+                                                    <p class="text-secondary mb-0 text-truncate"
+                                                        style="max-width:100%;font-size:clamp(0.7rem,1vw,0.9rem);">
+                                                        {{ $item->deskripsi }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <!-- Tombol navigasi -->
+                    <button class="carousel-control-prev" type="button" data-bs-target="#dokumentasiCarousel"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon bg-dark rounded-circle p-3"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#dokumentasiCarousel"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon bg-dark rounded-circle p-3"></span>
+                    </button>
+
+                    <!-- Indikator bulat -->
+                    <div class="carousel-indicators">
+                        @foreach ($dokumentasiChunks as $chunkIndex => $chunk)
+                            <button type="button" data-bs-target="#dokumentasiCarousel"
+                                data-bs-slide-to="{{ $chunkIndex }}"
+                                class="@if ($chunkIndex == 0) active @endif"
+                                style="width:12px;height:12px;border-radius:50%;"></button>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <section id="landingReviews" class="section-py bg-body landing-reviews pb-0">
             <div class="container">
