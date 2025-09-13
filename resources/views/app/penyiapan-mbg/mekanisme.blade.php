@@ -24,14 +24,14 @@
                     <div class="col-4">
                         <div class="mb-6">
                             <label class="form-label" for="waktu_mulai">Waktu Mulai</label>
-                            <input type="time" step="1" class="form-control" id="waktu_mulai" name="waktu_mulai"
-                                placeholder="Waktu Mulai" autocomplete="off">
+                            <input type="text" step="1" class="form-control timepicker" id="waktu_mulai"
+                                name="waktu_mulai" placeholder="Waktu Mulai" autocomplete="off">
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="mb-6">
                             <label class="form-label" for="waktu_selesai">Waktu Selesai</label>
-                            <input type="time" step="1" class="form-control" id="waktu_selesai"
+                            <input type="text" step="1" class="form-control timepicker" id="waktu_selesai"
                                 name="waktu_selesai" placeholder="Waktu Selesai" autocomplete="off">
                         </div>
                     </div>
@@ -93,6 +93,12 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
+        $('.timepicker').flatpickr({
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+        })
+
         const repeaterForm = $(".form-repeater");
         if (repeaterForm.length) {
             let groupIndex = 2;
