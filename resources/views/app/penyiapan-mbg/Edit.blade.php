@@ -15,7 +15,7 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-12 col-lg-4">
+                    <div class="col-12 col-lg-12">
                         <div class="mb-6">
                             <label class="form-label" for="tahapan">Tahapan</label>
                             <input type="text" class="form-control" id="tahapan" name="tahapan"
@@ -36,6 +36,114 @@
                                 name="waktu_selesai" value="{{ $tahapan->waktu_selesai }}" autocomplete="off">
                         </div>
                     </div>
+                    <div class="col-12 col-lg-4">
+                        <div class="mb-6">
+                            <label class="form-label" for="icon">Icon</label>
+                            <select class="form-select select2" id="icon" name="icon">
+                                <option value="bx bx-time" {{ $tahapan->icon == 'bx bx-time' ? 'selected' : '' }}>🕒 Jam
+                                </option>
+                                <option value="bx bx-restaurant"
+                                    {{ $tahapan->icon == 'bx bx-restaurant' ? 'selected' : '' }}>🍳 Masak</option>
+                                <option value="bx bx-bowl-hot" {{ $tahapan->icon == 'bx bx-bowl-hot' ? 'selected' : '' }}>🥣
+                                    Racik</option>
+                                <option value="bx bx-package" {{ $tahapan->icon == 'bx bx-package' ? 'selected' : '' }}>📦
+                                    Packing</option>
+                                <option value="bx bx-send" {{ $tahapan->icon == 'bx bx-send' ? 'selected' : '' }}>🚚 Kirim
+                                </option>
+                                <option value="bx bx-brush" {{ $tahapan->icon == 'bx bx-brush' ? 'selected' : '' }}>🧹
+                                    Bersih</option>
+                                <option value="bx bx-bell" {{ $tahapan->icon == 'bx bx-bell' ? 'selected' : '' }}>🔔
+                                    Notifikasi</option>
+                                <option value="bx bx-bell-off" {{ $tahapan->icon == 'bx bx-bell-off' ? 'selected' : '' }}>
+                                    🔕 Diam</option>
+                                <option value="bx bx-home" {{ $tahapan->icon == 'bx bx-home' ? 'selected' : '' }}>🏠 Rumah
+                                </option>
+                                <option value="bx bx-user" {{ $tahapan->icon == 'bx bx-user' ? 'selected' : '' }}>👤 User
+                                </option>
+                                <option value="bx bx-group" {{ $tahapan->icon == 'bx bx-group' ? 'selected' : '' }}>👥
+                                    Group</option>
+                                <option value="bx bx-search" {{ $tahapan->icon == 'bx bx-search' ? 'selected' : '' }}>🔍
+                                    Cari</option>
+                                <option value="bx bx-edit" {{ $tahapan->icon == 'bx bx-edit' ? 'selected' : '' }}>✏️ Edit
+                                </option>
+                                <option value="bx bx-trash" {{ $tahapan->icon == 'bx bx-trash' ? 'selected' : '' }}>🗑️
+                                    Hapus</option>
+                                <option value="bx bx-check" {{ $tahapan->icon == 'bx bx-check' ? 'selected' : '' }}>✔️ Oke
+                                </option>
+                                <option value="bx bx-x" {{ $tahapan->icon == 'bx bx-x' ? 'selected' : '' }}>❌ Batal
+                                </option>
+                                <option value="bx bx-like" {{ $tahapan->icon == 'bx bx-like' ? 'selected' : '' }}>👍 Suka
+                                </option>
+                                <option value="bx bx-dislike" {{ $tahapan->icon == 'bx bx-dislike' ? 'selected' : '' }}>👎
+                                    Tidak Suka</option>
+                                <option value="bx bx-heart" {{ $tahapan->icon == 'bx bx-heart' ? 'selected' : '' }}>❤️
+                                    Favorit</option>
+                                <option value="bx bx-star" {{ $tahapan->icon == 'bx bx-star' ? 'selected' : '' }}>⭐ Bintang
+                                </option>
+                                <option value="bx bx-calendar" {{ $tahapan->icon == 'bx bx-calendar' ? 'selected' : '' }}>
+                                    📅 Kalender</option>
+                                <option value="bx bx-map" {{ $tahapan->icon == 'bx bx-map' ? 'selected' : '' }}>🗺️ Peta
+                                </option>
+                                <option value="bx bx-car" {{ $tahapan->icon == 'bx bx-car' ? 'selected' : '' }}>🚗 Mobil
+                                </option>
+                                <option value="bx bx-train" {{ $tahapan->icon == 'bx bx-train' ? 'selected' : '' }}>🚆
+                                    Kereta</option>
+                                <option value="bx bx-ship" {{ $tahapan->icon == 'bx bx-ship' ? 'selected' : '' }}>🚢 Kapal
+                                </option>
+                                <option value="bx bx-money" {{ $tahapan->icon == 'bx bx-money' ? 'selected' : '' }}>💵 Uang
+                                </option>
+                                <option value="bx bx-credit-card"
+                                    {{ $tahapan->icon == 'bx bx-credit-card' ? 'selected' : '' }}>💳 Kartu</option>
+                                <option value="bx bx-cart" {{ $tahapan->icon == 'bx bx-cart' ? 'selected' : '' }}>🛒
+                                    Belanja</option>
+                                <option value="bx bx-lock" {{ $tahapan->icon == 'bx bx-lock' ? 'selected' : '' }}>🔒 Kunci
+                                </option>
+                                <option value="bx bx-unlock" {{ $tahapan->icon == 'bx bx-unlock' ? 'selected' : '' }}>🔓
+                                    Buka</option>
+                                <option value="bx bx-cloud" {{ $tahapan->icon == 'bx bx-cloud' ? 'selected' : '' }}>☁️
+                                    Cloud</option>
+                                <option value="bx bx-cloud-upload"
+                                    {{ $tahapan->icon == 'bx bx-cloud-upload' ? 'selected' : '' }}>☁️⬆️ Upload</option>
+                                <option value="bx bx-cloud-download"
+                                    {{ $tahapan->icon == 'bx bx-cloud-download' ? 'selected' : '' }}>☁️⬇️ Download</option>
+                                <option value="bx bx-battery" {{ $tahapan->icon == 'bx bx-battery' ? 'selected' : '' }}>🔋
+                                    Baterai</option>
+                                <option value="bx bx-alarm" {{ $tahapan->icon == 'bx bx-alarm' ? 'selected' : '' }}>⏰ Alarm
+                                </option>
+                                <option value="bx bx-volume-full"
+                                    {{ $tahapan->icon == 'bx bx-volume-full' ? 'selected' : '' }}>🔊 Volume</option>
+                                <option value="bx bx-video" {{ $tahapan->icon == 'bx bx-video' ? 'selected' : '' }}>🎥
+                                    Video</option>
+                                <option value="bx bx-photo-album"
+                                    {{ $tahapan->icon == 'bx bx-photo-album' ? 'selected' : '' }}>📷 Kamera</option>
+                                <option value="bx bx-coffee" {{ $tahapan->icon == 'bx bx-coffee' ? 'selected' : '' }}>☕
+                                    Kopi</option>
+                                <option value="bx bx-dish" {{ $tahapan->icon == 'bx bx-dish' ? 'selected' : '' }}>🍽️
+                                    Hidangan</option>
+                                <option value="bx bx-fridge" {{ $tahapan->icon == 'bx bx-fridge' ? 'selected' : '' }}>🧊
+                                    Pendingin</option>
+                                <option value="bx bx-basket" {{ $tahapan->icon == 'bx bx-basket' ? 'selected' : '' }}>🧺
+                                    Keranjang</option>
+                                <option value="bx bx-leaf" {{ $tahapan->icon == 'bx bx-leaf' ? 'selected' : '' }}>🌿
+                                    Organik</option>
+                                <option value="bx bx-donate-blood"
+                                    {{ $tahapan->icon == 'bx bx-donate-blood' ? 'selected' : '' }}>💉 Donasi</option>
+                                <option value="bx bx-wrench" {{ $tahapan->icon == 'bx bx-wrench' ? 'selected' : '' }}>🔧
+                                    Perbaikan</option>
+                                <option value="bx bx-run" {{ $tahapan->icon == 'bx bx-run' ? 'selected' : '' }}>🏃 Olahraga
+                                </option>
+                                <option value="bx bx-book" {{ $tahapan->icon == 'bx bx-book' ? 'selected' : '' }}>📖 Buku
+                                </option>
+                                <option value="bx bx-music" {{ $tahapan->icon == 'bx bx-music' ? 'selected' : '' }}>🎵
+                                    Musik</option>
+                                <option value="bx bx-flag" {{ $tahapan->icon == 'bx bx-flag' ? 'selected' : '' }}>🚩 Tugas
+                                </option>
+                                <option value="bx bx-shield" {{ $tahapan->icon == 'bx bx-shield' ? 'selected' : '' }}>🛡️
+                                    Proteksi</option>
+                            </select>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="divider">
                     <div class="divider-text">Pelaksana atau Relawan</div>
@@ -178,7 +286,7 @@
                             icon: 'success',
                             title: response.message || 'Tahapan berhasil disimpan.'
                         }).then(() => {
-                            window.location.href = '/app/penyiapan-mbg/detail/' + response.data;
+                            window.location.href = '/app/penyiapan-mbg';
                         });
                     } else {
                         Swal.fire({

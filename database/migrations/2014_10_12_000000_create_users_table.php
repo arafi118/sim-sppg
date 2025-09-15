@@ -25,6 +25,7 @@ return new class extends Migration
             $table->date('tanggal_masuk');
             $table->string('gaji');
             $table->string('status');
+            $table->string('foto')->nullable();
             $table->string('username');
             $table->string('password');
             $table->timestamps();

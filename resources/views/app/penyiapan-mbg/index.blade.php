@@ -23,7 +23,7 @@
         </div>
     </div>
 
-    <form id="FormHapusPenyiapan" method="post">
+    <form id="FormHapusTahapan" method="post">
         @method('DELETE')
         @csrf
     </form>
@@ -46,6 +46,36 @@
 @endsection
 @section('script')
     <script>
+        const hariMap = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+        const bulanMap = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober",
+            "November", "Desember"
+        ];
+
+        function parseDateString(s) {
+            if (!s) return null;
+            s = String(s).trim();
+            if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
+                const [y, m, d] = s.split('-').map(Number);
+                return new Date(y, m - 1, d);
+            }
+            let norm = s.replace(' ', 'T');
+            let dt = new Date(norm);
+            if (!isNaN(dt)) return dt;
+            dt = new Date(s.replace(/-/g, '/'));
+            return isNaN(dt) ? null : dt;
+        }
+
+        function formatDateReadable(dt) {
+            if (!dt) return '-';
+            return `${dt.getDate()} ${bulanMap[dt.getMonth()]} ${dt.getFullYear()}`;
+        }
+
+        function formatTimeShort(t) {
+            if (!t) return '-';
+            const parts = String(t).split(':');
+            return parts.length >= 2 ? `${parts[0].padStart(2,'0')}:${parts[1].padStart(2,'0')}` : t;
+        }
+
         const tb = document.querySelector("#Penyiapan");
         let cl;
 
@@ -74,11 +104,11 @@
                         orderable: false,
                         searchable: false,
                         render: d => `
-                                <div class="d-inline-flex gap-1">
-                                    <a href="/app/create-mekanisme/${d.id}" class="btn btn-sm btn-primary"><i class="bx bx-plus"></i> Tahapan Pelayanan</a>
-                                    <button class="btn btn-sm btn-warning btnEdit" data-id="${d.id}" data-tanggal="${d.tanggal}">Edit</button>
-                                    <button class="btn btn-sm btn-danger btn-delete" data-id="${d.id}">Hapus</button>
-                                </div>`
+                <div class="d-inline-flex gap-1">
+                    <a href="/app/create-mekanisme/${d.id}" class="btn btn-sm btn-primary"><i class="bx bx-plus"></i> Tahapan Pelayanan</a>
+                    <button class="btn btn-sm btn-warning btnEdit" data-id="${d.id}" data-tanggal="${d.tanggal}">Edit</button>
+                    <button class="btn btn-sm btn-danger btn-delete" data-id="${d.id}">Hapus</button>
+                </div>`
                     }
                 ],
                 columnDefs: [{
@@ -90,40 +120,77 @@
                 }]
             });
 
-            // Detail
+            // Detail Tahapan
             cl.on("click", "td.dt-control", e => {
                 const row = cl.row(e.target.closest("tr")),
                     d = row.data();
                 if (row.child.isShown()) return row.child.hide();
-
                 let html = `<small class="fw-medium">Detail Tahapan</small>
-                <ul class="list-group list-group mt-2">`;
+            <div class="container-xxl flex-grow-1 container-p-y">
+                <div class="row overflow-hidden">
+                    <div class="col-12">
+                        <ul class=" timeline timeline-center mt-12">`;
                 if (d.tahapan?.length) {
                     d.tahapan.forEach(t => {
+                        const dateObj = parseDateString(t.tanggal || d.tanggal);
+                        const hari = dateObj ? hariMap[dateObj.getDay()] : '-';
+                        const tanggalReadable = formatDateReadable(dateObj);
                         html += `
-                        <li class="list-group-item d-flex align-items-center gap-2">
-                            <span class="w-px-30 h-px-30 rounded-circle d-flex justify-content-center align-items-center 
-                                        bg-label-success cursor-pointer btnUserDetail" 
-                                    data-id="${t.id}" title="Lihat Pelaksana">
-                                <i class="icon-base bx bx-walk icon-18px"></i>
-                            </span>
-                            <div>
-                                <b>${t.tahapan}</b>  
-                                <small class="text-muted">(Mulai: ${t.waktu_mulai} - Selesai: ${t.waktu_selesai})</small>
+                    <li class="timeline-item">
+                        <span class="timeline-indicator timeline-indicator-primary" data-aos="zoom-in" data-aos-delay="200">
+                            <i class="${t.icon ?? '' } icon-base"></i>
+                        </span>
+                        <div class="timeline-event card p-0" data-aos="fade-right">
+                            <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
+                                <h5 class="card-title mb-0">${t.tahapan ?? ''}</h5>
+                                <div class="meta">
+                                    <a href="/app/edit-mekanisme/${t.id}" class="badge rounded-pill bg-label-info me-1"><i class="bx bx-edit-alt me-1"></i></a>
+                                    <button type="submit" class="badge rounded-pill bg-label-danger btn-delete" data-id="${t.id}"><i class="bx bx-trash me-1"></i></button>
+                                </div>
                             </div>
-                            <a href="/app/penyiapan-mbg/detail/${t.id}" class="btn btn-sm btn-info ms-auto" title="Edit Tahapan">
-                                Detail Tahapan
-                            </a>
-                        </li>`;
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                    <p class="mb-0">
+                                        Hari <strong>${hari}</strong>, ${tanggalReadable}, 
+                                        akan melaksanakan <span class="text-primary fw-semibold">${t.tahapan ?? 'kegiatan'}</span> 
+                                        jam <span class="text-success fw-bold">${formatTimeShort(t.waktu_mulai)}</span> 
+                                        sampai <span class="text-danger fw-bold">${formatTimeShort(t.waktu_selesai)}</span>.
+                                    </p>
+                                </div>
+                                <br>
+                                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                    <div>
+                                        <p class="text-body-secondary mb-2">Team members</p>
+                                        <ul class="list-unstyled users-list d-flex align-items-center avatar-group">
+                                            ${t.pelaksana?.length 
+                                                ? t.pelaksana.map(p => `
+                                                                            <li data-bs-toggle="tooltip" title="${p.karyawan?.nama || '-'}" class="avatar avatar-xs pull-up">
+                                                                                <img class="rounded-circle"
+                                                                                    src="${p.karyawan?.foto ? '/storage/foto/' + p.karyawan.foto : '/assets/img/landing-page/default.png'}"
+                                                                                    alt="Avatar" />
+                                                                            </li>`).join('')
+                                                : `<li class="list-group-item text-muted">Belum ada pelaksana</li>`}
+                                            <li data-bs-toggle="tooltip" title="Lihat Pelaksana" class="avatar avatar-xs pull-up">
+                                                <span class="w-px-30 h-px-30 rounded-circle d-flex justify-content-center align-items-center bg-label-success cursor-pointer btnUserDetail" data-id="${t.id}">
+                                                    <i class="icon-base bx bx-walk icon-15px"></i>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-event-time">${t.tanggal ?? '-'}</div>
+                        </div>
+                    </li>`;
                     });
                 } else {
                     html += `<li class="list-group-item text-muted">Belum ada tahapan</li>`;
                 }
-                html += `</ul>`;
+                html += `</ul></div></div></div>`;
                 row.child(html).show();
             });
 
-            // modal pelaksana
+            // Detail Pelaksana
             $(document).on("click", ".btnUserDetail", function() {
                 const id = $(this).data("id");
                 const tahapan = cl.data().toArray().flatMap(r => r.tahapan || []).find(t => t.id == id);
@@ -140,6 +207,7 @@
                 $("#modalUserDetail").modal("show");
             });
         }
+
 
         $("#tanggal").flatpickr({
             monthSelectorType: "static",
@@ -257,6 +325,61 @@
                             },
                             error: function(xhr) {
                                 let msg = xhr.responseJSON?.message ||
+                                    "Terjadi kesalahan pada server.";
+                                Swal.fire("Gagal!", msg, "error");
+                            }
+                        });
+                    });
+                    form.trigger('submit');
+                }
+            });
+        });
+
+        $(document).on('click', '.btn-delete', function(e) {
+            e.preventDefault();
+            let id = $(this).data('id');
+
+            Swal.fire({
+                title: "Apakah Anda yakin?",
+                text: "Data Tahapan akan dihapus permanen!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Ya, Hapus",
+                cancelButtonText: "Batal",
+            }).then(res => {
+                if (res.isConfirmed) {
+                    let form = $('#FormHapusTahapan');
+                    form.attr('action', `/app/destroy-Mekanisme/${id}`);
+                    form.off('submit').on('submit', function(e) {
+                        e.preventDefault();
+                        $.ajax({
+                            url: form.attr('action'),
+                            type: 'POST',
+                            data: form.serialize(),
+                            success: function(r) {
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                    didOpen: (toast) => {
+                                        toast.addEventListener('mouseenter',
+                                            Swal.stopTimer);
+                                        toast.addEventListener('mouseleave',
+                                            Swal.resumeTimer);
+                                    }
+                                });
+
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: r.msg || 'Data berhasil dihapus!'
+                                }).then(() => {
+                                    window.location.href = '/app/penyiapan-mbg';
+                                });
+                            },
+                            error: function(xhr) {
+                                let msg = xhr.responseJSON?.msg ||
                                     "Terjadi kesalahan pada server.";
                                 Swal.fire("Gagal!", msg, "error");
                             }

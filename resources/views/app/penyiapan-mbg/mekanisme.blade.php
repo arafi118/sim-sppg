@@ -14,25 +14,82 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-12 col-lg-12">
                         <div class="mb-6">
-                            <label class="form-label" for="tahapan">Tahapan</label>
+                            <label class="form-label" for="tahapan">Tahapan Pelaksanaan</label>
                             <input type="text" class="form-control" id="tahapan" name="tahapan"
                                 placeholder="Masukkan Tahapan Penyiapan" autocomplete="off">
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-12 col-lg-4">
                         <div class="mb-6">
                             <label class="form-label" for="waktu_mulai">Waktu Mulai</label>
                             <input type="text" step="1" class="form-control timepicker" id="waktu_mulai"
                                 name="waktu_mulai" placeholder="Waktu Mulai" autocomplete="off">
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-12 col-lg-4">
                         <div class="mb-6">
                             <label class="form-label" for="waktu_selesai">Waktu Selesai</label>
                             <input type="text" step="1" class="form-control timepicker" id="waktu_selesai"
                                 name="waktu_selesai" placeholder="Waktu Selesai" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        <div class="mb-6">
+                            <label class="form-label" for="icon">Icon</label>
+                            <select class="form-select select2" id="icon" name="icon">
+                                <option value="bx bx-time">🕒 Jam</option>
+                                <option value="bx bx-restaurant">🍳 Masak</option>
+                                <option value="bx bx-bowl-hot">🥣 Racik</option>
+                                <option value="bx bx-package">📦 Packing</option>
+                                <option value="bx bx-send">🚚 Kirim</option>
+                                <option value="bx bx-brush">🧹 Bersih</option>
+                                <option value="bx bx-bell">🔔 Notifikasi</option>
+                                <option value="bx bx-bell-off">🔕 Diam</option>
+                                <option value="bx bx-home">🏠 Rumah</option>
+                                <option value="bx bx-user">👤 User</option>
+                                <option value="bx bx-group">👥 Group</option>
+                                <option value="bx bx-search">🔍 Cari</option>
+                                <option value="bx bx-edit">✏️ Edit</option>
+                                <option value="bx bx-trash">🗑️ Hapus</option>
+                                <option value="bx bx-check">✔️ Oke</option>
+                                <option value="bx bx-x">❌ Batal</option>
+                                <option value="bx bx-like">👍 Suka</option>
+                                <option value="bx bx-dislike">👎 Tidak Suka</option>
+                                <option value="bx bx-heart">❤️ Favorit</option>
+                                <option value="bx bx-star">⭐ Bintang</option>
+                                <option value="bx bx-calendar">📅 Kalender</option>
+                                <option value="bx bx-map">🗺️ Peta</option>
+                                <option value="bx bx-car">🚗 Mobil</option>
+                                <option value="bx bx-train">🚆 Kereta</option>
+                                <option value="bx bx-ship">🚢 Kapal</option>
+                                <option value="bx bx-money">💵 Uang</option>
+                                <option value="bx bx-credit-card">💳 Kartu</option>
+                                <option value="bx bx-cart">🛒 Belanja</option>
+                                <option value="bx bx-lock">🔒 Kunci</option>
+                                <option value="bx bx-unlock">🔓 Buka</option>
+                                <option value="bx bx-cloud">☁️ Cloud</option>
+                                <option value="bx bx-cloud-upload">☁️⬆️ Upload</option>
+                                <option value="bx bx-cloud-download">☁️⬇️ Download</option>
+                                <option value="bx bx-battery">🔋 Baterai</option>
+                                <option value="bx bx-alarm">⏰ Alarm</option>
+                                <option value="bx bx-volume-full">🔊 Volume</option>
+                                <option value="bx bx-video">🎥 Video</option>
+                                <option value="bx bx-photo-album">📷 Kamera</option>
+                                <option value="bx bx-coffee">☕ Kopi</option>
+                                <option value="bx bx-dish">🍽️ Hidangan</option>
+                                <option value="bx bx-fridge">🧊 Pendingin</option>
+                                <option value="bx bx-basket">🧺 Keranjang</option>
+                                <option value="bx bx-leaf">🌿 Organik</option>
+                                <option value="bx bx-donate-blood">💉 Donasi</option>
+                                <option value="bx bx-wrench">🔧 Perbaikan</option>
+                                <option value="bx bx-run">🏃 Olahraga</option>
+                                <option value="bx bx-book">📖 Buku</option>
+                                <option value="bx bx-music">🎵 Musik</option>
+                                <option value="bx bx-flag">🚩 Tugas</option>
+                                <option value="bx bx-shield">🛡️ Proteksi</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -45,8 +102,8 @@
                             <div class="row">
                                 <div class="col-lg-10 col-12 mb-6 pelaksana">
                                     <label for="form-repeater-1-1" class="form-label">Nama Pelaksana</label>
-                                    <select id="form-repeater-1-1" name="user_id" class="select2 form-select form-select-lg"
-                                        data-allow-clear="true">
+                                    <select id="form-repeater-1-1" name="user_id"
+                                        class="select2 form-select form-select-lg" data-allow-clear="true">
                                         <option value="">-- Pilih Karyawan --</option>
                                         @foreach ($karyawan as $user)
                                             <option value="{{ $user->id }}">{{ $user->nama }}</option>

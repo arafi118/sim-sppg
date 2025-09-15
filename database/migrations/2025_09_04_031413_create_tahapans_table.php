@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('tahapan');
             $table->time('waktu_mulai');
             $table->time('waktu_selesai');
+            $table->string('icon')->default('bx bx-bell')->nullable();
             $table->timestamps();
         });
     }

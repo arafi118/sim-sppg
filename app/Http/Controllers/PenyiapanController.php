@@ -28,19 +28,6 @@ class PenyiapanController extends Controller
 
         return view('app.penyiapan-mbg.index', ['title' => 'Mekanisme Penyiapan MBG']);
     }
-
-    public function detail($id)
-    {
-        $tahapan = Tahapan::with(
-            'penyiapan',
-            'pelaksana.karyawan'
-        )->findOrFail($id);
-        return view('app.penyiapan-mbg.detail', [
-            'title'   => 'Detail Tahapan Penyiapan',
-            'tahapan' => $tahapan
-        ]);
-    }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -136,6 +123,7 @@ class PenyiapanController extends Controller
             'tahapan',
             'waktu_mulai',
             'waktu_selesai',
+            'icon',
         ]);
 
         $rules = [
@@ -143,6 +131,7 @@ class PenyiapanController extends Controller
             'tahapan'       => 'required|string',
             'waktu_mulai'   => 'required',
             'waktu_selesai' => 'required',
+            'icon'          => 'required',
         ];
 
         $validate = Validator::make($data, $rules);
@@ -184,7 +173,7 @@ class PenyiapanController extends Controller
         $karyawan = User::where('level_id', 6)->get();
 
         $title = 'Edit Tahapan Mekanisme Penyiapan MBG';
-        return view('app.penyiapan-mbg.Edit', compact('tahapan', 'title', 'karyawan'));
+        return view('app.penyiapan-mbg.edit', compact('tahapan', 'title', 'karyawan'));
     }
 
     public function Updatemekanisme(Request $request, $id)
@@ -194,6 +183,7 @@ class PenyiapanController extends Controller
             'tahapan',
             'waktu_mulai',
             'waktu_selesai',
+            'icon',
             'pelaksana',
         ]);
 
@@ -202,6 +192,7 @@ class PenyiapanController extends Controller
             'tahapan'       => 'required|string',
             'waktu_mulai'   => 'required',
             'waktu_selesai' => 'required',
+            'icon'          => 'required',
             'pelaksana'     => 'nullable|array',
             'pelaksana.*.user_id' => 'nullable|integer|exists:users,id',
         ];
@@ -222,6 +213,7 @@ class PenyiapanController extends Controller
             'tahapan'       => $request->tahapan,
             'waktu_mulai'   => $request->waktu_mulai,
             'waktu_selesai' => $request->waktu_selesai,
+            'icon'          => $request->icon,
         ]);
 
         if ($request->has('pelaksana') && count($request->pelaksana) > 0) {
