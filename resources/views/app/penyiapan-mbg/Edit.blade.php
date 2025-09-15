@@ -198,7 +198,7 @@
                         @endforelse
                     </div>
                     <div class="d-flex justify-content-between">
-                        <a href="/app/penyiapan-mbg/detail/{{ $tahapan->id }}" class="btn btn-outline-secondary">
+                        <a href="/app/penyiapan-mbg" class="btn btn-outline-secondary">
                             <i class="bx bx-left-arrow-alt me-1"></i>
                             <span>Kembali</span>
                         </a>
