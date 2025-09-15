@@ -29,13 +29,22 @@
         }
 
         /* Checkbox pas di tengah */
-        .table .form-check {
-            margin: 0 !important;
-            padding: 0 !important;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* Samakan ukuran checkbox di header dan body */
+        table .form-check-input {
+            transform: scale(0.85);
+            /* perkecil semuanya 85% */
+            top: 0.1rem;
+            /* sesuaikan posisi biar rata */
         }
+
+        /* Samakan tinggi baris header dan body */
+        table thead th,
+        table tbody td {
+            padding-top: 0.4rem;
+            padding-bottom: 0.4rem;
+            vertical-align: middle;
+        }
+
 
         /* Kolom Bahan makin dekat */
         .table th:nth-child(2),
@@ -61,11 +70,12 @@
                             <thead>
                                 <tr>
                                     <th style="width:30px; text-align:center; vertical-align:middle;">
-                                        <div class="form-check">
-                                            <input class="form-check-input checkAll" type="checkbox">
-                                        </div>
+                                        <input type="checkbox" class="form-check-input checkAll">
                                     </th>
-                                    <th style="width: 150px;">Bahan Pangan</th>
+
+                                    <th style="width: 30px; text-align:center; vertical-align:middle;">No</th>
+                                    {{-- No pindah setelah checkbox --}}
+                                    <th style="width: 150px;">Bahan</th>
                                     <th style="width: 190px;">Mitra</th>
                                     <th style="width: 70px;">Harga</th>
                                     <th style="width: 100px;">Kebutuhan</th>
@@ -94,18 +104,17 @@
                                     @endphp
                                     <tr>
                                         <td style="text-align:center; vertical-align:middle;">
-                                            <div class="form-check">
-                                                <input class="form-check-input checkbox-detail" type="checkbox"
-                                                    value="{{ $detail->id }}" data-id="{{ $detail->id }}"
-                                                    data-bahan="{{ $detail->bahanPangan->nama ?? '-' }}"
-                                                    data-mitra="{{ $detail->mitra->nama ?? '-' }}"
-                                                    data-satuan="{{ $detail->bahanPangan->satuan ?? '-' }}"
-                                                    data-harga="{{ $detail->harga_satuan }}"
-                                                    data-kebutuhan="{{ $detail->jumlah }}"
-                                                    data-total="{{ $detail->total_harga }}"
-                                                    data-sisa="{{ $detail->total_harga - $detail->jumlah_bayar }}" checked>
-                                            </div>
+                                            <input type="checkbox" class="form-check-input checkbox-detail"
+                                                value="{{ $detail->id }}" data-id="{{ $detail->id }}"
+                                                data-bahan="{{ $detail->bahanPangan->nama ?? '-' }}"
+                                                data-mitra="{{ $detail->mitra->nama ?? '-' }}"
+                                                data-satuan="{{ $detail->bahanPangan->satuan ?? '-' }}"
+                                                data-harga="{{ $detail->harga_satuan }}"
+                                                data-kebutuhan="{{ $detail->jumlah }}"
+                                                data-total="{{ $detail->total_harga }}"
+                                                data-sisa="{{ $detail->total_harga - $detail->jumlah_bayar }}" checked>
                                         </td>
+                                        <td class="text-center">{{ $loop->iteration }}</td>
                                         <td>{{ $detail->bahanPangan->nama ?? '-' }}</td>
                                         <td>{{ $detail->mitra->nama ?? '-' }}</td>
                                         <td class="text-end">{{ number_format($detail->harga_satuan, 0, ',', '.') }}</td>
@@ -146,9 +155,8 @@
                                         </td>
                                     </tr>
                                 @endforeach
-
                                 <tr class="fw-bold">
-                                    <td colspan="6" class="text-center">Total</td>
+                                    <td colspan="7" class="text-center">Total</td>
                                     <td class="text-end">{{ number_format($totalHarga, 0, ',', '.') }}</td>
                                     <td colspan="2"></td>
                                 </tr>

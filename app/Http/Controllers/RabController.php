@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Rancangan;
 use App\Models\Po;
 use App\Models\PoDetail;
+use App\Models\BahanPangan;
 use App\Models\Mitra;
 use App\Models\PeriodeMasak;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
@@ -97,7 +98,6 @@ class RabController extends Controller
             ->setOption('title', $title)
             ->inline('RAB.pdf');
     }
-
 
     public function approve()
     {
@@ -253,7 +253,7 @@ class RabController extends Controller
     }
     public function simpanPO(Request $request)
     {
-        $po = \App\Models\Po::firstOrCreate(
+        $po = Po::firstOrCreate(
             ['tanggal' => now()->toDateString()],
             ['total_harga' => 0, 'status_bayar' => 'unpaid']
         );
@@ -277,7 +277,7 @@ class RabController extends Controller
 
         $totalKeseluruhan += $total;
 
-        \App\Models\PoDetail::updateOrCreate(
+        PoDetail::updateOrCreate(
             [
                 'po_id'           => $po->id,
                 'bahan_pangan_id' => $bpId,
@@ -304,56 +304,56 @@ class RabController extends Controller
     }
 
     public function detailPO($id)
-{
-    $title = 'Detail PO';
+    {
+        $title = 'Detail PO';
 
-    $po = Po::with(['poDetail' => function($q) {
-        $q->where('jumlah_input', '>', 0)
-        ->with(['bahanPangan', 'mitra']);
-    }])->findOrFail($id);
-
-    $referensiPOs = Po::with(['poDetail' => function($q) {
+        $po = Po::with(['poDetail' => function($q) {
             $q->where('jumlah_input', '>', 0)
             ->with(['bahanPangan', 'mitra']);
-        }])
-        ->whereHas('poDetail', function($q) {
-            $q->where('jumlah_input', '>', 0);
-        })
-        ->orderBy('tanggal', 'asc')
-        ->get();
+        }])->findOrFail($id);
 
-    $bahanPangan = \App\Models\BahanPangan::orderBy('nama')->get();
-    $mitras = \App\Models\Mitra::orderBy('nama')->get(); // ✅ semua mitra
+        $referensiPOs = Po::with(['poDetail' => function($q) {
+                $q->where('jumlah_input', '>', 0)
+                ->with(['bahanPangan', 'mitra']);
+            }])
+            ->whereHas('poDetail', function($q) {
+                $q->where('jumlah_input', '>', 0);
+            })
+            ->orderBy('tanggal', 'asc')
+            ->get();
 
-    return view('app.rab.po_detail', compact('po', 'referensiPOs', 'title', 'bahanPangan', 'mitras'));
-}
+        $bahanPangan = BahanPangan::orderBy('nama')->get();
+        $mitras = Mitra::orderBy('nama')->get(); // semua mitra
+
+        return view('app.rab.po_detail', compact('po', 'referensiPOs', 'title', 'bahanPangan', 'mitras'));
+    }
 
 
     public function updatePO(Request $request)
-{
-    $request->validate([
-        'id' => 'required|exists:po_details,id',
-        'bahan_pangan_id' => 'required|exists:bahan_pangans,id',
-        'mitra_id' => 'required|exists:mitras,id',
-        'harga_satuan' => 'required|numeric|min:0',
-        'jumlah_input' => 'required|numeric|min:0',
-    ]);
+    {
+        $request->validate([
+            'id' => 'required|exists:po_details,id',
+            'bahan_pangan_id' => 'required|exists:bahan_pangans,id',
+            'mitra_id' => 'required|exists:mitras,id',
+            'harga_satuan' => 'required|numeric|min:0',
+            'jumlah_input' => 'required|numeric|min:0',
+        ]);
 
-    $detail = PoDetail::findOrFail($request->id);
-    $detail->bahan_pangan_id = $request->bahan_pangan_id;
-    $detail->mitra_id        = $request->mitra_id;
-    $detail->harga_satuan    = $request->harga_satuan;
-    $detail->jumlah_input    = $request->jumlah_input;
-    $detail->total_harga     = $request->harga_satuan * $request->jumlah_input;
-    $detail->save();
+        $detail = PoDetail::findOrFail($request->id);
+        $detail->bahan_pangan_id = $request->bahan_pangan_id;
+        $detail->mitra_id        = $request->mitra_id;
+        $detail->harga_satuan    = $request->harga_satuan;
+        $detail->jumlah_input    = $request->jumlah_input;
+        $detail->total_harga     = $request->harga_satuan * $request->jumlah_input;
+        $detail->save();
 
-    // Update total PO
-    $total = PoDetail::where('po_id', $detail->po_id)->sum('total_harga');
-    $detail->po->update(['total_harga' => $total]);
+        // Update total PO
+        $total = PoDetail::where('po_id', $detail->po_id)->sum('total_harga');
+        $detail->po->update(['total_harga' => $total]);
 
-    // untuk AJAX response
-    return response()->json(['success' => true]);
-}
+        // untuk AJAX response
+        return response()->json(['success' => true]);
+    }
 
 
     public function cetak_detail($id)
@@ -400,44 +400,42 @@ class RabController extends Controller
         ]);
     }
 
-public function bayarPO(Request $request)
-{
-    $request->validate([
-        'po_id' => 'required|exists:po,id',
-        'detail_id' => 'required|array',
-        'detail_id.*' => 'exists:po_details,id',
-        'jumlah_bayar' => 'required|array',
-        'jumlah_bayar.*' => 'numeric|min:0',
-    ]);
+    public function bayarPO(Request $request)
+    {
+        $request->validate([
+            'po_id' => 'required|exists:po,id',
+            'detail_id' => 'required|array',
+            'detail_id.*' => 'exists:po_details,id',
+            'jumlah_bayar' => 'required|array',
+            'jumlah_bayar.*' => 'numeric|min:0',
+        ]);
 
-    foreach ($request->detail_id as $i => $detailId) {
-        $detail = PoDetail::findOrFail($detailId);
-        $bayar = (float) ($request->jumlah_bayar[$i] ?? 0);
+        foreach ($request->detail_id as $i => $detailId) {
+            $detail = PoDetail::findOrFail($detailId);
+            $bayar = (float) ($request->jumlah_bayar[$i] ?? 0);
 
-        if ($bayar <= 0) continue;
+            if ($bayar <= 0) continue;
 
-        // hitung sisa
-        $sisa = $detail->total_harga - ($detail->jumlah_bayar ?? 0);
-        $bayarSekarang = min($sisa, $bayar);
+            // hitung sisa
+            $sisa = $detail->total_harga - ($detail->jumlah_bayar ?? 0);
+            $bayarSekarang = min($sisa, $bayar);
 
-        $detail->jumlah_bayar = ($detail->jumlah_bayar ?? 0) + $bayarSekarang;
+            $detail->jumlah_bayar = ($detail->jumlah_bayar ?? 0) + $bayarSekarang;
 
-        // update status
-        if ($detail->jumlah_bayar >= $detail->total_harga) {
-            $detail->status_bayar = 'PAID';
-        } elseif ($detail->jumlah_bayar > 0) {
-            $detail->status_bayar = 'PARTIAL';
-        } else {
-            $detail->status_bayar = 'UNPAID';
+            // update status
+            if ($detail->jumlah_bayar >= $detail->total_harga) {
+                $detail->status_bayar = 'PAID';
+            } elseif ($detail->jumlah_bayar > 0) {
+                $detail->status_bayar = 'PARTIAL';
+            } else {
+                $detail->status_bayar = 'UNPAID';
+            }
+
+            $detail->save();
         }
 
-        $detail->save();
+        return redirect()->back()->with('success', 'Pembayaran PO berhasil disimpan.');
     }
-
-    return redirect()->back()->with('success', 'Pembayaran PO berhasil disimpan.');
-}
-
-
 
     public function cetakPO()
     {
