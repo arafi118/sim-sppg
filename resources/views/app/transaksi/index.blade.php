@@ -301,17 +301,19 @@
         })
 
         $(document).on('change', '#daftar_barang', function() {
-            var inventaris = $(this).val().split('#');
+            if ($(this).val()) {
+                var inventaris = $(this).val().split('#');
 
-            INVENTARIS.id = inventaris[0];
-            INVENTARIS.jumlah = inventaris[1];
-            INVENTARIS.nilai_buku = inventaris[2];
+                INVENTARIS.id = inventaris[0];
+                INVENTARIS.jumlah = inventaris[1];
+                INVENTARIS.nilai_buku = inventaris[2];
 
-            $('#jumlah_unit_inventaris').attr('max', INVENTARIS.jumlah);
+                $('#jumlah_unit_inventaris').attr('max', INVENTARIS.jumlah);
 
-            $('#jumlah_unit_inventaris').val('0');
-            $('#nilai_buku').val(numberFormat(INVENTARIS.nilai_buku));
-            $('#harga_jual').val(numberFormat(INVENTARIS.nilai_buku));
+                $('#jumlah_unit_inventaris').val('0');
+                $('#nilai_buku').val(numberFormat(INVENTARIS.nilai_buku));
+                $('#harga_jual').val(numberFormat(INVENTARIS.nilai_buku));
+            }
         })
 
         $(document).on('change', '#jumlah_unit_inventaris', function() {
