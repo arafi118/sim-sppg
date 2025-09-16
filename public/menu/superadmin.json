@@ -97,4 +97,10 @@
     "nama": "Approve RAB",
     "icon": "bx-add-to-queue",
     "url": "/app/rab/approve"
+}, {
+    "nama": "Master karyawan"
+}, {
+    "nama": "Tahapan Pelayanan",
+    "icon": "bx-broadcast",
+    "url": "/app/penyiapan-mbg"
 }]
