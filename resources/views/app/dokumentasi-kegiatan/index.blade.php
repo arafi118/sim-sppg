@@ -80,6 +80,34 @@
             });
         }
 
+        // validasi upload foto
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        })
+        $('#gambar').on('change', function() {
+            let f = this.files[0];
+            if (f) {
+                let a = ['jpg', 'jpeg', 'png'],
+                    e = f.name.split('.').pop().toLowerCase();
+                if (!a.includes(e)) {
+                    $(this).val('');
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Hanya diperbolehkan file JPG, JPEG, atau PNG!'
+                    })
+                } else {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'File valid: ' + e.toUpperCase()
+                    })
+                }
+            }
+        })
+
         // tambah
         $('#btnTambah').click(() => {
             const form = $('#FormDokumentasi');

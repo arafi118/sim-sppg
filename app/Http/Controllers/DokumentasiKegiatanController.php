@@ -107,6 +107,8 @@ class DokumentasiKegiatanController extends Controller
             $data['gambar'] = $request->file('gambar')->store('dokumentasi', 'public');
         }
 
+
+
         $dokumentasi_kegiatan->update($data);
 
         return response()->json([

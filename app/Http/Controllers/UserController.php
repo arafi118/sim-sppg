@@ -20,11 +20,14 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = User::with('level')->get();
-
-            return DataTables::of($data)->make(true);
+            $data = User::with('level')->latest();
+            return DataTables::of($data)->addColumn('foto', function ($row) {
+                $src = $row->foto && file_exists(storage_path('app/public/' . $row->foto)) ? asset('storage/' . $row->foto) : asset('/assets/img/landing-page/default.png');
+                return '<img src="' . $src . '" class="rounded-circle me-2" width="35" height="35"/>';
+            })->addColumn('foto_raw', function ($row) {
+                return $row->foto && file_exists(storage_path('app/public/' . $row->foto)) ? asset('storage/' . $row->foto) : asset('/assets/img/landing-page/default.png');
+            })->rawColumns(['foto'])->make(true);
         }
-
         return view('app.karyawan.index', ['title' => 'Karyawan']);
     }
 
@@ -67,12 +70,8 @@ class UserController extends Controller
         $gaji = floatval(str_replace(',', '', str_replace('.00', '', $request->gaji)));
 
         if ($request->hasFile('foto')) {
-            $filename = $request->file('foto')->hashName();
-            $request->file('foto')->storeAs('public/foto', $filename);
-            $data['foto'] = $filename;
+            $data['foto'] = $request->file('foto')->store('foto', 'public');
         }
-
-
 
         $karyawan = User::create([
             'level_id'      => $request->level_id,
@@ -162,13 +161,10 @@ class UserController extends Controller
         }
 
         if ($request->hasFile('foto')) {
-            if ($karyawan->foto && Storage::exists('public/foto/' . $karyawan->foto)) {
-                Storage::delete('public/foto/' . $karyawan->foto);
+            if ($karyawan->foto && Storage::disk('public')->exists($karyawan->foto)) {
+                Storage::disk('public')->delete($karyawan->foto);
             }
-
-            $filename = $request->file('foto')->hashName();
-            $request->file('foto')->storeAs('public/foto', $filename);
-            $updateData['foto'] = $filename;
+            $updateData['foto'] = $request->file('foto')->store('foto', 'public');
         }
 
         $karyawan->update($updateData);
@@ -189,7 +185,11 @@ class UserController extends Controller
             return response()->json([
                 'status'  => 'error',
                 'message' => 'Data tidak bisa dihapus karena sudah dipakai di data presensi.'
-            ], 400);
+            ], Response::HTTP_UNPROCESSABLE_ENTITY); // 422
+        }
+
+        if ($karyawan->foto && Storage::disk('public')->exists($karyawan->foto)) {
+            Storage::disk('public')->delete($karyawan->foto);
         }
 
         $karyawan->delete();
@@ -197,6 +197,6 @@ class UserController extends Controller
         return response()->json([
             'status'  => 'success',
             'message' => 'Karyawan berhasil dihapus.'
-        ]);
+        ], Response::HTTP_OK);
     }
 }
