@@ -46,7 +46,18 @@
                 },
                 columns: [{
                         data: 'nama',
-                        name: 'nama'
+                        name: 'nama',
+                        render: function(data, type, row) {
+                            let src = (row.foto && row.foto !== '') ?
+                                '/storage/foto/' + row.foto :
+                                '/assets/img/landing-page/default.png';
+                            return `
+            <div class="d-flex align-items-center">
+                <img src="${src}" alt="Foto" class="rounded-circle me-2" width="35" height="35">
+                <span>${data}</span>
+            </div>
+        `;
+                        }
                     },
                     {
                         data: 'nik',

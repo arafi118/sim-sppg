@@ -10,6 +10,7 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -43,58 +44,56 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->only([
-            "level_id",
-            "nama",
-            "nik",
-            "tanggal_lahir",
-            "tanggal_masuk",
-            "gaji",
-            "alamat",
-            "telpon",
-            "jenis_kelamin",
-            "username",
-            "password"
-        ]);
-
         $rules = [
-            'level_id'           => 'required',
-            'nama'               => 'required',
-            'nik'                => 'required',
-            'tanggal_lahir'      => 'required',
-            'tanggal_masuk'      => 'required',
-            'gaji'               => 'required',
-            'alamat'             => 'required',
-            'telpon'             => 'nullable',
-            'jenis_kelamin'      => 'required',
-            'username'           => 'required',
-            'password'           => 'required',
+            'level_id'      => 'required',
+            'nama'          => 'required',
+            'nik'           => 'required',
+            'tanggal_lahir' => 'required',
+            'tanggal_masuk' => 'required',
+            'gaji'          => 'required',
+            'alamat'        => 'required',
+            'telpon'        => 'nullable',
+            'jenis_kelamin' => 'required',
+            'foto'          => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'username'      => 'required',
+            'password'      => 'required',
         ];
 
-        $gaji = floatval(str_replace(',', '', str_replace('.00', '', $request->gaji)));
-
-        $validate = Validator::make($data, $rules);
+        $validate = Validator::make($request->all(), $rules);
         if ($validate->fails()) {
             return response()->json($validate->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
+
+        $gaji = floatval(str_replace(',', '', str_replace('.00', '', $request->gaji)));
+
+        if ($request->hasFile('foto')) {
+            $filename = $request->file('foto')->hashName();
+            $request->file('foto')->storeAs('public/foto', $filename);
+            $data['foto'] = $filename;
+        }
+
+
+
         $karyawan = User::create([
-            'level_id'          => $request->level_id,
-            'nik'               => $request->nik,
-            'nama'              => $request->nama,
-            'tanggal_lahir'     => $request->tanggal_lahir,
-            'tanggal_masuk'     => $request->tanggal_masuk,
-            'gaji'              => $gaji,
-            'alamat'            => $request->alamat,
-            'telpon'            => $request->telpon,
-            'jenis_kelamin'     => $request->jenis_kelamin,
-            'id_sidik_jari'     => 0,
-            'status'            => 'aktif',
-            'username'          => $request->username,
-            'password'          => Hash::make($request->password),
+            'level_id'      => $request->level_id,
+            'nik'           => $request->nik,
+            'nama'          => $request->nama,
+            'tanggal_lahir' => $request->tanggal_lahir,
+            'tanggal_masuk' => $request->tanggal_masuk,
+            'gaji'          => $gaji,
+            'alamat'        => $request->alamat,
+            'telpon'        => $request->telpon,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'id_sidik_jari' => 0,
+            'status'        => 'aktif',
+            'foto'          => $data['foto'] ?? null,
+            'username'      => $request->username,
+            'password'      => Hash::make($request->password),
         ]);
+
         return response()->json([
-            'success'   => true,
-            'msg'       => 'Karyawan berhasil ditambahkan!',
+            'success' => true,
+            'msg'     => 'Karyawan berhasil ditambahkan!',
         ]);
     }
 
@@ -122,40 +121,28 @@ class UserController extends Controller
      */
     public function update(Request $request, User $karyawan)
     {
-        $data = $request->only([
-            "level_id",
-            "nama",
-            "nik",
-            "tanggal_lahir",
-            "tanggal_masuk",
-            "gaji",
-            "alamat",
-            "telpon",
-            "jenis_kelamin",
-            "username",
-            "password"
-        ]);
-
         $rules = [
-            'level_id'           => 'required',
-            'nama'               => 'required',
-            'nik'                => 'required',
-            'tanggal_lahir'      => 'required',
-            'tanggal_masuk'      => 'required',
-            'gaji'               => 'required',
-            'alamat'             => 'required',
-            'telpon'             => 'nullable',
-            'jenis_kelamin'      => 'required',
-            'username'           => 'required',
+            'level_id'      => 'required',
+            'nama'          => 'required',
+            'nik'           => 'required',
+            'tanggal_lahir' => 'required',
+            'tanggal_masuk' => 'required',
+            'gaji'          => 'required',
+            'alamat'        => 'required',
+            'telpon'        => 'nullable',
+            'jenis_kelamin' => 'required',
+            'foto'          => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'username'      => 'required',
         ];
 
-        $gaji = floatval(str_replace(',', '', str_replace('.00', '', $request->gaji)));
-
-        $validate = Validator::make($data, $rules);
+        $validate = Validator::make($request->all(), $rules);
         if ($validate->fails()) {
             return response()->json($validate->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
-        $karyawan->update([
+
+        $gaji = floatval(str_replace(',', '', str_replace('.00', '', $request->gaji)));
+
+        $updateData = [
             'level_id'      => $request->level_id,
             'nik'           => $request->nik,
             'nama'          => $request->nama,
@@ -168,11 +155,27 @@ class UserController extends Controller
             'id_sidik_jari' => 0,
             'status'        => 'aktif',
             'username'      => $request->username,
-            'password'      => Hash::make($request->password),
-        ]);
+        ];
+
+        if ($request->filled('password')) {
+            $updateData['password'] = Hash::make($request->password);
+        }
+
+        if ($request->hasFile('foto')) {
+            if ($karyawan->foto && Storage::exists('public/foto/' . $karyawan->foto)) {
+                Storage::delete('public/foto/' . $karyawan->foto);
+            }
+
+            $filename = $request->file('foto')->hashName();
+            $request->file('foto')->storeAs('public/foto', $filename);
+            $updateData['foto'] = $filename;
+        }
+
+        $karyawan->update($updateData);
+
         return response()->json([
-            'success'   => true,
-            'msg'       => 'Karyawan berhasil di Update!',
+            'success' => true,
+            'msg'     => 'Karyawan berhasil di Update!',
         ]);
     }
 

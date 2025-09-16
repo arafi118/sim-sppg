@@ -1,6 +1,6 @@
 @extends('app.layouts.app')
 @section('content')
-    <form action="/app/karyawan/{{ $karyawan->id }}" method="POST" id="FormKaryawanEdit">
+    <form action="/app/karyawan/{{ $karyawan->id }}" method="POST" id="FormKaryawanEdit" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -72,20 +72,30 @@
                 </div>
 
                 <div class="row mt-3">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label" for="tanggal_masuk">Tanggal Masuk</label>
                         <input type="text" id="tanggal_masuk" name="tanggal_masuk" class="form-control dob-picker"
                             value="{{ $karyawan->tanggal_masuk }}" />
                     </div>
-                    <div class="col-6">
+                    <div class="col-4">
                         <div class="mb-6">
                             <label for="gaji" class="form-label">Satuan Gaji</label>
                             <input type="text" class="form-control" id="gaji" name="gaji"
                                 value="{{ number_format($karyawan->gaji, 0, ',', '.') }}">
                         </div>
                     </div>
+                    <div class="col-4">
+                        <div class="mb-6">
+                            <label for="foto" class="form-label">Foto</label>
+                            <input type="file" class="form-control" id="foto" name="foto"
+                                accept=".jpg,.jpeg,.png">
+                            {{-- @if ($karyawan->foto)
+                                <img src="{{ asset('storage/foto/' . $karyawan->foto) }}" alt="Foto Karyawan"
+                                    class="img-thumbnail mt-1 rounded" width="120">
+                            @endif --}}
+                        </div>
+                    </div>
                 </div>
-
                 <div class="row mt-3">
                     <div class="col-12">
                         <div class="mb-6">
@@ -143,17 +153,41 @@
 
 @section('script')
     <script>
-        const toggle = document.getElementById('togglePassword');
-        const password = document.getElementById('password');
-        const eyeIcon = document.getElementById('eyeIcon');
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        })
+        $('#foto').on('change', function() {
+            let f = this.files[0];
+            if (f) {
+                let a = ['jpg', 'jpeg', 'png'],
+                    e = f.name.split('.').pop().toLowerCase();
+                if (!a.includes(e)) {
+                    $(this).val('');
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Hanya diperbolehkan file JPG, JPEG, atau PNG!'
+                    })
+                } else {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'File valid: ' + e.toUpperCase()
+                    })
+                }
+            }
+        })
 
-        toggle.addEventListener('click', () => {
-            password.type = password.type === 'password' ? 'text' : 'password';
-            eyeIcon.innerHTML = password.type === 'password' ?
-                `<path d="M12 5c-7.633 0-12 7-12 7s4.367 7 12 7 12-7 12-7-4.367-7-12-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>
-           <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="2"/>` :
-                `<path d="M12 5c-7.633 0-12 7-12 7s4.367 7 12 7 12-7 12-7-4.367-7-12-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>`;
-        });
+        $('#togglePassword').on('click', () => {
+            let p = $('#password')[0],
+                i = $('#eyeIcon')[0];
+            p.type = p.type === 'password' ? 'text' : 'password';
+            i.innerHTML = p.type === 'password' ?
+                `<path d="M12 5c-7.633 0-12 7-12 7s4.367 7 12 7 12-7 12-7-4.367-7-12-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/><line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="2"/>` :
+                `<path d="M12 5c-7.633 0-12 7-12 7s4.367 7 12 7 12-7 12-7-4.367-7-12-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>`
+        })
 
         $(".dob-picker").flatpickr({
             monthSelectorType: "static"
@@ -169,25 +203,16 @@
             $('small').html('');
             $('.is-invalid').removeClass('is-invalid');
 
-            var form = $('#FormKaryawanEdit');
-            var actionUrl = form.attr('action');
-
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            });
+            var form = $('#FormKaryawanEdit')[0];
+            var actionUrl = $(form).attr('action');
+            var formData = new FormData(form);
 
             $.ajax({
                 type: 'POST',
                 url: actionUrl,
-                data: form.serialize(),
+                data: formData,
+                contentType: false,
+                processData: false,
                 success: function(result) {
                     if (result.success) {
                         Toast.fire({

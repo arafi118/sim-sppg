@@ -164,11 +164,11 @@
                                         <ul class="list-unstyled users-list d-flex align-items-center avatar-group">
                                             ${t.pelaksana?.length 
                                                 ? t.pelaksana.map(p => `
-                                                                            <li data-bs-toggle="tooltip" title="${p.karyawan?.nama || '-'}" class="avatar avatar-xs pull-up">
-                                                                                <img class="rounded-circle"
-                                                                                    src="${p.karyawan?.foto ? '/storage/foto/' + p.karyawan.foto : '/assets/img/landing-page/default.png'}"
-                                                                                    alt="Avatar" />
-                                                                            </li>`).join('')
+                                                                                <li data-bs-toggle="tooltip" title="${p.karyawan?.nama || '-'}" class="avatar avatar-xs pull-up">
+                                                                                    <img class="rounded-circle"
+                                                                                        src="${p.karyawan?.foto ? '/storage/foto/' + p.karyawan.foto : '/assets/img/landing-page/default.png'}"
+                                                                                        alt="Avatar" />
+                                                                                </li>`).join('')
                                                 : `<li class="list-group-item text-muted">Belum ada pelaksana</li>`}
                                             <li data-bs-toggle="tooltip" title="Lihat Pelaksana" class="avatar avatar-xs pull-up">
                                                 <span class="w-px-30 h-px-30 rounded-circle d-flex justify-content-center align-items-center bg-label-success cursor-pointer btnUserDetail" data-id="${t.id}">
@@ -207,7 +207,6 @@
                 $("#modalUserDetail").modal("show");
             });
         }
-
 
         $("#tanggal").flatpickr({
             monthSelectorType: "static",
