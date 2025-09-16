@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 
 class ProfilController extends Controller
 {
@@ -69,55 +70,50 @@ class ProfilController extends Controller
             $request->validate([
                 'username' => 'required|string|max:50',
                 'password' => 'nullable|string|min:6|confirmed',
+                'foto'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             ]);
 
             $user = User::findOrFail($id);
-
             $user->username = $request->username;
-            if ($request->password) {
-                $user->password = bcrypt($request->password);
+            if ($request->password) $user->password = bcrypt($request->password);
+
+            if ($request->hasFile('foto')) {
+                if ($user->foto && Storage::disk('public')->exists('users/' . $user->foto)) {
+                    Storage::disk('public')->delete('users/' . $user->foto);
+                }
+                $user->foto = $request->file('foto')->store('users', 'public');
             }
 
             $user->save();
-
-            return response()->json([
-                'success' => true,
-                'msg' => 'User berhasil diperbarui!'
-            ]);
+            return response()->json(['success' => true, 'msg' => 'User berhasil diperbarui!']);
         }
 
         if ($formType === 'profil') {
             $request->validate([
-                'mitra_id'          => 'required',
-                'id_yayasan'        => 'required',
-                'nama'              => 'required',
-                'nama_mitra'        => 'required',
-                'alamat'            => 'required',
-                'telpon'            => 'required',
-                'penanggung_jawab'  => 'required',
+                'id_yayasan' => 'required',
+                'nama' => 'required',
+                'nama_mitra' => 'required',
+                'alamat' => 'required',
+                'telpon' => 'required',
+                'penanggung_jawab' => 'required',
             ]);
 
             $profil = Profil::findOrFail($id);
-            $profil->mitra_id           = $request->mitra_id;
-            $profil->id_yayasan         = $request->id_yayasan;
-            $profil->nama               = $request->nama;
-            $profil->nama_mitra         = $request->nama_mitra;
-            $profil->alamat             = $request->alamat;
-            $profil->telpon             = $request->telpon;
-            $profil->penanggung_jawab   = $request->penanggung_jawab;
+            $profil->mitra_id = $request->mitra_id;
+            $profil->id_yayasan = $request->id_yayasan;
+            $profil->nama = $request->nama;
+            $profil->nama_mitra = $request->nama_mitra;
+            $profil->alamat = $request->alamat;
+            $profil->telpon = $request->telpon;
+            $profil->penanggung_jawab = $request->penanggung_jawab;
             $profil->save();
 
-            return response()->json([
-                'success' => true,
-                'msg' => 'Profil berhasil diperbarui!'
-            ]);
+            return response()->json(['success' => true, 'msg' => 'Profil berhasil diperbarui!']);
         }
 
-        return response()->json([
-            'success' => false,
-            'msg' => 'Form tidak dikenali'
-        ]);
+        return response()->json(['success' => false, 'msg' => 'Form tidak dikenali']);
     }
+
 
 
     /**

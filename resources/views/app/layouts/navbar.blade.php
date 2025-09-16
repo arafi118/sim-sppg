@@ -1,6 +1,12 @@
 @php
     $nama = auth()->user()->nama;
     $level = auth()->user()->level->nama;
+    $foto = auth()->user()->foto;
+
+    $avatarPath =
+        $foto && file_exists(storage_path('app/public/' . $foto))
+            ? asset('storage/' . $foto)
+            : asset('assets/img/landing-page/user.png');
 @endphp
 
 <nav class="layout-navbar container-xxl navbar-detached navbar navbar-expand-xl align-items-center bg-navbar-theme"
@@ -58,16 +64,17 @@
             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
-                        <img src="/assets/img/landing-page/user.png" alt class="rounded-circle" />
+                        <img src="{{ $avatarPath }}" alt="Avatar" class="rounded-circle" />
                     </div>
                 </a>
+
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li>
-                        <a class="dropdown-item" href="pages-account-settings-account.html">
+                        <a class="dropdown-item" href="/app/profile">
                             <div class="d-flex">
                                 <div class="flex-shrink-0 me-3">
                                     <div class="avatar avatar-online">
-                                        <img src="/app/profile" alt class="w-px-40 h-auto rounded-circle" />
+                                        <img src="{{ $avatarPath }}" alt class="w-px-40 h-auto rounded-circle" />
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">
