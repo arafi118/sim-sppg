@@ -22,7 +22,7 @@ class KelompokPemanfaatController extends Controller
             return DataTables::of($data)->make(true);
         }
 
-        return view('app.kelompok-Pemanfaat.index', ['title' => 'Kelompok Pemanfaat']);
+        return view('app.kelompok-pemanfaat.index', ['title' => 'Kelompok Pemanfaat']);
     }
 
     public function NextCode(Request $request)

@@ -29,7 +29,7 @@
         @csrf
     </form>
 
-    @include('app.Bahan-Pangan.modal')
+    @include('app.bahan-pangan.modal')
 @endsection
 @section('script')
     <script>

@@ -26,7 +26,7 @@ class NamaPemanfaatController extends Controller
                 ->make(true);
         }
 
-        return view('app.nama-Pemanfaat.index', ['title' => 'Nama Pemanfaat']);
+        return view('app.nama-pemanfaat.index', ['title' => 'Nama Pemanfaat']);
     }
 
     public function list(Request $request)

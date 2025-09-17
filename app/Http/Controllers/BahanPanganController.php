@@ -29,7 +29,7 @@ class BahanPanganController extends Controller
                 ->make(true);
         }
 
-        return view('app.Bahan-Pangan.index', ['title' => 'Bahan Pangan']);
+        return view('app.bahan-pangan.index', ['title' => 'Bahan Pangan']);
     }
 
     public function list(Request $request)

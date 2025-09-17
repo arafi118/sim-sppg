@@ -28,7 +28,7 @@
         @csrf
     </form>
 
-    @include('app.Kelompok-Pangan.modal')
+    @include('app.kelompok-pangan.modal')
 @endsection
 @section('script')
     <script>
