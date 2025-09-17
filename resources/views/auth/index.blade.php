@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
     <link rel="stylesheet" href="/assets/vendor/fonts/flag-icons.css" />
     <link rel="stylesheet" href="/assets/vendor/libs/apex-charts/apex-charts.css" />
+    <link rel="stylesheet" href="/assets/vendor/libs/sweetalert2/sweetalert2.css" />
 
     <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr@1.9.1/dist/pickr.min.js"></script>
     <script src="/assets/vendor/js/helpers.js"></script>
@@ -84,6 +85,33 @@
     </div>
 
     <!-- / Content -->
+    <script src="/assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                }
+            });
+
+            const flash = @json(session()->only(['success', 'error']));
+
+            for (const [type, msg] of Object.entries(flash)) {
+                if (msg) {
+                    Toast.fire({
+                        icon: type === 'success' ? 'success' : 'error',
+                        title: msg
+                    });
+                }
+            }
+        });
+    </script>
 
     <script src="/assets/vendor/libs/jquery/jquery.js"></script>
     <script src="/assets/vendor/libs/popper/popper.js"></script>

@@ -127,6 +127,31 @@
     <script src="/assets/js/main.js"></script>
 
     <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+            }
+        });
+
+        // Ambil flash session dari Laravel
+        const flash = @json(session()->only(['success', 'error']));
+
+        for (const [type, msg] of Object.entries(flash)) {
+            if (msg) {
+                Toast.fire({
+                    icon: type === 'success' ? 'success' : 'error',
+                    title: msg
+                });
+            }
+        }
+    </script>
+    <script>
         $(".nominal").maskMoney({
             allowZero: true,
             allowNegative: false,

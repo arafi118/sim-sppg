@@ -12,21 +12,21 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-12 col-md-4">
                         <div class="mb-6">
                             <label for="nik" class="form-label">Nik</label>
                             <input type="text" maxlength="16" class="form-control" id="nik" name="nik"
                                 value="{{ $karyawan->nik }}">
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-12 col-md-4">
                         <div class="mb-6">
                             <label for="nama" class="form-label">Nama Lengkap</label>
                             <input type="text" class="form-control" id="nama" name="nama"
                                 value="{{ $karyawan->nama }}">
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-12 col-md-4">
                         <div class="mb-6">
                             <label for="level_id" class="form-label">Level Hak Akses</label>
                             <select id="level_id" name="level_id" class="select2 form-select form-select-lg"
@@ -44,12 +44,12 @@
                 </div>
 
                 <div class="row mt-3">
-                    <div class="col-md-4">
+                    <div class="col-md-4 col-12">
                         <label class="form-label" for="tanggal_lahir">Tanggal Lahir</label>
                         <input type="text" id="tanggal_lahir" name="tanggal_lahir" class="form-control dob-picker"
                             value="{{ $karyawan->tanggal_lahir }}" />
                     </div>
-                    <div class="col-4">
+                    <div class="col-12 col-md-4">
                         <div class="mb-6">
                             <label class="form-label d-block">Jenis Kelamin</label>
                             <div class="btn-group w-100" role="group">
@@ -62,7 +62,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-12 col-md-4">
                         <div class="mb-6">
                             <label for="telpon" class="form-label">No Telepon</label>
                             <input type="text" class="form-control" id="telpon" name="telpon"
@@ -72,19 +72,19 @@
                 </div>
 
                 <div class="row mt-3">
-                    <div class="col-md-4">
+                    <div class="col-md-4 col-12">
                         <label class="form-label" for="tanggal_masuk">Tanggal Masuk</label>
                         <input type="text" id="tanggal_masuk" name="tanggal_masuk" class="form-control dob-picker"
                             value="{{ $karyawan->tanggal_masuk }}" />
                     </div>
-                    <div class="col-4">
+                    <div class="col-12 col-md-4">
                         <div class="mb-6">
                             <label for="gaji" class="form-label">Satuan Gaji</label>
                             <input type="text" class="form-control" id="gaji" name="gaji"
                                 value="{{ number_format($karyawan->gaji, 0, ',', '.') }}">
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-12 col-md-4">
                         <div class="mb-6">
                             <label for="foto" class="form-label">Foto</label>
                             <input type="file" class="form-control" id="foto" name="foto"
@@ -97,7 +97,7 @@
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-12">
+                    <div class="col-12 col-md-12">
                         <div class="mb-6">
                             <label for="alamat" class="form-label">Alamat Lengkap</label>
                             <textarea class="form-control" id="alamat" name="alamat" rows="1">{{ $karyawan->alamat }}</textarea>
@@ -106,14 +106,14 @@
                 </div>
 
                 <div class="row mt-3">
-                    <div class="col-6">
+                    <div class="col-12 col-md-6">
                         <div class="mb-6">
                             <label for="username" class="form-label">Username</label>
                             <input type="text" class="form-control" id="username" name="username"
                                 value="{{ $karyawan->username }}">
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-12 col-md-6">
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
                             <div class="input-group">

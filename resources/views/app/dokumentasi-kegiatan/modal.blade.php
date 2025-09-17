@@ -8,7 +8,7 @@
                     @csrf
 
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-4 col-12">
                             <div class="mb-3"><label for="gambar" class="w-100">
                                     <div class="border rounded d-flex align-items-center justify-content-center mb-2 overflow-hidden position-relative"
                                         style="width:100%; height:150px; background-color:#396c9f00; cursor: pointer;">
@@ -24,7 +24,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-8">
+                        <div class="col-md-8 col-12">
                             <div class="mb-3">
                                 <label for="judul" class="form-label">Judul</label>
                                 <input type="text" id="judul" name="judul" class="form-control" />

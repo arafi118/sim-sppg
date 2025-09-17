@@ -12,7 +12,7 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-md-4 col-12">
                         <div class="mb-6">
                             <label for="kelompok_pemanfaat_id" class="form-label">Kelompok Pemanfaat</label>
                             <select id="kelompok_pemanfaat_id" name="kelompok_pemanfaat_id"
@@ -27,14 +27,14 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4 col-12">
                         <div class="mb-6">
                             <label for="nama_lembaga" class="form-label">Nama Lembaga</label>
                             <input type="text" class="form-control" id="nama_lembaga" name="nama_lembaga"
                                 value="{{ $dataPemanfaat->nama_lembaga }}">
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4 col-12">
                         <div class="mb-6">
                             <label for="nama_pj" class="form-label">Nama Penangung Jawab</label>
                             <input type="text" class="form-control" id="nama_pj" name="nama_pj"
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-md-12 col-12">
                         <div class="mb-6">
                             <label for="alamat" class="form-label">Alamat Lengkap</label>
                             <textarea class="form-control" id="alamat" name="alamat" rows="1">{{ $dataPemanfaat->alamat }}</textarea>
@@ -51,21 +51,21 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-md-4 col-12">
                         <div class="mb-6">
                             <label for="jabatan_pj" class="form-label">Jabatan Penangung Jawab</label>
                             <input type="text" class="form-control" id="jabatan_pj" name="jabatan_pj"
                                 value="{{ $dataPemanfaat->jabatan_pj }}">
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4 col-12">
                         <div class="mb-6">
                             <label for="telpon_pj" class="form-label">No Telepon Penangung Jawab</label>
                             <input type="text" class="form-control" id="telpon_pj" name="telpon_pj"
                                 value="{{ $dataPemanfaat->telpon_pj }}">
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4 col-12">
                         <div class="mb-6">
                             <label for="email_pj" class="form-label">Email Penangung Jawab</label>
                             <input type="text" class="form-control" id="email_pj" name="email_pj"
@@ -74,21 +74,21 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-md-4 col-12">
                         <div class="mb-6">
                             <label for="jarak_tempuh" class="form-label">Jarak Tempuh</label>
                             <input type="number" class="form-control" id="jarak_tempuh" name="jarak_tempuh"
                                 value="{{ $dataPemanfaat->jarak_tempuh }}">
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4 col-12">
                         <div class="mb-3">
                             <label for="waktu_tempuh_roda_2" class="form-label">Waktu Tempuh Roda 2</label>
                             <input type="time" step="1" class="form-control" id="waktu_tempuh_roda_2"
                                 name="waktu_tempuh_roda_2" value="{{ $dataPemanfaat->waktu_tempuh_roda_2 }}">
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4 col-12">
                         <div class="mb-3">
                             <label for="waktu_tempuh_roda_4" class="form-label">Waktu Tempuh Roda 4</label>
                             <input type="time" step="1" class="form-control" id="waktu_tempuh_roda_4"
