@@ -83,6 +83,8 @@ Route::get('/', function () {
     return view('welcome', compact('menus', 'levelImages', 'periode', 'dokumentasiChunks', 'karyawan', 'yesterday', 'today', 'tomorrow'));
 });
 
+Route::get('test', fn() => phpinfo());
+
 
 Route::get('/auth', [AuthController::class, 'index']);
 Route::post('/auth', [AuthController::class, 'auth']);
@@ -137,7 +139,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
 
     //Presensi
     Route::get('/presensi', [PresensiController::class, 'index']);
-    Route::get('/upload-presensi', [PresensiController::class, 'create']);
+    Route::get('/scan-qr', [PresensiController::class, 'create']);
     Route::post('/upload-presensi', [PresensiController::class, 'store']);
     Route::get('/hitung-pengajian', [PresensiController::class, 'hitung']);
 
