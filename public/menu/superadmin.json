@@ -65,9 +65,9 @@
     "icon": "bx-calendar-check",
     "url": "#",
     "children": [{
-            "nama": "Upload Presensi",
+            "nama": "Scan QR",
             "icon": "bx-group",
-            "url": "/app/upload-presensi"
+            "url": "/app/scan-qr"
         },
         {
             "nama": "Hitung Penggajian",

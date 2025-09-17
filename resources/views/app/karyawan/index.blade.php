@@ -86,7 +86,10 @@
                         orderable: false,
                         searchable: false,
                         render: function(data) {
-                            return `<div class="d-inline-flex gap-1">
+                            return `<div class="d-inline-flex gap-2">
+                                <a href="/app/karyawan/${data.id}" class="btn btn-sm btn-warning" title="Detail">
+                                    Detail
+                                </a>
                                 <a href="/app/karyawan/${data.id}/edit" class="btn btn-sm btn-primary" title="Edit">
                                     Edit
                                 </a>

@@ -140,7 +140,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     //Presensi
     Route::get('/presensi', [PresensiController::class, 'index']);
     Route::get('/scan-qr', [PresensiController::class, 'create']);
-    Route::post('/upload-presensi', [PresensiController::class, 'store']);
+    Route::post('/scan-qr', [PresensiController::class, 'store']);
     Route::get('/hitung-pengajian', [PresensiController::class, 'hitung']);
 
     //Pelaporan

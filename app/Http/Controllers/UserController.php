@@ -5,6 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Level;
 use App\Models\Presensi;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Color\Color;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\Label\Label;
+use Endroid\QrCode\Logo\Logo;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\RoundBlockSizeMode;
+use Endroid\QrCode\Writer\PngWriter;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
@@ -101,7 +110,31 @@ class UserController extends Controller
      */
     public function show(User $karyawan)
     {
-        //
+        $karyawan = $karyawan->load('level');
+
+        $writer = new PngWriter();
+        $qrCode = new QrCode(
+            data: $karyawan->nik,
+            encoding: new Encoding('UTF-8'),
+            errorCorrectionLevel: ErrorCorrectionLevel::High,
+            size: 400,
+            margin: 8,
+            roundBlockSizeMode: RoundBlockSizeMode::Margin,
+            foregroundColor: new Color(0, 0, 0),
+            backgroundColor: new Color(255, 255, 255)
+        );
+
+        $logo = new Logo(
+            path: public_path('assets/img/Logo.png'),
+            resizeToWidth: 60,
+            punchoutBackground: true
+        );
+
+        $result = $writer->write($qrCode, $logo);
+        $dataUri = $result->getDataUri();
+
+        $title = "Detail Karyawan " . $karyawan->nama;
+        return view('app.karyawan.detail', compact('title', 'karyawan', 'dataUri'));
     }
 
     /**
