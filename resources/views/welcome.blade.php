@@ -8,19 +8,12 @@
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
     <title>Landing Page - SIM-SPPG</title>
-    <meta name="description"
-        content="Sneat is the best bootstrap 5 dashboard for responsive web apps. Streamline your app development process with ease." />
-    <meta name="keywords"
-        content="Sneat bootstrap dashboard, sneat bootstrap 5 dashboard, themeselection, html dashboard, web dashboard, frontend dashboard, responsive bootstrap theme" />
-    <meta property="og:title" content="Sneat Bootstrap 5 Dashboard PRO by ThemeSelection" />
+    <meta name="description" content="SIM SPPG | Sistem Informasi Manajemen Satuan Pelayanan Pemenuhan Gizi" />
+    <meta name="keywords" content="SIM SPPG | Sistem Informasi Manajemen Satuan Pelayanan Pemenuhan Gizi" />
+    <meta property="og:title" content="SIM SPPG | Sistem Informasi Manajemen Satuan Pelayanan Pemenuhan Gizi" />
     <meta property="og:type" content="product" />
-    <meta property="og:url" content="https://themeselection.com/item/sneat-dashboard-pro-bootstrap/" />
-    <meta property="og:image"
-        content="https://themeselection.com/wp-content/uploads/edd/2024/08/sneat-dashboard-pro-bootstrap-smm-image.png" />
-    <meta property="og:description"
-        content="Sneat is the best bootstrap 5 dashboard for responsive web apps. Streamline your app development process with ease." />
+    <meta property="og:description" content="SIM SPPG | Sistem Informasi Manajemen Satuan Pelayanan Pemenuhan Gizi" />
     <meta property="og:site_name" content="ThemeSelection" />
-    <link rel="canonical" href="https://themeselection.com/item/sneat-dashboard-pro-bootstrap/" />
     <link rel="icon" type="image/x-icon" href="/assets/img/favicon/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
