@@ -61,7 +61,7 @@
 
 <body>
     <div class="struk-box">
-        <div class="header text-center" style="font-size: 14px; margin-bottom: 15px;">
+        <div class="header text-center" style="font-size: 14px; font-weight: bold; margin-bottom: 15px;">
             <p>NO PO: {{ str_pad($po->id, 2, '0', STR_PAD_LEFT) }} /
                 {{ strtoupper($po->status_bayar) }}</p>
             <p style="text-transform: uppercase;">
