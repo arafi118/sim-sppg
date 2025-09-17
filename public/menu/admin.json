@@ -5,7 +5,7 @@
 }, {
     "nama": "Master Data"
 }, {
-    "nama": "Karyawan",
+    "nama": "Pengguna",
     "icon": "bx-user",
     "url": "/app/karyawan"
 }, {

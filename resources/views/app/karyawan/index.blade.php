@@ -5,7 +5,7 @@
         <div class="card-header pb-0">
             <div class="d-flex justify-content-end">
                 <a href="/app/karyawan/create" class="btn btn-primary">
-                    <i class="bx bx-plus"></i> Tambah Menu
+                    <i class="bx bx-plus"></i> Tambah Pengguna
                 </a>
             </div>
         </div>
@@ -16,7 +16,7 @@
                         <th>Nama</th>
                         <th>NIK</th>
                         <th>Telepon</th>
-                        <th>Gaji</th>
+                        <th>Level</th>
                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
@@ -65,11 +65,8 @@
                         name: 'telpon'
                     },
                     {
-                        data: 'gaji',
-                        name: 'gaji',
-                        render: function(data) {
-                            return new Intl.NumberFormat('id-ID').format(data);
-                        }
+                        data: 'level.nama',
+                        name: 'level.nama',
                     },
                     {
                         data: 'status',

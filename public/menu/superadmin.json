@@ -11,7 +11,7 @@
 }, {
     "nama": "Master Admin"
 }, {
-    "nama": "Karyawan",
+    "nama": "Pengguna",
     "icon": "bx-user",
     "url": "/app/karyawan"
 }, {
