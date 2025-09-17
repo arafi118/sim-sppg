@@ -78,10 +78,10 @@ class ProfilController extends Controller
             if ($request->password) $user->password = bcrypt($request->password);
 
             if ($request->hasFile('foto')) {
-                if ($user->foto && Storage::disk('public')->exists('users/' . $user->foto)) {
-                    Storage::disk('public')->delete('users/' . $user->foto);
+                if ($user->foto && Storage::disk('public')->exists($user->foto)) {
+                    Storage::disk('public')->delete($user->foto);
                 }
-                $user->foto = $request->file('foto')->store('users', 'public');
+                $user->foto = $request->file('foto')->store('foto', 'public');
             }
 
             $user->save();
