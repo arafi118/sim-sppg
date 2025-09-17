@@ -67,7 +67,7 @@ class UserController extends Controller
             return response()->json($validate->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $gaji = floatval(str_replace(',', '', str_replace('.00', '', $request->gaji)));
+        $gaji = (int) str_replace(['.', ','], '', $request->gaji);
 
         if ($request->hasFile('foto')) {
             $data['foto'] = $request->file('foto')->store('foto', 'public');
@@ -139,7 +139,7 @@ class UserController extends Controller
             return response()->json($validate->errors(), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $gaji = floatval(str_replace(',', '', str_replace('.00', '', $request->gaji)));
+        $gaji = (int) str_replace(['.', ','], '', $request->gaji);
 
         $updateData = [
             'level_id'      => $request->level_id,
@@ -151,7 +151,7 @@ class UserController extends Controller
             'alamat'        => $request->alamat,
             'telpon'        => $request->telpon,
             'jenis_kelamin' => $request->jenis_kelamin,
-            'id_sidik_jari' => 0,
+            'id_sidik_jari' => $karyawan->id_sidik_jari ?? 0,
             'status'        => 'aktif',
             'username'      => $request->username,
         ];
@@ -171,7 +171,7 @@ class UserController extends Controller
 
         return response()->json([
             'success' => true,
-            'msg'     => 'Karyawan berhasil di Update!',
+            'msg'     => 'Karyawan berhasil diupdate!',
         ]);
     }
 
