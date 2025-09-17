@@ -20,7 +20,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = User::where('level_id', '6')->with('level')->latest();
+            $data = User::with('level')->latest();
             return DataTables::of($data)->addColumn('foto', function ($row) {
                 $src = $row->foto && file_exists(storage_path('app/public/' . $row->foto)) ? asset('storage/' . $row->foto) : asset('/assets/img/landing-page/default.png');
                 return '<img src="' . $src . '" class="rounded-circle me-2" width="35" height="35"/>';
@@ -37,7 +37,9 @@ class UserController extends Controller
     public function create()
     {
         $title  = 'Tambah Karyawan';
-        return view('app.karyawan.create', compact('title'));
+        $levels = Level::all();
+
+        return view('app.karyawan.create', compact('title', 'levels'));
     }
 
     /**
@@ -108,7 +110,9 @@ class UserController extends Controller
     public function edit(User $karyawan)
     {
         $title = 'Edit Karyawan';
-        return view('app.karyawan.edit', compact('title', 'karyawan'));
+        $levels = Level::all();
+
+        return view('app.karyawan.edit', compact('title', 'karyawan', 'levels'));
     }
 
     /**
