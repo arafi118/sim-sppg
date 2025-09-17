@@ -22,7 +22,7 @@ class KelompokPanganController extends Controller
             return DataTables::of($data)->make(true);
         }
 
-        return view('app.kelompok-Pangan.index', ['title' => 'Kelompok Pangan']);
+        return view('app.kelompok-pangan.index', ['title' => 'Kelompok Pangan']);
     }
 
     public function getNextCode(Request $request)
