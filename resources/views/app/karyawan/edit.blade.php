@@ -4,6 +4,7 @@
         @csrf
         @method('PUT')
 
+        <input type="hidden" name="level_id" id="level_id" value="6">
         <div class="card">
             <div class="card-header">
                 <div class="card-title mb-0">
@@ -12,33 +13,18 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-md-6">
                         <div class="mb-6">
                             <label for="nik" class="form-label">Nik</label>
                             <input type="text" maxlength="16" class="form-control" id="nik" name="nik"
                                 value="{{ $karyawan->nik }}">
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-6">
                         <div class="mb-6">
                             <label for="nama" class="form-label">Nama Lengkap</label>
                             <input type="text" class="form-control" id="nama" name="nama"
                                 value="{{ $karyawan->nama }}">
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="mb-6">
-                            <label for="level_id" class="form-label">Level Hak Akses</label>
-                            <select id="level_id" name="level_id" class="select2 form-select form-select-lg"
-                                data-allow-clear="true">
-                                <option value="">-- Pilih Level --</option>
-                                @foreach ($levels as $lev)
-                                    <option value="{{ $lev->id }}"
-                                        {{ $karyawan->level_id == $lev->id ? 'selected' : '' }}>
-                                        {{ $lev->nama }}
-                                    </option>
-                                @endforeach
-                            </select>
                         </div>
                     </div>
                 </div>
@@ -49,7 +35,7 @@
                         <input type="text" id="tanggal_lahir" name="tanggal_lahir" class="form-control dob-picker"
                             value="{{ $karyawan->tanggal_lahir }}" />
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4">
                         <div class="mb-6">
                             <label class="form-label d-block">Jenis Kelamin</label>
                             <div class="btn-group w-100" role="group">
@@ -62,7 +48,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4">
                         <div class="mb-6">
                             <label for="telpon" class="form-label">No Telepon</label>
                             <input type="text" class="form-control" id="telpon" name="telpon"
@@ -77,14 +63,14 @@
                         <input type="text" id="tanggal_masuk" name="tanggal_masuk" class="form-control dob-picker"
                             value="{{ $karyawan->tanggal_masuk }}" />
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4">
                         <div class="mb-6">
                             <label for="gaji" class="form-label">Satuan Gaji</label>
                             <input type="text" class="form-control" id="gaji" name="gaji"
                                 value="{{ number_format($karyawan->gaji, 0, ',', '.') }}">
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4">
                         <div class="mb-6">
                             <label for="foto" class="form-label">Foto</label>
                             <input type="file" class="form-control" id="foto" name="foto"
