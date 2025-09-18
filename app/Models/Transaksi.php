@@ -15,6 +15,15 @@ class Transaksi extends Model
     {
         return $this->belongsTo(PoDetail::class, 'po_detail_id');
     }
+
+    public function rekeningDebit() {
+        return $this->belongsTo(Rekening::class, 'rekening_debit');
+    }
+
+    public function rekeningKredit() {
+        return $this->belongsTo(Rekening::class, 'rekening_kredit');
+    }
+
       public function po()
     {
         return $this->belongsTo(Po::class, 'po_id');
