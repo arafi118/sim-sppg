@@ -7,6 +7,7 @@ use App\Models\JenisLaporan;
 use App\Models\KelompokPemanfaat;
 use App\Models\DataPemanfaat;
 use App\Models\User;
+use App\Models\AkunLevel1;
 use App\Utils\Tanggal;
 use App\Models\Transaksi;
 use App\Models\Profil;
@@ -106,39 +107,93 @@ class PelaporanController extends Controller
 
         return $pdf->inline();
     }
-private function jurnal_transaksi(array $data)
+    private function jurnal_transaksi(array $data)
+    {
+        $thn  = $data['tahun'];
+        $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
+        $hari = str_pad($data['hari'], 2, '0', STR_PAD_LEFT);
+
+        $tgl = $thn . '-' . $bln . '-' . $hari;
+
+        $data['judul']     = 'Jurnal Transaksi';
+        $data['sub_judul'] = 'Tahun ' . Tanggal::tahun($tgl);
+        $data['tgl']       = Tanggal::tahun($tgl);
+        $data['title']     = 'Jurnal Transaksi';
+        if (!empty($data['bulan'])) { 
+            $data['sub_judul'] = 'Bulan ' . Tanggal::namaBulan($tgl) . ' ' . Tanggal::tahun($tgl);
+            $data['tgl']       = Tanggal::namaBulan($tgl) . ' ' . Tanggal::tahun($tgl);
+        }
+
+
+        $data['transaksis'] = Transaksi::with(['rekeningDebit', 'rekeningKredit', 'user'])
+        ->when(!empty($data['bulan']), function ($q) use ($thn, $bln) {
+            $q->whereBetween('tanggal_transaksi', [
+                "$thn-$bln-01",
+                date('Y-m-t', strtotime("$thn-$bln-01"))
+            ]);
+        })
+        ->when(!empty($data['hari']), function ($q) use ($thn, $bln, $hari) {
+            $q->whereDate('tanggal_transaksi', "$thn-$bln-$hari");
+        })
+        ->orderBy('tanggal_transaksi', 'asc')
+        ->get();
+
+
+        $view = view('app.pelaporan.views.jurnal_transaksi', $data)->render();
+
+        $pdf = PDF::loadHTML($view)->setOptions([
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+            'header-html'   => view('app.pelaporan.layout.header', $data)->render(),
+            'enable-local-file-access' => true,
+        ]);
+
+        return $pdf->inline();
+    }
+
+   
+   private function neraca(array $data)
 {
     $thn  = $data['tahun'];
     $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
     $hari = str_pad($data['hari'], 2, '0', STR_PAD_LEFT);
 
-    $tgl = $thn . '-' . $bln . '-' . $hari;
+    $tgl_awal  = "{$thn}-01-01";
+    $tgl_akhir = "{$thn}-{$bln}-" . cal_days_in_month(CAL_GREGORIAN, (int) $bln, (int) $thn);
 
-    $data['judul']     = 'Jurnal Transaksi';
-    $data['sub_judul'] = 'Tahun ' . Tanggal::tahun($tgl);
-    $data['tgl']       = Tanggal::tahun($tgl);
-    $data['title']     = 'Jurnal Transaksi';
-    if (!empty($data['bulan'])) { 
-        $data['sub_judul'] = 'Bulan ' . Tanggal::namaBulan($tgl) . ' ' . Tanggal::tahun($tgl);
-        $data['tgl']       = Tanggal::namaBulan($tgl) . ' ' . Tanggal::tahun($tgl);
-    }
+    $data['judul'] = 'Neraca';
 
+    $namaBulan = Tanggal::namaBulan("{$thn}-{$bln}-01");
+    $lastDay   = date('t', strtotime("{$thn}-{$bln}-01"));
 
-    $data['transaksis'] = Transaksi::with(['rekeningDebit', 'rekeningKredit', 'user'])
-    ->when(!empty($data['bulan']), function ($q) use ($thn, $bln) {
-        $q->whereBetween('tanggal_transaksi', [
-            "$thn-$bln-01",
-            date('Y-m-t', strtotime("$thn-$bln-01"))
-        ]);
-    })
-    ->when(!empty($data['hari']), function ($q) use ($thn, $bln, $hari) {
-        $q->whereDate('tanggal_transaksi', "$thn-$bln-$hari");
-    })
-    ->orderBy('tanggal_transaksi', 'asc')
-    ->get();
+    $data['sub_judul'] = !empty($data['bulan'])
+        ? 'per ' . $lastDay . ' ' . $namaBulan . ' ' . $thn
+        : 'Tahun ' . $thn;
 
+    $data['tgl'] = $data['sub_judul'];
 
-    $view = view('app.pelaporan.views.jurnal_transaksi', $data)->render();
+    $data['title'] = !empty($data['bulan'])
+        ? 'Neraca (' . $namaBulan . ' ' . $thn . ')'
+        : 'Neraca (Tahun ' . $thn . ')';
+
+    // Ambil akun + rekening + transaksi debit/kredit (periode Jan s/d bulan yang dipilih)
+    $data['akun1'] = AkunLevel1::where('lev1', '<=', 3)
+        ->with([
+            'akun2',
+            'akun2.akun3',
+            'akun2.akun3.rek.transaksiDebit' => function ($q) use ($tgl_awal, $tgl_akhir) {
+                $q->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir]);
+            },
+            'akun2.akun3.rek.transaksiKredit' => function ($q) use ($tgl_awal, $tgl_akhir) {
+                $q->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir]);
+            }
+        ])
+        ->orderBy('kode_akun', 'ASC')
+        ->get();
+
+    $view = view('app.pelaporan.views.neraca', $data)->render();
 
     $pdf = PDF::loadHTML($view)->setOptions([
         'margin-top'    => 30,
@@ -151,6 +206,10 @@ private function jurnal_transaksi(array $data)
 
     return $pdf->inline();
 }
+
+
+
+
     private function berita_acara(array $data)
     {
         $data['title'] = 'Berita Acara';

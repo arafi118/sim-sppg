@@ -10,4 +10,14 @@ class AkunLevel2 extends Model
     use HasFactory;
 
     protected $table = 'akun_level2s';
+
+     public function akun3()
+    {
+        return $this->hasMany(AkunLevel3::class, 'parent_id', 'id')->orderBy('kode_akun', 'ASC');
+    }
+
+    public function rek()
+    {
+        return $this->hasMany(Rekening::class, ['lev1', 'lev2'], ['lev1', 'lev2']);
+    }
 }
