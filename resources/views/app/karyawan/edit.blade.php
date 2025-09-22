@@ -140,7 +140,7 @@
                         <span class="align-middle">Kembali</span>
                     </a>
                     <div d-flex>
-                        <button type="submit" id="updateKaryawan" class="btn btn-primary ms-2">
+                        <button type="button" id="updateKaryawan" class="btn btn-primary ms-2">
                             <i class="icon-base bx bx-cloud-upload me-1"></i>
                             <span class="align-middle">Update</span>
                         </button>
