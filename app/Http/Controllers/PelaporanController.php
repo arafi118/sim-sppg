@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\JenisLaporan;
 use App\Models\KelompokPemanfaat;
-use App\Models\DataPemanfaat;
+use App\Models\Rekening;
 use App\Models\User;
 use App\Models\AkunLevel1;
 use App\Utils\Tanggal;
@@ -153,62 +153,115 @@ class PelaporanController extends Controller
         return $pdf->inline();
     }
 
-   
-   private function neraca(array $data)
-{
-    $thn  = $data['tahun'];
-    $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
-    $hari = str_pad($data['hari'], 2, '0', STR_PAD_LEFT);
+    private function neraca(array $data)
+    {
+        $thn  = $data['tahun'];
+        $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
+        $hari = str_pad($data['hari'], 2, '0', STR_PAD_LEFT);
 
-    $tgl_awal  = "{$thn}-01-01";
-    $tgl_akhir = "{$thn}-{$bln}-" . cal_days_in_month(CAL_GREGORIAN, (int) $bln, (int) $thn);
+        $tgl_awal  = "{$thn}-01-01";
+        $tgl_akhir = "{$thn}-{$bln}-" . cal_days_in_month(CAL_GREGORIAN, (int) $bln, (int) $thn);
 
-    $data['judul'] = 'Neraca';
+        $data['judul'] = 'Neraca';
 
-    $namaBulan = Tanggal::namaBulan("{$thn}-{$bln}-01");
-    $lastDay   = date('t', strtotime("{$thn}-{$bln}-01"));
+        $namaBulan = Tanggal::namaBulan("{$thn}-{$bln}-01");
+        $lastDay   = date('t', strtotime("{$thn}-{$bln}-01"));
 
-    $data['sub_judul'] = !empty($data['bulan'])
-        ? 'per ' . $lastDay . ' ' . $namaBulan . ' ' . $thn
-        : 'Tahun ' . $thn;
+        $data['sub_judul'] = !empty($data['bulan'])
+            ? 'per ' . $lastDay . ' ' . $namaBulan . ' ' . $thn
+            : 'Tahun ' . $thn;
 
-    $data['tgl'] = $data['sub_judul'];
+        $data['tgl'] = $data['sub_judul'];
 
-    $data['title'] = !empty($data['bulan'])
-        ? 'Neraca (' . $namaBulan . ' ' . $thn . ')'
-        : 'Neraca (Tahun ' . $thn . ')';
+        $data['title'] = !empty($data['bulan'])
+            ? 'Neraca (' . $namaBulan . ' ' . $thn . ')'
+            : 'Neraca (Tahun ' . $thn . ')';
 
-    // Ambil akun + rekening + transaksi debit/kredit (periode Jan s/d bulan yang dipilih)
-    $data['akun1'] = AkunLevel1::where('lev1', '<=', 3)
-        ->with([
-            'akun2',
-            'akun2.akun3',
-            'akun2.akun3.rek.transaksiDebit' => function ($q) use ($tgl_awal, $tgl_akhir) {
+        // Ambil akun + rekening + transaksi debit/kredit (periode Jan s/d bulan yang dipilih)
+        $data['akun1'] = AkunLevel1::where('lev1', '<=', 3)
+            ->with([
+                'akun2',
+                'akun2.akun3',
+                'akun2.akun3.rek.transaksiDebit' => function ($q) use ($tgl_awal, $tgl_akhir) {
+                    $q->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir]);
+                },
+                'akun2.akun3.rek.transaksiKredit' => function ($q) use ($tgl_awal, $tgl_akhir) {
+                    $q->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir]);
+                }
+            ])
+            
+            ->orderBy('kode_akun', 'ASC')
+            ->get();
+
+        $view = view('app.pelaporan.views.neraca', $data)->render();
+
+        $pdf = PDF::loadHTML($view)->setOptions([
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+            'header-html'   => view('app.pelaporan.layout.header', $data)->render(),
+            'enable-local-file-access' => true,
+        ]);
+
+        return $pdf->inline();
+    }
+
+    private function neraca_saldo(array $data)
+    {
+        $thn  = $data['tahun'];
+        $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
+        $hari = str_pad($data['hari'], 2, '0', STR_PAD_LEFT);
+
+        $tgl_awal  = "{$thn}-01-01";
+        $tgl_akhir = "{$thn}-{$bln}-" . cal_days_in_month(CAL_GREGORIAN, (int) $bln, (int) $thn);
+
+        $data['judul'] = 'Neraca ';
+
+        $namaBulan = Tanggal::namaBulan("{$thn}-{$bln}-01");
+        $lastDay   = date('t', strtotime("{$thn}-{$bln}-01"));
+
+        $data['sub_judul'] = !empty($data['bulan'])
+            ? $namaBulan . ' ' . $thn
+            : 'Tahun ' . $thn;
+
+        $data['tgl'] = $data['sub_judul'];
+
+
+        $data['title'] = !empty($data['bulan'])
+            ? 'Neraca Saldo (' . $namaBulan . ' ' . $thn . ')'
+            : 'Neraca Saldo (Tahun ' . $thn . ')';
+
+        $data['rekening'] = Rekening::with([
+            'transaksiDebit' => function ($q) use ($tgl_awal, $tgl_akhir) {
                 $q->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir]);
             },
-            'akun2.akun3.rek.transaksiKredit' => function ($q) use ($tgl_awal, $tgl_akhir) {
+            'transaksiKredit' => function ($q) use ($tgl_awal, $tgl_akhir) {
                 $q->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir]);
             }
         ])
-        ->orderBy('kode_akun', 'ASC')
-        ->get();
+        ->orderBy('kode_akun')
+        ->get()
+        ->transform(function ($rek) {
+            $rek->total_debit  = $rek->transaksiDebit->sum('jumlah');
+            $rek->total_kredit = $rek->transaksiKredit->sum('jumlah');
+            return $rek;
+        });
+        $view = view('app.pelaporan.views.neraca_saldo', $data)->render();
 
-    $view = view('app.pelaporan.views.neraca', $data)->render();
+        $pdf = PDF::loadHTML($view)
+            ->setPaper('a4', 'landscape')
+            ->setOptions([
+                'margin-top'    => 30,
+                'margin-bottom' => 15,
+                'margin-left'   => 25,
+                'margin-right'  => 20,
+                'header-html'   => view('app.pelaporan.layout.header', $data)->render(),
+                'enable-local-file-access' => true,
+            ]);
 
-    $pdf = PDF::loadHTML($view)->setOptions([
-        'margin-top'    => 30,
-        'margin-bottom' => 15,
-        'margin-left'   => 25,
-        'margin-right'  => 20,
-        'header-html'   => view('app.pelaporan.layout.header', $data)->render(),
-        'enable-local-file-access' => true,
-    ]);
-
-    return $pdf->inline();
-}
-
-
-
+        return $pdf->inline();
+    }
 
     private function berita_acara(array $data)
     {
