@@ -117,8 +117,8 @@ class UserController extends Controller
             data: $karyawan->nik,
             encoding: new Encoding('UTF-8'),
             errorCorrectionLevel: ErrorCorrectionLevel::High,
-            size: 400,
-            margin: 8,
+            size: 1920,
+            margin: 16,
             roundBlockSizeMode: RoundBlockSizeMode::Margin,
             foregroundColor: new Color(0, 0, 0),
             backgroundColor: new Color(255, 255, 255)
@@ -126,7 +126,7 @@ class UserController extends Controller
 
         $logo = new Logo(
             path: public_path('assets/img/Logo.png'),
-            resizeToWidth: 60,
+            resizeToWidth: 480,
             punchoutBackground: true
         );
 
