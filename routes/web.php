@@ -83,7 +83,7 @@ Route::get('/', function () {
     return view('welcome', compact('menus', 'levelImages', 'periode', 'dokumentasiChunks', 'karyawan', 'yesterday', 'today', 'tomorrow'));
 });
 
-Route::get('test', fn() => phpinfo());
+Route::get('test', fn () => phpinfo());
 
 
 Route::get('/auth', [AuthController::class, 'index']);
@@ -166,14 +166,12 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::post('/rab/bayar', [RabController::class, 'bayar'])->name('rab.bayar');
     Route::post('/rab/bayar_po', [RabController::class, 'bayarPO']);
 
-
     //Mekanisme Pelaksanaan
     Route::get('/create-mekanisme/{id}', [PenyiapanController::class, 'CreateMekanisme']);
     Route::get('/edit-mekanisme/{id}', [PenyiapanController::class, 'Editmekanisme']);
     Route::post('/store-mekanisme', [PenyiapanController::class, 'Storemekanisme']);
     Route::put('/update-mekanisme/{id}', [PenyiapanController::class, 'Updatemekanisme']);
     Route::delete('/destroy-Mekanisme/{id}', [PenyiapanController::class, 'DestroyMekanisme'])->name('mekanisme.destroy');
-    Route::get('/penyiapan-mbg/detail/{id}', [PenyiapanController::class, 'detail']);
     Route::resource('/penyiapan-mbg', PenyiapanController::class);
 
     //Jurnal Transaksi
