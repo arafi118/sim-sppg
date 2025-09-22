@@ -51,7 +51,6 @@
             flex-direction: column;
             justify-content: center;
             align-items: flex-start;
-            gap: 0;
         }
 
         .business-name .main-title {
@@ -114,17 +113,16 @@
             object-fit: cover;
             border-radius: 4px;
             z-index: 3;
-            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
         }
 
         .profile-id-card .profile-info {
-            position: relative;
+            margin-top: 32px;
             width: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            margin-top: 32px;
         }
 
         .profile-info .profile-name {
@@ -148,7 +146,6 @@
 
         .profile-id-card .qr-id-card {
             margin-top: 12px;
-            position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -201,7 +198,9 @@
             height: auto;
         }
     </style>
+
     <div class="id-card">
+        {{-- Header --}}
         <div class="header-id-card">
             <img src="{{ asset('assets/img/id-card/Header.png') }}" alt="Header">
             <div class="title-id-card">
@@ -213,6 +212,7 @@
             </div>
         </div>
 
+        {{-- Body --}}
         <div class="body-id-card">
             <div class="profile-id-card">
                 <div class="avatar">
@@ -226,13 +226,12 @@
                     <div class="profile-role">
                         {{ $karyawan->level->nama }}
                     </div>
-
                     <div class="line"></div>
                 </div>
 
                 <div class="qr-id-card">
                     <div class="qr-container">
-                        <img src="{{ $dataUri }}">
+                        <img src="{{ $dataUri }}" alt="QR Code">
                         <div class="profile-data">
                             <div>Telp : {{ $karyawan->telpon }}</div>
                             <div>Join : {{ $karyawan->tanggal_masuk }}</div>
@@ -242,10 +241,12 @@
             </div>
         </div>
 
+        {{-- Footer --}}
         <div class="footer-id-card">
             <img src="{{ asset('assets/img/id-card/Footer.png') }}" alt="Footer">
         </div>
 
+        {{-- Overlay --}}
         <div class="middle-line">
             <img src="{{ asset('assets/img/id-card/Body Overlay.png') }}" alt="Middle Line">
         </div>
