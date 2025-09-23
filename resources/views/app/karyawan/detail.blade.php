@@ -17,6 +17,16 @@
             background: #FCFCFF;
         }
 
+        .id-card * {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -o-user-select: none;
+            box-sizing: border-box;
+
+        }
+
         .header-id-card {
             position: relative;
             top: 0;

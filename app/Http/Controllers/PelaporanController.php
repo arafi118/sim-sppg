@@ -119,24 +119,24 @@ class PelaporanController extends Controller
         $data['sub_judul'] = 'Tahun ' . Tanggal::tahun($tgl);
         $data['tgl']       = Tanggal::tahun($tgl);
         $data['title']     = 'Jurnal Transaksi';
-        if (!empty($data['bulan'])) { 
+        if (!empty($data['bulan'])) {
             $data['sub_judul'] = 'Bulan ' . Tanggal::namaBulan($tgl) . ' ' . Tanggal::tahun($tgl);
             $data['tgl']       = Tanggal::namaBulan($tgl) . ' ' . Tanggal::tahun($tgl);
         }
 
 
         $data['transaksis'] = Transaksi::with(['rekeningDebit', 'rekeningKredit', 'user'])
-        ->when(!empty($data['bulan']), function ($q) use ($thn, $bln) {
-            $q->whereBetween('tanggal_transaksi', [
-                "$thn-$bln-01",
-                date('Y-m-t', strtotime("$thn-$bln-01"))
-            ]);
-        })
-        ->when(!empty($data['hari']), function ($q) use ($thn, $bln, $hari) {
-            $q->whereDate('tanggal_transaksi', "$thn-$bln-$hari");
-        })
-        ->orderBy('tanggal_transaksi', 'asc')
-        ->get();
+            ->when(!empty($data['bulan']), function ($q) use ($thn, $bln) {
+                $q->whereBetween('tanggal_transaksi', [
+                    "$thn-$bln-01",
+                    date('Y-m-t', strtotime("$thn-$bln-01"))
+                ]);
+            })
+            ->when(!empty($data['hari']), function ($q) use ($thn, $bln, $hari) {
+                $q->whereDate('tanggal_transaksi', "$thn-$bln-$hari");
+            })
+            ->orderBy('tanggal_transaksi', 'asc')
+            ->get();
 
 
         $view = view('app.pelaporan.views.jurnal_transaksi', $data)->render();
@@ -189,7 +189,7 @@ class PelaporanController extends Controller
                     $q->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir]);
                 }
             ])
-            
+
             ->orderBy('kode_akun', 'ASC')
             ->get();
 
@@ -240,13 +240,13 @@ class PelaporanController extends Controller
                 $q->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir]);
             }
         ])
-        ->orderBy('kode_akun')
-        ->get()
-        ->transform(function ($rek) {
-            $rek->total_debit  = $rek->transaksiDebit->sum('jumlah');
-            $rek->total_kredit = $rek->transaksiKredit->sum('jumlah');
-            return $rek;
-        });
+            ->orderBy('kode_akun')
+            ->get()
+            ->transform(function ($rek) {
+                $rek->total_debit  = $rek->transaksiDebit->sum('jumlah');
+                $rek->total_kredit = $rek->transaksiKredit->sum('jumlah');
+                return $rek;
+            });
         $view = view('app.pelaporan.views.neraca_saldo', $data)->render();
 
         $pdf = PDF::loadHTML($view)
@@ -601,6 +601,32 @@ class PelaporanController extends Controller
                 'margin-right'  => 20,
                 'header-html' => view('app.pelaporan.layout.header', $data)->render(),
                 'enable-local-file-access' => true,
+            ]);
+
+        return $pdf->inline();
+    }
+
+    private function presensi(array $data)
+    {
+        $data['users'] = User::whereNotIn('level_id', ['1', '7'])->with([
+            'presensi' => function ($q) use ($data) {
+                $q->whereMonth('tanggal', $data['bulan'])
+                    ->whereYear('tanggal', $data['tahun']);
+            }
+        ])->get();
+
+        $data['title'] = 'Laporan Presensi';
+        $view = view('app.pelaporan.views.presensi', $data)->render();
+        $pdf = PDF::loadHTML($view)
+            ->setOptions([
+                'margin-top'    => 30,
+                'margin-bottom' => 15,
+                'margin-left'   => 25,
+                'margin-right'  => 20,
+                'header-html' => view('app.pelaporan.layout.header', $data)->render(),
+                'enable-local-file-access' => true,
+                'orientation' => 'landscape',
+                'page-size' => 'A4',
             ]);
 
         return $pdf->inline();
