@@ -1,3 +1,7 @@
+@php
+    $jumlahHari = $hari ? $hari : date('t', strtotime($tahun . '-' . $bulan . '-01'));
+@endphp
+
 @extends('app.pelaporan.layout.base')
 @section('content')
     <table border="1" cellpadding="0" cellspacing="0" width="100%">
@@ -6,10 +10,10 @@
                 <td width="4%" align="center" rowspan="2">No</td>
                 <td width="12%" align="center" rowspan="2">NIK</td>
                 <td width="22%" align="center" rowspan="2">Nama Lengkap</td>
-                <td align="center" colspan="31">Tanggal</td>
+                <td align="center" colspan="{{ $jumlahHari }}">Tanggal</td>
             </tr>
             <tr>
-                @for ($i = 1; $i <= 31; $i++)
+                @for ($i = 1; $i <= $jumlahHari; $i++)
                     <td width="2%" align="center">{{ $i }}</td>
                 @endfor
             </tr>
@@ -28,7 +32,7 @@
                     <td align="center">{{ $user->nik }}</td>
                     <td style="padding-left: 4px;">{{ $user->nama }}</td>
 
-                    @for ($i = 1; $i <= 31; $i++)
+                    @for ($i = 1; $i <= $jumlahHari; $i++)
                         @php
                             $status = 'A';
                             if (count($dataPresensi) > 0) {
