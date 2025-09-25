@@ -81,13 +81,13 @@
         }
 
         // validasi upload foto
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true
-        })
+        // const Toast = Swal.mixin({
+        //     toast: true,
+        //     position: 'top-end',
+        //     showConfirmButton: false,
+        //     timer: 3000,
+        //     timerProgressBar: true
+        // })
         $('#gambar').on('change', function() {
             let f = this.files[0];
             if (f) {
