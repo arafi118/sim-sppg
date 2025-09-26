@@ -1,3 +1,9 @@
+@php
+    use App\Utils\Keuangan;
+    $i = 0;
+@endphp
+<title>{{ $title }}</title>
+
 @extends('app.pelaporan.layout.base')
 
 @section('content')
@@ -15,22 +21,11 @@
         <tr>
             <td colspan="3" height="5"></td>
         </tr>
-
         <tr style="background:#000; color:#fff; font-weight:600;">
             <td width="10%" style="padding:4px;">Kode</td>
             <td width="70%" style="padding:4px;">Nama Akun</td>
             <td width="20%" style="padding:4px;" align="right">Saldo</td>
         </tr>
-
-        @php
-            $i = 0;
-            function formatSaldo($nilai)
-            {
-                $formatted = number_format(abs($nilai), 2, ',', '.');
-                return $nilai < 0 ? '(' . $formatted . ')' : $formatted;
-            }
-        @endphp
-
         @foreach ($akun1 as $lev1)
             @php $total_akun1 = 0; @endphp
 
@@ -39,25 +34,14 @@
                     {{ $lev1->kode_akun }}. {{ $lev1->nama_akun }}
                 </td>
             </tr>
-
             @foreach ($lev1->akun2 as $lev2)
                 <tr style="background:#a7a7a7; font-weight:bold;">
                     <td>{{ $lev2->kode_akun }}.</td>
                     <td colspan="2">{{ $lev2->nama_akun }}</td>
                 </tr>
-
                 @foreach ($lev2->akun3 as $lev3)
                     @php
-                        $saldo_akun3 = 0;
-                        foreach ($lev3->rek as $rekening) {
-                            $total_debit = $rekening->transaksiDebit->sum('jumlah');
-                            $total_kredit = $rekening->transaksiKredit->sum('jumlah');
-                            $saldo_rekening =
-                                $rekening->jenis_mutasi === 'debet'
-                                    ? $total_debit - $total_kredit
-                                    : $total_kredit - $total_debit;
-                            $saldo_akun3 += $saldo_rekening;
-                        }
+                        $saldo_akun3 = Keuangan::hitungSaldo($lev3);
                         $total_akun1 += $saldo_akun3;
                         $bg = $i % 2 === 0 ? '#e6e6e6' : '#ffffff';
                         $i++;
@@ -66,14 +50,13 @@
                     <tr style="background:{{ $bg }};">
                         <td>{{ $lev3->kode_akun }}.</td>
                         <td>{{ $lev3->nama_akun }}</td>
-                        <td align="right">{{ formatSaldo($saldo_akun3) }}</td>
+                        <td align="right">{{ Keuangan::formatSaldo($saldo_akun3) }}</td>
                     </tr>
                 @endforeach
             @endforeach
-
             <tr style="background:#a7a7a7; font-weight:bold;">
                 <td colspan="2" align="left">Jumlah {{ $lev1->nama_akun }}</td>
-                <td align="right">{{ formatSaldo($total_akun1) }}</td>
+                <td align="right">{{ Keuangan::formatSaldo($total_akun1) }}</td>
             </tr>
             <tr>
                 <td colspan="3" height="2"></td>

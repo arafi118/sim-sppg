@@ -26,5 +26,10 @@ class Rekening extends Model
         return $this->hasMany(Transaksi::class, 'rekening_debit', 'id')
             ->orWhere('rekening_kredit', $this->id);
     }
+    public function saldo()
+    {
+        return $this->hasMany(Saldo::class, 'rekening_id', 'id');
+    }
+
 
 }
