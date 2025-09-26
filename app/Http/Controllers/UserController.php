@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Level;
 use App\Models\Presensi;
+use App\Models\Profil;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Color\Color;
 use Endroid\QrCode\Encoding\Encoding;
@@ -110,6 +111,7 @@ class UserController extends Controller
      */
     public function show(User $karyawan)
     {
+        $profil = Profil::first();
         $karyawan = $karyawan->load('level');
 
         $writer = new PngWriter();
@@ -134,7 +136,7 @@ class UserController extends Controller
         $dataUri = $result->getDataUri();
 
         $title = "Detail Karyawan " . $karyawan->nama;
-        return view('app.karyawan.detail', compact('title', 'karyawan', 'dataUri'));
+        return view('app.karyawan.detail', compact('title', 'karyawan', 'dataUri', 'profil'));
     }
 
     /**

@@ -61,6 +61,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: flex-start;
+            max-width: 200px;
         }
 
         .business-name .main-title {
@@ -217,7 +218,7 @@
                 <img src="{{ asset('assets/img/Logo.png') }}" alt="Logo">
                 <div class="business-name">
                     <div class="main-title">BADAN GIZI NASIONAL</div>
-                    <div class="sub-title">SATUAN PELAYANAN PEMENUHAN GIZI</div>
+                    <div class="sub-title">{{ $profil->nama }}</div>
                 </div>
             </div>
         </div>
