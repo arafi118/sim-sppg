@@ -37,8 +37,23 @@ class PelaporanController extends Controller
     }
     private function cover(array $data)
     {
-        $data['judul'] = 'Laporan Keuangan';
-        $data['tgl']   = now()->format('d-m-Y');
+        $thn  = $data['tahun'];
+        $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
+        $hari = str_pad($data['hari'], 2, '0', STR_PAD_LEFT);
+
+        $tgl = $thn . '-' . $bln . '-' . $hari;
+
+        $data['tahun']     = $thn;
+        $data['judul']     = 'LAPORAN KEUANGAN';
+        $data['sub_judul'] = 'Tahun ' . Tanggal::tahun($tgl);
+        $data['tgl']       = Tanggal::tahun($tgl);
+        $data['title']     = 'LAPORAN KEUANGAN';
+        if (!empty($data['bulan'])) {
+            $data['sub_judul'] = 'Bulan ' . Tanggal::namaBulan($tgl) . ' ' . Tanggal::tahun($tgl);
+            $data['tgl']       = Tanggal::namaBulan($tgl) . ' ' . Tanggal::tahun($tgl);
+        }
+
+        $data['profil'] = Profil::first();
 
         $view = view('app.pelaporan.views.cover', $data)->render();
 
@@ -155,7 +170,7 @@ class PelaporanController extends Controller
         return $pdf->inline();
     }
 
-    
+
     private function arus_kas(array $data)
     {
         $thn  = $data['tahun'];
@@ -181,19 +196,19 @@ class PelaporanController extends Controller
 
         $data['arus_kas'] = MasterArusKas::with([
             'child',
-            'child.rek_debit.rek.transaksiDebit' => function($q) use ($tgl_awal, $tgl_akhir) {
+            'child.rek_debit.rek.transaksiDebit' => function ($q) use ($tgl_awal, $tgl_akhir) {
                 $q->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir])
-                ->where('rekening_kredit', 'like', '1.1.01%'); 
+                    ->where('rekening_kredit', 'like', '1.1.01%');
             },
-            'child.rek_kredit.rek.transaksiKredit' => function($q) use ($tgl_awal, $tgl_akhir) {
+            'child.rek_kredit.rek.transaksiKredit' => function ($q) use ($tgl_awal, $tgl_akhir) {
                 $q->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir])
-                ->where('rekening_debit', 'like', '1.1.01%'); 
+                    ->where('rekening_debit', 'like', '1.1.01%');
             }
         ])->where('parent_id', 0)->get();
 
 
         $keuangan = new Keuangan;
-        $tgl_saldo_lalu = date('Y-m-d', strtotime("-1 day", strtotime($tgl_awal))); 
+        $tgl_saldo_lalu = date('Y-m-d', strtotime("-1 day", strtotime($tgl_awal)));
         $saldo_bulan_lalu = $keuangan->saldoKas($tgl_saldo_lalu);
         $data['saldo_bulan_lalu'] = $saldo_bulan_lalu;
 
@@ -228,10 +243,10 @@ class PelaporanController extends Controller
             ? 'per ' . $lastDay . ' ' . $namaBulan . ' ' . $thn
             : 'Tahun ' . $thn;
 
-        $data['title'] = !empty($data['bulan']) ? $data['judul'] . ' (' . $namaBulan . ' ' . $thn . ')': $data['judul'] . ' Tahun ' . $thn;
-       
+        $data['title'] = !empty($data['bulan']) ? $data['judul'] . ' (' . $namaBulan . ' ' . $thn . ')' : $data['judul'] . ' Tahun ' . $thn;
+
         $data['akun1'] = AkunLevel1::where('lev1', '<=', 3)
-            ->with(['akun2.akun3.rek']) 
+            ->with(['akun2.akun3.rek'])
             ->orderBy('kode_akun', 'ASC')
             ->get();
 
@@ -313,17 +328,17 @@ class PelaporanController extends Controller
         $bln  = $data['bulan'] ?? null;
         $hari = $data['hari'] ?? null;
 
-        $tgl = $thn 
-            . ($bln ? '-' . $bln : '-12') 
+        $tgl = $thn
+            . ($bln ? '-' . $bln : '-12')
             . ($hari ? '-' . $hari : '-' . date('t', strtotime("$thn-" . ($bln ?? '12') . "-01")));
 
         $keuangan = new Keuangan();
         $lr = $keuangan->listLabaRugi($tgl);
 
         $data['judul'] = 'Laporan Laba Rugi';
-        $data['sub_judul'] = !empty($bln) 
-            ? "PERIODE " . date('01 M Y', strtotime("$thn-$bln-01")) 
-            . " s.d. " . date('t M Y', strtotime("$thn-$bln-01")) 
+        $data['sub_judul'] = !empty($bln)
+            ? "PERIODE " . date('01 M Y', strtotime("$thn-$bln-01"))
+            . " s.d. " . date('t M Y', strtotime("$thn-$bln-01"))
             : "TAHUN $thn";
 
         $data['pendapatan'] = $lr['pendapatan'];
