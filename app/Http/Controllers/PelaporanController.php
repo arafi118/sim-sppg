@@ -8,9 +8,11 @@ use App\Models\KelompokPemanfaat;
 use App\Models\Rekening;
 use App\Models\User;
 use App\Models\AkunLevel1;
+use App\Models\MasterArusKas;
 use App\Utils\Tanggal;
 use App\Models\Transaksi;
 use App\Models\Profil;
+use App\Utils\Keuangan;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
 
@@ -153,7 +155,8 @@ class PelaporanController extends Controller
         return $pdf->inline();
     }
 
-    private function neraca(array $data)
+    
+    private function arus_kas(array $data)
     {
         $thn  = $data['tahun'];
         $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
@@ -162,7 +165,7 @@ class PelaporanController extends Controller
         $tgl_awal  = "{$thn}-01-01";
         $tgl_akhir = "{$thn}-{$bln}-" . cal_days_in_month(CAL_GREGORIAN, (int) $bln, (int) $thn);
 
-        $data['judul'] = 'Neraca';
+        $data['judul'] = 'Laporan Arus Kas';
 
         $namaBulan = Tanggal::namaBulan("{$thn}-{$bln}-01");
         $lastDay   = date('t', strtotime("{$thn}-{$bln}-01"));
@@ -172,26 +175,68 @@ class PelaporanController extends Controller
             : 'Tahun ' . $thn;
 
         $data['tgl'] = $data['sub_judul'];
-
         $data['title'] = !empty($data['bulan'])
-            ? 'Neraca (' . $namaBulan . ' ' . $thn . ')'
-            : 'Neraca (Tahun ' . $thn . ')';
+            ? 'Arus Kas (' . $namaBulan . ' ' . $thn . ')'
+            : 'Arus Kas (Tahun ' . $thn . ')';
 
-        // Ambil akun + rekening + transaksi debit/kredit (periode Jan s/d bulan yang dipilih)
+        $data['arus_kas'] = MasterArusKas::with([
+            'child',
+            'child.rek_debit.rek.transaksiDebit' => function($q) use ($tgl_awal, $tgl_akhir) {
+                $q->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir])
+                ->where('rekening_kredit', 'like', '1.1.01%'); 
+            },
+            'child.rek_kredit.rek.transaksiKredit' => function($q) use ($tgl_awal, $tgl_akhir) {
+                $q->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir])
+                ->where('rekening_debit', 'like', '1.1.01%'); 
+            }
+        ])->where('parent_id', 0)->get();
+
+
+        $keuangan = new Keuangan;
+        $tgl_saldo_lalu = date('Y-m-d', strtotime("-1 day", strtotime($tgl_awal))); 
+        $saldo_bulan_lalu = $keuangan->saldoKas($tgl_saldo_lalu);
+        $data['saldo_bulan_lalu'] = $saldo_bulan_lalu;
+
+
+        $view = view('app.pelaporan.views.arus_kas', $data)->render();
+
+        $pdf = PDF::loadHTML($view)->setOptions([
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+            'header-html'   => view('app.pelaporan.layout.header', $data)->render(),
+            'enable-local-file-access' => true,
+        ]);
+
+        return $pdf->inline();
+    }
+
+    private function neraca(array $data)
+    {
+        $thn  = $data['tahun'];
+        $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
+
+        $tgl_awal  = "{$thn}-01-01";
+        $tgl_akhir = "{$thn}-{$bln}-" . cal_days_in_month(CAL_GREGORIAN, (int) $bln, (int) $thn);
+
+        $data['judul'] = 'Neraca';
+        $namaBulan = Tanggal::namaBulan("{$thn}-{$bln}-01");
+        $lastDay   = date('t', strtotime("{$thn}-{$bln}-01"));
+
+        $data['sub_judul'] = !empty($data['bulan'])
+            ? 'per ' . $lastDay . ' ' . $namaBulan . ' ' . $thn
+            : 'Tahun ' . $thn;
+
+        $data['title'] = !empty($data['bulan']) ? $data['judul'] . ' (' . $namaBulan . ' ' . $thn . ')': $data['judul'] . ' Tahun ' . $thn;
+       
         $data['akun1'] = AkunLevel1::where('lev1', '<=', 3)
-            ->with([
-                'akun2',
-                'akun2.akun3',
-                'akun2.akun3.rek.transaksiDebit' => function ($q) use ($tgl_awal, $tgl_akhir) {
-                    $q->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir]);
-                },
-                'akun2.akun3.rek.transaksiKredit' => function ($q) use ($tgl_awal, $tgl_akhir) {
-                    $q->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir]);
-                }
-            ])
-
+            ->with(['akun2.akun3.rek']) 
             ->orderBy('kode_akun', 'ASC')
             ->get();
+
+        $data['tgl_awal']  = $tgl_awal;
+        $data['tgl_akhir'] = $tgl_akhir;
 
         $view = view('app.pelaporan.views.neraca', $data)->render();
 
@@ -261,6 +306,47 @@ class PelaporanController extends Controller
             ]);
 
         return $pdf->inline();
+    }
+    private function laba_rugi(array $data)
+    {
+        $thn  = $data['tahun'];
+        $bln  = $data['bulan'] ?? null;
+        $hari = $data['hari'] ?? null;
+
+        $tgl = $thn 
+            . ($bln ? '-' . $bln : '-12') 
+            . ($hari ? '-' . $hari : '-' . date('t', strtotime("$thn-" . ($bln ?? '12') . "-01")));
+
+        $keuangan = new Keuangan();
+        $lr = $keuangan->listLabaRugi($tgl);
+
+        $data['judul'] = 'Laporan Laba Rugi';
+        $data['sub_judul'] = !empty($bln) 
+            ? "PERIODE " . date('01 M Y', strtotime("$thn-$bln-01")) 
+            . " s.d. " . date('t M Y', strtotime("$thn-$bln-01")) 
+            : "TAHUN $thn";
+
+        $data['pendapatan'] = $lr['pendapatan'];
+        $data['beban']      = $lr['beban'];
+        $data['bp']         = $lr['bp'];
+        $data['pen']        = $lr['pen'];
+        $data['pendl']      = $lr['pendl'];
+        $data['beb']        = $lr['beb'];
+        $data['ph']         = $lr['ph'];
+
+        $data['title'] = 'Laba Rugi';
+
+        // Render PDF
+        $view = view('app.pelaporan.views.laba_rugi', $data)->render();
+        $pdf = PDF::loadHTML($view)->setOptions([
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+            'header-html' => view('app.pelaporan.layout.header', $data)->render(),
+            'enable-local-file-access' => true,
+        ]);
+        return PDF::loadHTML($view)->inline();
     }
 
     private function berita_acara(array $data)
