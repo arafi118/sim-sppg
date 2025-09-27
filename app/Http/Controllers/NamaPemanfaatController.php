@@ -62,6 +62,7 @@ class NamaPemanfaatController extends Controller
         $data = $request->only([
             'data_pemanfaat_id',
             'nama',
+            'nik',
             'tempat_lahir',
             'tanggal_lahir',
             'status'
@@ -69,6 +70,7 @@ class NamaPemanfaatController extends Controller
 
         $rules = [
             'data_pemanfaat_id' => 'required',
+            'nik'               => 'required',
             'nama'              => 'required',
             'tempat_lahir'      => 'required',
             'tanggal_lahir'     => 'required',
@@ -82,6 +84,7 @@ class NamaPemanfaatController extends Controller
 
         $namaPemanfaat = NamaPemanfaat::create([
             'data_pemanfaat_id' => $request->data_pemanfaat_id,
+            'nik'               => $request->nik,
             'nama'              => $request->nama,
             'tempat_lahir'      => $request->tempat_lahir,
             'tanggal_lahir'     => $request->tanggal_lahir,
@@ -125,6 +128,7 @@ class NamaPemanfaatController extends Controller
     {
         $data = $request->only([
             'data_pemanfaat_id',
+            'nik',
             'nama',
             'tempat_lahir',
             'tanggal_lahir',
@@ -133,6 +137,7 @@ class NamaPemanfaatController extends Controller
 
         $rules = [
             'data_pemanfaat_id' => 'required',
+            'nik'               => 'required',
             'nama'              => 'required',
             'tempat_lahir'      => 'required',
             'tanggal_lahir'     => 'required',

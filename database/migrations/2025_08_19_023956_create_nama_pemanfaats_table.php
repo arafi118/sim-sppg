@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('nama_pemanfaats', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreignIdFor(DataPemanfaat::class);
+            $table->string('nik');
             $table->string('nama');
             $table->string('tempat_lahir');
             $table->date('tanggal_lahir');

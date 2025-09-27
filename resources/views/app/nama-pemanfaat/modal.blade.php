@@ -1,5 +1,5 @@
     <div class="modal fade" id="NP-Pemanfaat" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-simple modal-add-new-address">
+        <div class="modal-dialog modal-xl modal-simple modal-pricing">
             <div class="modal-content">
                 <div class="modal-body">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -12,14 +12,19 @@
 
                         <input type="hidden" id="id_NP" name="id_NP">
                         <div class="row">
-                            <div class="col-12 col-md-6 kp-wrapper">
+                            <div class="col-12 col-md-4 kp-wrapper">
                                 <label class="form-label" for="data_pemanfaat_id">Nama Lembaga</label>
                                 <select id="data_pemanfaat_id" name="data_pemanfaat_id"
                                     class="form-control data_pemanfaat_id select2"></select>
                                 <div class="kp-info mt-1 text-success"></div>
                             </div>
-
-                            <div class="col-12 col-md-6">
+                            <div class="col-12 col-md-4">
+                                <label class="form-label" for="nik">Nomor Induk Kependudukan (nik)</label>
+                                <input type="text" id="nik" maxlength="16" name="nik" class="form-control"
+                                    placeholder="masukkan nik anda" />
+                                <small id="msg_nama" class="text-danger"></small>
+                            </div>
+                            <div class="col-12 col-md-4">
                                 <label class="form-label" for="nama">Nama</label>
                                 <input type="text" id="nama" name="nama" class="form-control"
                                     placeholder="masukkan nama anda" />

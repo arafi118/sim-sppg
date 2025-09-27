@@ -33,8 +33,10 @@ class RancanganController extends Controller
             return datatables()->of($rancanganMenu)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="/app/rancang-menu/' . $row->id . '/edit" class="btn btn-sm btn-primary">Edit</a>';
-                    $btn .= '<button type="button" class="btn btn-sm btn-danger btn-hapus ms-2" data-id="' . $row->id . '">Hapus</button>';
+                    $btn  = '<div class="d-inline-flex gap-1">';
+                    $btn .= '<a href="/app/rancang-menu/' . $row->id . '/edit" class="btn btn-sm btn-primary">Edit</a>';
+                    $btn .= '<button type="button" class="btn btn-sm btn-danger btn-hapus" data-id="' . $row->id . '">Hapus</button>';
+                    $btn .= '</div>';
 
                     return $btn;
                 })

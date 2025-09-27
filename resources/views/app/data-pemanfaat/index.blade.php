@@ -15,6 +15,7 @@
                     <tr>
                         <th class="text-center" rowspan="2">Kelompok Pemanfaat</th>
                         <th class="text-center" rowspan="2">Nama Lembaga</th>
+                        <th class="text-center" rowspan="2">Nis</th>
                         <th class="text-center" colspan="3">Penanggung Jawab</th>
                         <th class="text-center" rowspan="2">Aksi</th>
                     </tr>
@@ -54,6 +55,10 @@
                     {
                         data: 'nama_lembaga',
                         name: 'nama_lembaga'
+                    },
+                    {
+                        data: 'nis',
+                        name: 'nis'
                     },
                     {
                         data: 'nama_pj',

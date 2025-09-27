@@ -48,6 +48,7 @@ class DataPemanfaatController extends Controller
         $data = $request->only([
             'kelompok_pemanfaat_id',
             'nama_lembaga',
+            'nis',
             'nama_pj',
             'alamat',
             'jabatan_pj',
@@ -60,6 +61,7 @@ class DataPemanfaatController extends Controller
         $rules = [
             'kelompok_pemanfaat_id'     => 'required',
             'nama_lembaga'              => 'required',
+            'nis'                       => 'required',
             'nama_pj'                   => 'required',
             'alamat'                    => 'required',
             'jabatan_pj'                => 'required',
@@ -79,6 +81,7 @@ class DataPemanfaatController extends Controller
             'kelompok_pemanfaat_id' => $request->kelompok_pemanfaat_id,
             'nama_lembaga'          => $request->nama_lembaga,
             'nama_pj'               => $request->nama_pj,
+            'nis'                   => $request->nis,
             'alamat'                => $request->alamat,
             'jabatan_pj'            => $request->jabatan_pj,
             'telpon_pj'             => $request->telpon_pj,
@@ -131,6 +134,7 @@ class DataPemanfaatController extends Controller
         $data = $request->only([
             'kelompok_pemanfaat_id',
             'nama_lembaga',
+            'nis',
             'nama_pj',
             'alamat',
             'jabatan_pj',
@@ -143,6 +147,7 @@ class DataPemanfaatController extends Controller
         $rules = [
             'kelompok_pemanfaat_id'     => 'required',
             'nama_lembaga'              => 'required',
+            'nis'                       => 'required',
             'nama_pj'                   => 'required',
             'alamat'                    => 'required',
             'jabatan_pj'                => 'required',
@@ -161,6 +166,7 @@ class DataPemanfaatController extends Controller
         $dataPemanfaat->update([
             'kelompok_pemanfaat_id' => $request->kelompok_pemanfaat_id,
             'nama_lembaga'          => $request->nama_lembaga,
+            'nis'                   => $request->nis,
             'nama_pj'               => $request->nama_pj,
             'alamat'                => $request->alamat,
             'jabatan_pj'            => $request->jabatan_pj,

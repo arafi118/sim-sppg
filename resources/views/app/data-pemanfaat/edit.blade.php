@@ -36,9 +36,9 @@
                     </div>
                     <div class="col-md-4 col-12">
                         <div class="mb-6">
-                            <label for="nama_pj" class="form-label">Nama Penangung Jawab</label>
-                            <input type="text" class="form-control" id="nama_pj" name="nama_pj"
-                                value="{{ $dataPemanfaat->nama_pj }}">
+                            <label for="nis" class="form-label">Nomor Induk Siswa (Nis)</label>
+                            <input type="text" class="form-control" id="nis" name="nis"
+                                value="{{ $dataPemanfaat->nis }}">
                         </div>
                     </div>
                 </div>
@@ -51,21 +51,28 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 col-12">
+                    <div class="col-md-3 col-12">
+                        <div class="mb-6">
+                            <label for="nama_pj" class="form-label">Nama Penangung Jawab</label>
+                            <input type="text" class="form-control" id="nama_pj" name="nama_pj"
+                                value="{{ $dataPemanfaat->nama_pj }}">
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-12">
                         <div class="mb-6">
                             <label for="jabatan_pj" class="form-label">Jabatan Penangung Jawab</label>
                             <input type="text" class="form-control" id="jabatan_pj" name="jabatan_pj"
                                 value="{{ $dataPemanfaat->jabatan_pj }}">
                         </div>
                     </div>
-                    <div class="col-md-4 col-12">
+                    <div class="col-md-3 col-12">
                         <div class="mb-6">
                             <label for="telpon_pj" class="form-label">No Telepon Penangung Jawab</label>
                             <input type="text" class="form-control" id="telpon_pj" name="telpon_pj"
                                 value="{{ $dataPemanfaat->telpon_pj }}">
                         </div>
                     </div>
-                    <div class="col-md-4 col-12">
+                    <div class="col-md-3 col-12">
                         <div class="mb-6">
                             <label for="email_pj" class="form-label">Email Penangung Jawab</label>
                             <input type="text" class="form-control" id="email_pj" name="email_pj"
@@ -84,15 +91,16 @@
                     <div class="col-md-4 col-12">
                         <div class="mb-3">
                             <label for="waktu_tempuh_roda_2" class="form-label">Waktu Tempuh Roda 2</label>
-                            <input type="time" step="1" class="form-control" id="waktu_tempuh_roda_2"
+                            <input type="text" step="1" class="form-control timepicker" id="waktu_tempuh_roda_2"
                                 name="waktu_tempuh_roda_2" value="{{ $dataPemanfaat->waktu_tempuh_roda_2 }}">
                         </div>
                     </div>
                     <div class="col-md-4 col-12">
                         <div class="mb-3">
                             <label for="waktu_tempuh_roda_4" class="form-label">Waktu Tempuh Roda 4</label>
-                            <input type="time" step="1" class="form-control" id="waktu_tempuh_roda_4"
-                                name="waktu_tempuh_roda_4" value="{{ $dataPemanfaat->waktu_tempuh_roda_4 }}">
+                            <input type="text" step="1" class="form-control timepicker"
+                                id="waktu_tempuh_roda_4" name="waktu_tempuh_roda_4"
+                                value="{{ $dataPemanfaat->waktu_tempuh_roda_4 }}">
                         </div>
                     </div>
                 </div>
@@ -115,6 +123,12 @@
 
 @section('script')
     <script>
+        $('.timepicker').flatpickr({
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+        })
+
         $(".dob-picker").flatpickr({
             monthSelectorType: "static"
         });

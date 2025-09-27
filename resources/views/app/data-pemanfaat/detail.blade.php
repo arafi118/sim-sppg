@@ -1,20 +1,20 @@
 @php
-    function formatWaktu($time)
-    {
-        [$hours, $minutes, $seconds] = explode(':', $time);
-        $result = [];
-        if ((int) $hours > 0) {
-            $result[] = (int) $hours . ' jam';
+    if (!function_exists('formatWaktu')) {
+        function formatWaktu($time)
+        {
+            [$hours, $minutes] = array_pad(explode(':', $time), 2, 0);
+            $result = [];
+            if ((int) $hours > 0) {
+                $result[] = (int) $hours . ' jam';
+            }
+            if ((int) $minutes > 0) {
+                $result[] = (int) $minutes . ' menit';
+            }
+            return implode(' ', $result);
         }
-        if ((int) $minutes > 0) {
-            $result[] = (int) $minutes . ' menit';
-        }
-        if ((int) $seconds > 0) {
-            $result[] = (int) $seconds . ' detik';
-        }
-        return implode(' ', $result);
     }
 @endphp
+
 @extends('app.layouts.app')
 @section('content')
     <div class="row">

@@ -28,12 +28,26 @@
                             </div>
                         </div>
                         <div class="row mt-2">
-                            <div class="col-12 col-md-6">
-                                <label class="form-label" for="satuan">Satuan</label>
-                                <input type="text" id="satuan" name="satuan" class="form-control"
-                                    placeholder="Satuan" />
-                                <small id="msg_satuan" class="text-danger"></small>
+                            <div class="col-12 col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label class="form-label" for="satuan">Satuan</label>
+                                    <select id="satuan" name="satuan" class="form-control select2">
+                                        <option value="">-- Pilih Satuan --</option>
+                                        <option value="kg">Kilogram (kg)</option>
+                                        <option value="g">Gram (g)</option>
+                                        <option value="liter">Liter (L)</option>
+                                        <option value="pcs">Pcs</option>
+                                        <option value="pack">Pack</option>
+                                        <option value="bungkus">Bungkus</option>
+                                        <option value="dus">Dus</option>
+                                        <option value="box">Box</option>
+                                        <option value="ekor">Ekor</option>
+                                        <option value="ikat">Ikat</option>
+                                    </select>
+                                    <small id="msg_satuan" class="text-danger"></small>
+                                </div>
                             </div>
+
                             <div class="col-12 col-md-6">
                                 <label class="form-label" for="harga_jual">Harga</label>
                                 <input type="text" id="harga_jual" name="harga_jual" class="form-control"

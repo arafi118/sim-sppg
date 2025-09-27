@@ -14,6 +14,7 @@
                 <thead>
                     <tr>
                         <th>Nama Lembaga</th>
+                        <th>Nik</th>
                         <th>Nama</th>
                         <th>Tempat Lahir</th>
                         <th>Tanggal Lahir</th>
@@ -49,6 +50,10 @@
                         name: 'Nama_Pemanfaat'
                     },
                     {
+                        data: 'nik',
+                        name: 'nik'
+                    },
+                    {
                         data: 'nama',
                         name: 'nama'
                     },
@@ -74,6 +79,7 @@
                             <button 
                                 class="btn btn-sm btn-primary btnEdit"
                                 data-id="${data.id}"
+                                data-nik="${data.nik}"
                                 data-nama="${data.nama}"
                                 data-tempat_lahir="${data.tempat_lahir}"
                                 data-tanggal_lahir="${data.tanggal_lahir}"
@@ -131,6 +137,7 @@
             const form = $('#FormNamaPemanfaat');
 
             $('#id_NP').val(d.id);
+            $('#nik').val(d.nik);
             $('#nama').val(d.nama);
             $('#tempat_lahir').val(d.tempat_lahir);
             $('#tanggal_lahir').val(d.tanggal_lahir);

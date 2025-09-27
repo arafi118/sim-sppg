@@ -76,7 +76,7 @@ class BahanPanganController extends Controller
             'harga_jual'            => 'required'
         ];
 
-        $harga_jual = floatval(str_replace(',', '', str_replace('.00', '', $data['harga_jual'])));
+        $harga_jual = floatval(str_replace(',', '', str_replace('.', '', $data['harga_jual'])));
 
         $validator = Validator::make($data, $rules);
 
@@ -132,7 +132,7 @@ class BahanPanganController extends Controller
             'harga_jual'            => 'required'
         ];
 
-        $haarga_jual = floatval(str_replace(',', '', str_replace('.00', '', $data['harga_jual'])));
+        $haarga_jual = floatval(str_replace(',', '', str_replace('.', '', $data['harga_jual'])));
 
         $validator = Validator::make($data, $rules);
 
@@ -147,10 +147,19 @@ class BahanPanganController extends Controller
             'harga_jual'         => $haarga_jual
         ]);
 
+        $bahanPangan->load('kelompokPangan');
+
         return response()->json([
-            'success'   => true,
-            'msg'       => 'Data berhasil diperbarui.',
-            'data'      => $bahanPangan
+            'success' => true,
+            'msg'     => 'Data berhasil diperbarui.',
+            'data'    => [
+                'id'                   => $bahanPangan->id,
+                'nama'                 => $bahanPangan->nama,
+                'satuan'               => $bahanPangan->satuan,
+                'harga_jual'           => $bahanPangan->harga_jual,
+                'kelompok_pangan_id'   => $bahanPangan->kelompok_pangan_id,
+                'kelompok_pangan_nama' => $bahanPangan->kelompokPangan->nama ?? '',
+            ]
         ], Response::HTTP_OK);
     }
 

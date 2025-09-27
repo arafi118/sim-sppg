@@ -90,6 +90,7 @@
             });
         }
 
+
         // format input harga_jual
         $("#harga_jual").on("input", function() {
             let value = $(this).val().replace(/\D/g, "");
@@ -129,9 +130,12 @@
 
             $('#id_BP').val(d.id);
             $('#nama').val(d.nama);
-            $('#satuan').val(d.satuan);
             $('#harga_jual').val(d.harga_jual);
 
+            // set satuan
+            $('#satuan').val(d.satuan).trigger('change');
+
+            // set kelompok pangan
             if (d.kelompok_pangan_id) {
                 $('#kelompok_pangan_id').val(d.kelompok_pangan_id).trigger('change');
             } else {
@@ -141,6 +145,7 @@
             form.attr('action', `/app/bahan-pangan/${d.id}`);
             form.find('input[name="_method"]').remove();
             form.append('<input type="hidden" name="_method" value="PUT">');
+
             $('#formTitle').text("Edit Bahan Pangan").css('color', 'goldenrod');
             const modal = new bootstrap.Modal(document.getElementById('BP-Pangan'));
             modal.show();
@@ -153,6 +158,8 @@
             $('small').empty();
             $('.is-invalid').removeClass('is-invalid');
             const actionUrl = form.attr('action');
+            const isEdit = form.find('input[name="_method"]').val() === "PUT"; // cek mode
+
             const Toast = Swal.mixin({
                 toast: true,
                 position: 'top-end',
@@ -178,7 +185,20 @@
                         const modalEl = document.getElementById('BP-Pangan');
                         const modalInstance = bootstrap.Modal.getInstance(modalEl);
                         modalInstance.hide();
-                        if (cl) cl.ajax.reload(null, false);
+
+                        // update datatable tanpa reload
+                        if (isEdit) {
+                            // cari row berdasarkan ID
+                            let row = table.row(function(idx, data, node) {
+                                return data.id == result.data.id;
+                            });
+                            if (row) {
+                                row.data(result.data).draw(false);
+                            }
+                        } else {
+                            table.row.add(result.data).draw(false);
+                        }
+
                     } else {
                         Toast.fire({
                             icon: 'error',
