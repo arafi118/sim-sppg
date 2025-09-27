@@ -405,8 +405,27 @@ class PelaporanController extends Controller
 
     private function proposal(array $data)
     {
+        $thn  = $data['tahun'];
+        $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
+        $hari = str_pad($data['hari'], 2, '0', STR_PAD_LEFT);
+
+        $tgl = $thn . '-' . $bln . '-' . $hari;
+
+        $data['tahun']     = $thn;
+        $data['judul']     = 'LAPORAN KEUANGAN';
+        $data['sub_judul'] = 'Tahun ' . Tanggal::tahun($tgl);
+        $data['tgl']       = Tanggal::tahun($tgl);
+        $data['title']     = 'LAPORAN KEUANGAN';
+        if (!empty($data['bulan'])) {
+            $data['sub_judul'] = 'Bulan ' . Tanggal::namaBulan($tgl) . ' ' . Tanggal::tahun($tgl);
+            $data['tgl']       = Tanggal::namaBulan($tgl) . ' ' . Tanggal::tahun($tgl);
+        }
+
+        $data['profil'] = Profil::first();
         $data['title'] = 'Proposal';
-        $data['tgl']   = now()->format('d-m-Y');
+
+        $data['kepala'] = User::where('level_id', '5')->first();
+
         $data['kelompokpemanfaat'] = KelompokPemanfaat::all();
 
         $view = view('app.pelaporan.views.proposal', $data)->render();

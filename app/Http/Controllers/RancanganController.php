@@ -27,10 +27,6 @@ class RancanganController extends Controller
             $rancanganMenu = Rancangan::select('rancangans.*', 'periode_masaks.periode_ke', 'periode_masaks.tanggal_awal', 'periode_masaks.tanggal_akhir')
                 ->join('periode_masaks', 'rancangans.periode_masak_id', '=', 'periode_masaks.id')
                 ->with(['dataPemanfaat', 'rancanganMenu.menu.resep.bahanPangan'])
-                ->where([
-                    ['periode_masaks.tanggal_awal', '>=', $tanggal_awal],
-                    ['periode_masaks.tanggal_akhir', '<=', $tanggal_akhir]
-                ])
                 ->orderBy('tanggal', 'desc')
                 ->get();
 
@@ -87,7 +83,7 @@ class RancanganController extends Controller
             $tanggal[1] = $tanggal[0];
         }
 
-        $rancangan = Rancangan::with(['kelompokPemanfaat', 'rancanganMenu.menu'])
+        $rancangan = Rancangan::with(['dataPemanfaat', 'rancanganMenu.menu'])
             ->whereBetween('tanggal', [$tanggal[0], $tanggal[1]])
             ->where('approved', 0)
             ->orderBy('tanggal', 'ASC')

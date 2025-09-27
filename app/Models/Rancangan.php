@@ -21,6 +21,11 @@ class  Rancangan extends Model
         return $this->belongsTo(DataPemanfaat::class, 'data_pemanfaat_id');
     }
 
+    public function kelompokPemanfaat()
+    {
+        return $this->belongsTo(KelompokPemanfaat::class, 'kelompok_pemanfaat_id');
+    }
+
     public function rancanganMenu()
     {
         return $this->hasMany(RancanganMenu::class, 'rancangan_id');

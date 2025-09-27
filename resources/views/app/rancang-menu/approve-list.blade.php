@@ -20,7 +20,7 @@
                             <input type="checkbox" class="form-check-input" name="id[]" value="{{ $r->id }}">
                         </td>
                         <td>{{ $r->tanggal }}</td>
-                        <td>{{ $r->kelompokPemanfaat->nama }}</td>
+                        <td>{{ $r->dataPemanfaat->nama }}</td>
                         <td>{{ $r->jumlah }}</td>
                         <td>
                             @foreach ($r->rancanganMenu as $rm)

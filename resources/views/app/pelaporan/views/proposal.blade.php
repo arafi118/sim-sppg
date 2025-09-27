@@ -23,12 +23,12 @@
             <tr>
                 <td width="10%">&nbsp;</td>
                 <td width="10%">&nbsp;</td>
-                <td width="10%">Jakarta, ...... 2025 </td>
+                <td width="10%">Wonosobo, ...... {{ $tahun }} </td>
             </tr>
             <tr>
                 <td width="10%">&nbsp;</td>
                 <td width="10%">&nbsp;</td>
-                <td width="10%">Kepala Satuan Pelayanan Pemenuhan Gizi </td>
+                <td width="10%">Kepala Satuan Pelayanan Pemenuhan Gizi</td>
             </tr>
             <tr>
                 <td width="10%">&nbsp;</td>
@@ -41,7 +41,7 @@
             <tr>
                 <td width="10%">&nbsp;</td>
                 <td width="10%">&nbsp;</td>
-                <td width="10%">________________________ </td>
+                <td width="10%">{{ $kepala->nama }} <br>________________________</td>
             </tr>
         </table>
     </div>
