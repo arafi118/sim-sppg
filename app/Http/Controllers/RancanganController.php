@@ -91,7 +91,7 @@ class RancanganController extends Controller
             $tanggal[1] = $tanggal[0];
         }
 
-        $rancangan = Rancangan::with(['dataPemanfaat', 'rancanganMenu.menu'])
+        $rancangan = Rancangan::with(['rancanganMenu.menu.resep.bahanPangan'])
             ->whereBetween('tanggal', [$tanggal[0], $tanggal[1]])
             ->where('approved', 0)
             ->orderBy('tanggal', 'ASC')
