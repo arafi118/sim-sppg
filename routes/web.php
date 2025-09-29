@@ -146,7 +146,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     //Pelaporan
     Route::get('/laporan', [PelaporanController::class, 'index']);
     Route::get('/pelaporan/preview', [PelaporanController::class, 'preview']);
-    Route::get('/pelaporan/sub-laporan/{file}', [PelaporanController::class, 'subLaporan']);
+    Route::get('/pelaporan/sub_laporan/{file}', [PelaporanController::class, 'subLaporan']);
     Route::get('/pelaporan/simpan-saldo/{tahun}/{bulan?}', [PelaporanController::class, 'simpanSaldo']);
 
     //Rab

@@ -28,12 +28,46 @@ class PelaporanController extends Controller
         return view('app.pelaporan.index', compact('title', 'laporan'));
     }
 
+    public function subLaporan($file)
+    {
+        $sub_laporan = [];
+
+        if ($file == 'buku_besar') {
+            $rekening = Rekening::orderBy('kode_akun', 'ASC')->get();
+
+            foreach ($rekening as $rek) {
+                $sub_laporan[] = [
+                    'value' => $rek->kode_akun,
+                    'title' => $rek->kode_akun . '. ' . $rek->nama_akun
+                ];
+            }
+        } else {
+            // untuk laporan lain tetap ada placeholder
+            $sub_laporan[] = [
+                'value' => '',
+                'title' => '---'
+            ];
+        }
+
+        return view('app.pelaporan.partials.sub_laporan', compact('sub_laporan'));
+    }
+
     public function preview(Request $request)
     {
         $laporan = $request->get('laporan');
         $data = $request->all();
 
-        return $this->$laporan($data);
+        if ($laporan === 'buku_besar') {
+            $data['kode_akun'] = $request->sub_laporan;
+            $data['laporan']   = 'buku_besar ' . $request->sub_laporan;
+            return $this->buku_besar($data);
+        }
+
+        if (method_exists($this, $laporan)) {
+            return $this->$laporan($data);
+        }
+
+        abort(404, 'Laporan tidak ditemukan');
     }
     private function cover(array $data)
     {
@@ -322,6 +356,7 @@ class PelaporanController extends Controller
 
         return $pdf->inline();
     }
+
     private function laba_rugi(array $data)
     {
         $thn  = $data['tahun'];
@@ -362,6 +397,77 @@ class PelaporanController extends Controller
             'enable-local-file-access' => true,
         ]);
         return PDF::loadHTML($view)->inline();
+    }
+
+    private function buku_besar(array $data)
+    {
+        $thn  = $data['tahun'];
+        $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
+
+        $tgl_awal  = "{$thn}-01-01";
+        $tgl_akhir = "{$thn}-{$bln}-" . cal_days_in_month(CAL_GREGORIAN, (int) $bln, (int) $thn);
+
+        $namaBulan = Tanggal::namaBulan("{$thn}-{$bln}-01");
+        $lastDay   = date('t', strtotime("{$thn}-{$bln}-01"));
+
+        $data['sub_judul'] = !empty($data['bulan'])
+            ? 'per ' . $lastDay . ' ' . $namaBulan . ' ' . $thn
+            : 'Tahun ' . $thn;
+
+        // 🔹 Cari akun berdasarkan kode_akun
+        $akun = Rekening::where('kode_akun', $data['kode_akun'])->first();
+        $data['akun'] = $akun;
+
+        // 🔹 Tambahkan nama akun ke judul
+        $data['judul'] = 'Buku Besar - ' . $akun->kode_akun . ' ' . $akun->nama_akun;
+
+        $data['title'] = !empty($data['bulan'])
+            ? $data['judul'] . ' (' . $namaBulan . ' ' . $thn . ')'
+            : $data['judul'] . ' Tahun ' . $thn;
+            // 🔹 Cari akun berdasarkan kode_akun
+            $akun = Rekening::where('kode_akun', $data['kode_akun'])->first();
+            $data['akun'] = $akun;
+
+            // 🔹 Ambil transaksi akun tersebut dalam periode
+            $data['transaksi'] = Transaksi::where(function ($q) use ($data) {
+                    $q->where('rekening_debit', $data['kode_akun'])
+                    ->orWhere('rekening_kredit', $data['kode_akun']);
+                })
+                ->whereBetween('tgl_transaksi', [$tgl_awal, $tgl_akhir])
+                ->orderBy('tgl_transaksi')
+                ->get();
+
+            // 🔹 Hitung saldo awal (manual, tanpa DB::raw)
+            $saldo_awal = 0;
+            $trx_awal = Transaksi::where(function ($q) use ($data) {
+                    $q->where('rekening_debit', $data['kode_akun'])
+                    ->orWhere('rekening_kredit', $data['kode_akun']);
+                })
+                ->where('tgl_transaksi', '<', $tgl_awal)
+                ->get();
+
+            foreach ($trx_awal as $trx) {
+                if ($trx->rekening_debit == $data['kode_akun']) {
+                    $saldo_awal += $trx->jumlah;
+                } else {
+                    $saldo_awal -= $trx->jumlah;
+                }
+            }
+            $data['saldo_awal'] = $saldo_awal;
+
+            // 🔹 Generate view + PDF
+            $view = view('app.pelaporan.views.buku_besar', $data)->render();
+
+            $pdf = PDF::loadHTML($view)->setOptions([
+                'margin-top'    => 30,
+                'margin-bottom' => 15,
+                'margin-left'   => 25,
+                'margin-right'  => 20,
+                'header-html'   => view('app.pelaporan.layout.header', $data)->render(),
+                'enable-local-file-access' => true,
+            ]);
+
+            return $pdf->inline();
     }
 
     private function berita_acara(array $data)
