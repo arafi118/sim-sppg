@@ -1,9 +1,15 @@
 @extends('app.layouts.app')
 
 @section('content')
+    <style>
+        body {
+            overflow: hidden;
+            /* matikan scroll horizontal & vertical */
+        }
+    </style>
     <div class="card">
         <div class="card-body">
-            <form action="/app/pelaporan/preview" method="GET" class="row g-3" target="_blank">
+            <form action="/pelaporan/preview" method="GET" class="row g-3" target="_blank">
                 <div class="col-md-4">
                     <label for="tahun" class="form-label">Tahunan</label>
                     <select name="tahun" class="form-select select2">
@@ -66,6 +72,8 @@
                     </select>
                 </div>
 
+
+
                 <div class="col-12">
                     <div class="d-flex justify-content-end gap-2 mt-4">
                         <button type="submit" name="action" value="simpan" class="btn btn-danger">Simpan Saldo</button>
@@ -78,12 +86,35 @@
         </div>
     </div>
 @endsection
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('.select2').select2({
-            width: '100%'
+
+@section('script')
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                width: '100%'
+            });
+
+            $('#laporan').on('change', function() {
+                let file = $(this).val();
+                let tahun = $('select[name="tahun"]').val();
+                let bulan = $('select[name="bulan"]').val();
+
+                if (file) {
+                    $.get("/app/pelaporan/sub_laporan/" + file + "?tahun=" + tahun + "&bulan=" + bulan,
+                        function(result) {
+                            $('#sub_laporan').html(result);
+                            $('#sub_laporan').select2({
+                                width: '100%'
+                            });
+                        });
+                } else {
+                    $('#sub_laporan').html('<option value="">---</option>')
+                        .select2({
+                            width: '100%'
+                        });
+                }
+            });
+
         });
-    });
-</script>
+    </script>
+@endsection
