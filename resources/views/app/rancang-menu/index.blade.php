@@ -52,6 +52,7 @@
                 url: '/app/rancang-menu?tanggal_awal={{ $tanggal_awal }}&tanggal_akhir={{ $tanggal_akhir }}',
                 type: 'GET',
             },
+
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
@@ -67,8 +68,8 @@
                     name: 'tanggal'
                 },
                 {
-                    data: 'data_pemanfaat.nama_lembaga',
-                    name: 'data_pemanfaat.nama_lembaga'
+                    data: 'data_pemanfaat',
+                    name: 'data_pemanfaat'
                 },
                 {
                     data: 'jumlah',

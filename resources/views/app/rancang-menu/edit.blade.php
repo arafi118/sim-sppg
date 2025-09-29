@@ -54,14 +54,19 @@
                     <div class="col-lg-3 col-12 mb-6">
                         <label for="nama_lembaga_pemanfaat" class="form-label">Data Pemanfaat</label>
                         <input id="nama_lembaga_pemanfaat" name="nama_lembaga_pemanfaat" class="form-control list-menu"
-                            value="{{ $rancang_menu->dataPemanfaat->nama_lembaga }}" readonly />
+                            value="{{ $rancang_menu->data_pemanfaat }}" readonly />
                         <input type="hidden" id="data_pemanfaat" name="data_pemanfaat" class="form-control list-menu"
-                            value="{{ $rancang_menu->data_pemanfaat_id }}" />
+                            value="{{ $rancang_menu->data_pemanfaat }}" />
                     </div>
-                    <div class="col-lg-9 col-12 mb-6">
+                    <div class="col-lg-7 col-12 mb-6">
                         <label for="pilih-menu" class="form-label">Pilih Menu</label>
                         <input id="pilih-menu" name="menu" class="form-control list-menu"
                             value="{{ json_encode($selectedMenu) }}" />
+                    </div>
+                    <div class="col-lg-2 col-12 mb-6">
+                        <label for="porsi" class="form-label">Jumlah Porsi</label>
+                        <input id="porsi" type="number" name="porsi" class="form-control"
+                            value="{{ $rancang_menu->jumlah }}" />
                     </div>
                 </div>
                 <hr />

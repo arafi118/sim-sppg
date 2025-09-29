@@ -52,16 +52,18 @@
                                     <select id="form-repeater-1-1" name="data_pemanfaat"
                                         class="select2 form-select form-select-lg" data-allow-clear="true">
                                         <option value="">-- Pilih Pemanfaat --</option>
-                                        @foreach ($dataPemanfaat as $kp)
-                                            <option value="{{ $kp->id }}|{{ $kp->jumlah_pemanfaat }}">
-                                                {{ $kp->nama_lembaga }}
-                                            </option>
-                                        @endforeach
+                                        <option value="besar">Besar</option>
+                                        <option value="kecil">Kecil</option>
                                     </select>
                                 </div>
-                                <div class="col-lg-7 col-12 mb-6">
+                                <div class="col-lg-5 col-12 mb-6">
                                     <label for="form-repeater-1-2" class="form-label">Pilih Menu</label>
                                     <input id="form-repeater-1-2" name="menu" class="form-control list-menu" />
+                                </div>
+                                <div class="col-lg-2 col-12 mb-6">
+                                    <label for="form-repeater-1-3" class="form-label">Jumlah Porsi</label>
+                                    <input id="form-repeater-1-3" type="number" value="0" name="porsi"
+                                        class="form-control list-porsi" />
                                 </div>
                                 <div class="col-lg-2 col-12 d-flex align-items-end mb-6">
                                     <button type="button" class="btn btn-label-danger w-100" data-repeater-delete>
@@ -77,7 +79,6 @@
                             <i class="icon-base bx bx-left-arrow-alt me-1"></i>
                             <span class="align-middle">Kembali</span>
                         </a>
-
                         <div class="d-flex">
                             <button type="button" class="btn btn-outline-primary" data-repeater-create>
                                 <i class="icon-base bx bx-plus me-1"></i>

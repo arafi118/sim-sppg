@@ -24,9 +24,14 @@ class RancanganController extends Controller
             $tanggal_awal = request()->get('tanggal_awal', date('Y-m-d'));
             $tanggal_akhir = request()->get('tanggal_akhir', date('Y-m-d', strtotime('+14 days')));
 
-            $rancanganMenu = Rancangan::select('rancangans.*', 'periode_masaks.periode_ke', 'periode_masaks.tanggal_awal', 'periode_masaks.tanggal_akhir')
+            $rancanganMenu = Rancangan::select(
+                'rancangans.*',
+                'periode_masaks.periode_ke',
+                'periode_masaks.tanggal_awal',
+                'periode_masaks.tanggal_akhir'
+            )
                 ->join('periode_masaks', 'rancangans.periode_masak_id', '=', 'periode_masaks.id')
-                ->with(['dataPemanfaat', 'rancanganMenu.menu.resep.bahanPangan'])
+                ->with(['rancanganMenu.menu.resep.bahanPangan'])
                 ->orderBy('tanggal', 'desc')
                 ->get();
 
@@ -37,25 +42,26 @@ class RancanganController extends Controller
                     $btn .= '<a href="/app/rancang-menu/' . $row->id . '/edit" class="btn btn-sm btn-primary">Edit</a>';
                     $btn .= '<button type="button" class="btn btn-sm btn-danger btn-hapus" data-id="' . $row->id . '">Hapus</button>';
                     $btn .= '</div>';
-
                     return $btn;
                 })
                 ->editColumn('periode_ke', function ($row) {
                     return 'Periode ke ' . str_pad($row->periode_ke, 2, '0', STR_PAD_LEFT);
                 })
+                ->editColumn('data_pemanfaat', function ($row) {
+                    return $row->data_pemanfaat ?? '-';
+                })
                 ->addColumn('menu', function ($row) {
                     $menu = '<div class="demo-inline-spacing">';
                     foreach ($row->rancanganMenu as $rm) {
-                        $_menu = '<span class="badge text-bg-primary">' . $rm->menu->nama . '</span>';
-                        $menu .= $_menu;
+                        $menu .= '<span class="badge text-bg-primary">' . $rm->menu->nama . '</span>';
                     }
                     $menu .= '</div>';
-
                     return $menu;
                 })
                 ->rawColumns(['action', 'menu'])
                 ->make(true);
         }
+
 
         $periode = PeriodeMasak::where([
             ['tanggal_awal', '<=', date('Y-m-d')],
@@ -162,6 +168,7 @@ class RancanganController extends Controller
             'tanggal',
             'periode_id',
             'rancangan',
+            'porsi',
         ]);
 
         $validate = Validator::make($data, [
@@ -189,13 +196,15 @@ class RancanganController extends Controller
             }
 
             foreach ($rancanganMenu as $rm) {
-                $dataPemanfaat = explode('|', $rm['data_pemanfaat']);
-                $dataPemanfaatId = $dataPemanfaat[0];
-                $jumlahPemanfaat = $dataPemanfaat[1];
+                // $dataPemanfaat = explode('|', $rm['data_pemanfaat']);
+                // $dataPemanfaatId = $dataPemanfaat[0];
+                // $jumlahPemanfaat = $dataPemanfaat[1];
+                $dataPemanfaatId = $rm['data_pemanfaat'];
+                $jumlahPemanfaat = $rm['porsi'];
 
                 $rancangan = Rancangan::create([
                     'periode_masak_id' => $periode_id,
-                    'data_pemanfaat_id' => $dataPemanfaatId,
+                    'data_pemanfaat' => $dataPemanfaatId,
                     'tanggal' => $tanggal,
                     'jumlah' => $jumlahPemanfaat,
                 ]);
@@ -242,6 +251,8 @@ class RancanganController extends Controller
         $rancang_menu = $rancang_menu->load(['periode', 'dataPemanfaat', 'rancanganMenu.menu']);
         $menu = Menu::orderBy('nama', 'asc')->get();
 
+        // dd($rancang_menu, $menu);
+
         $title = 'Edit Rancangan Menu';
         return view('app.rancang-menu.edit', compact('title', 'rancang_menu', 'menu'));
     }
@@ -254,25 +265,28 @@ class RancanganController extends Controller
         $data = $request->only([
             'tanggal',
             'menu',
+            'porsi',
         ]);
 
         $validate = Validator::make($data, [
-            'tanggal' => 'required|date',
-            'menu' => 'required',
+            'tanggal'   => 'required|date',
+            'menu'      => 'required',
+            'porsi'     => 'required',
         ]);
 
         if ($validate->fails()) {
             return response()->json(['error' => $validate->errors()], 422);
         }
 
-        $rancangan_menu = [];
         $menu = json_decode($data['menu'], true);
+
+        $rancangan_menu = [];
         foreach ($menu as $m) {
             $rancangan_menu[] = [
-                'rancangan_id' => $rancang_menu->id,
-                'menu_id' => $m['id'],
-                'created_at' => now(),
-                'updated_at' => now(),
+                'rancangan_id'  => $rancang_menu->id,
+                'menu_id'       => $m['id'],
+                'created_at'    => now(),
+                'updated_at'    => now(),
             ];
         }
 
@@ -283,6 +297,7 @@ class RancanganController extends Controller
 
         $rancang_menu->update([
             'tanggal' => $data['tanggal'],
+            'jumlah' => $data['porsi'],
         ]);
 
         return response()->json([
