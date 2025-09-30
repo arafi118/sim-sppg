@@ -113,6 +113,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
 
     Route::get('/mitra/daftar-menu', [MitraController::class, 'daftarMenu']);
     Route::get('/mitra/rab', [MitraController::class, 'rab']);
+    Route::get('/mitra/rab/generate', [MitraController::class, 'generate']);
     Route::resource('/mitra', MitraController::class);
 
     //admin

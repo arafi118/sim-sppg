@@ -5,8 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\BahanPangan;
 use App\Models\KelompokPangan;
 use App\Models\Mitra;
+use App\Models\PeriodeMasak;
+use App\Models\Rancangan;
+use App\Utils\Tanggal;
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
 class MitraController extends Controller
 {
@@ -182,11 +188,177 @@ class MitraController extends Controller
 
     public function daftarMenu()
     {
-        //
+        $periode = PeriodeMasak::where('tanggal_awal', '<=', date('Y-m-d'))->where('tanggal_akhir', '>=', date('Y-m-d'))->first();
+        $rancangan = Rancangan::with(['rancanganMenu.menu.resep.bahanPangan'])
+            ->whereBetween('tanggal', [$periode->tanggal_awal, $periode->tanggal_akhir])
+            ->where('approved', 1)
+            ->orderBy('tanggal', 'ASC')
+            ->get();
+
+        $title = 'Daftar Menu';
+        return view('app.mitra.daftar-menu')->with(compact('title', 'rancangan'));
     }
 
     public function rab()
     {
-        //
+        $periode = PeriodeMasak::where('tanggal_awal', '<=', date('Y-m-d'))->where('tanggal_akhir', '>=', date('Y-m-d'))->first();
+
+        $title = 'Rencana Anggaran Biaya (RAB)';
+        return view('app.mitra.rab')->with(compact('title', 'periode'));
+    }
+
+    public function generate()
+    {
+        $tanggalParam = explode(',', request()->get('tanggal'));
+
+        if (count($tanggalParam) === 0) {
+            return redirect()->back()->with('error', 'Tanggal tidak valid.');
+        }
+
+        $orientasi = 'landscape';
+        if (count($tanggalParam) == '2') {
+            $tanggal_awal = new DateTime($tanggalParam[0]);
+            $tanggal_akhir = new DateTime($tanggalParam[1]);
+            $selisih = $tanggal_awal->diff($tanggal_akhir);
+
+            $daftarTanggal = [];
+            for ($i = 0; $i <= $selisih->days; $i++) {
+                $TanggalPeriode = date('Y-m-d', strtotime('+ ' . $i . ' days', strtotime($tanggal_awal->format('Y-m-d'))));
+
+                $daftarTanggal[] = [
+                    'hari' => date('d', strtotime($TanggalPeriode)),
+                    'nama_hari' => Tanggal::namaHari($TanggalPeriode),
+                    'tanggal' => $TanggalPeriode
+                ];
+            }
+
+            // Hanya ambil rancangan yang sudah approved
+            $rancangan = Rancangan::with(['rancanganMenu.menu.resep.bahanPangan'])
+                ->whereBetween('tanggal', $tanggalParam)
+                ->where('approved', 1)
+                ->orderBy('tanggal', 'ASC')
+                ->get();
+
+            // Kalau tidak ada rancangan approved → balik ke index
+            if ($rancangan->isEmpty()) {
+                return redirect()->route('rab.index')->with('error', 'Belum ada rancangan yang disetujui.');
+            }
+
+            $jenis = ($tanggalParam[0] === $tanggalParam[1]) ? 'Harian' : 'Periode';
+
+            $dataBahanPangan = [];
+            foreach ($rancangan as $r) {
+                $jumlah = $r->jumlah;
+
+                foreach ($r->rancanganMenu as $rm) {
+                    $menu = $rm->menu;
+                    if ($menu) {
+                        foreach ($menu->resep as $resep) {
+                            $bahanPangan = $resep->bahanPangan;
+                            if ($bahanPangan) {
+                                if (isset($dataBahanPangan[$bahanPangan->id])) {
+                                    if (isset($dataBahanPangan[$bahanPangan->id]['jumlah'][$r->tanggal])) {
+                                        $dataBahanPangan[$bahanPangan->id]['jumlah'][$r->tanggal] += ($resep->gramasi * $jumlah);
+                                    } else {
+                                        $dataBahanPangan[$bahanPangan->id]['jumlah'][$r->tanggal] = ($resep->gramasi * $jumlah);
+                                    }
+                                } else {
+                                    $dataBahanPangan[$bahanPangan->id] = [
+                                        'nama'   => $bahanPangan->nama,
+                                        'satuan' => $bahanPangan->satuan,
+                                        'harga'  => $bahanPangan->harga_jual,
+                                        'jumlah' => [
+                                            $r->tanggal => ($resep->gramasi * $jumlah)
+                                        ],
+                                    ];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            uasort($dataBahanPangan, fn($a, $b) => strcmp($a['nama'], $b['nama']));
+
+            if ($jenis === 'Harian') {
+                $title = "Rab Harian - " . Carbon::parse($tanggalParam[0])->translatedFormat('d F Y');
+            } else {
+                $title = "Rab Periode - " .
+                    Carbon::parse($tanggalParam[0])->translatedFormat('d F Y') .
+                    " s.d " .
+                    Carbon::parse($tanggalParam[1])->translatedFormat('d F Y');
+            }
+
+            $view = view('app.mitra.cetak-rab-full', compact('dataBahanPangan', 'tanggalParam', 'daftarTanggal', 'jenis'))->render();
+        } else {
+            $tanggalParam[1] = $tanggalParam[0];
+
+            // Hanya ambil rancangan yang sudah approved
+            $rancangan = Rancangan::with(['rancanganMenu.menu.resep.bahanPangan'])
+                ->whereBetween('tanggal', $tanggalParam)
+                ->where('approved', 1)
+                ->orderBy('tanggal', 'ASC')
+                ->get();
+
+            // Kalau tidak ada rancangan approved → balik ke index
+            if ($rancangan->isEmpty()) {
+                return redirect()->route('rab.index')->with('error', 'Belum ada rancangan yang disetujui.');
+            }
+
+            $jenis = ($tanggalParam[0] === $tanggalParam[1]) ? 'Harian' : 'Periode';
+
+            $dataBahanPangan = [];
+            foreach ($rancangan as $r) {
+                $jumlah = $r->jumlah;
+
+                foreach ($r->rancanganMenu as $rm) {
+                    $menu = $rm->menu;
+                    if ($menu) {
+                        foreach ($menu->resep as $resep) {
+                            $bahanPangan = $resep->bahanPangan;
+                            if ($bahanPangan) {
+                                if (isset($dataBahanPangan[$bahanPangan->id])) {
+                                    $dataBahanPangan[$bahanPangan->id]['jumlah'] += ($resep->gramasi * $jumlah);
+                                } else {
+                                    $dataBahanPangan[$bahanPangan->id] = [
+                                        'nama'   => $bahanPangan->nama,
+                                        'satuan' => $bahanPangan->satuan,
+                                        'harga'  => $bahanPangan->harga_jual,
+                                        'jumlah' => ($resep->gramasi * $jumlah),
+                                    ];
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            uasort($dataBahanPangan, fn($a, $b) => strcmp($a['nama'], $b['nama']));
+
+            if ($jenis === 'Harian') {
+                $title = "Rab Harian - " . Carbon::parse($tanggalParam[0])->translatedFormat('d F Y');
+            } else {
+                $title = "Rab Periode - " .
+                    Carbon::parse($tanggalParam[0])->translatedFormat('d F Y') .
+                    " s.d " .
+                    Carbon::parse($tanggalParam[1])->translatedFormat('d F Y');
+            }
+
+            $orientasi = 'portrait';
+            $view = view('app.mitra.cetak-rab-per-tanggal', compact('dataBahanPangan', 'tanggalParam', 'jenis'))->render();
+        }
+
+        return PDF::loadHTML($view)
+            ->setOptions([
+                'header-line' => true,
+                'margin-top'     => 20,
+                'margin-bottom'  => 16,
+                'margin-left'    => 12,
+                'margin-right'   => 10,
+                'enable-local-file-access' => true,
+            ])
+            ->setPaper('A4', $orientasi)
+            ->setOption('title', $title)
+            ->inline('RAB.pdf');
     }
 }
