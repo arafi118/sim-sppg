@@ -9,7 +9,10 @@
     </style>
     <div class="card">
         <div class="card-body">
-            <form action="/pelaporan/preview" method="GET" class="row g-3" target="_blank">
+            <form action="/app/pelaporan/preview" method="GET" class="row g-3" target="_blank">
+                <input type="hidden" name="laporan" value="buku_besar">
+                <input type="hidden" name="action" value="preview">
+
                 <div class="col-md-4">
                     <label for="tahun" class="form-label">Tahunan</label>
                     <select name="tahun" class="form-select select2">

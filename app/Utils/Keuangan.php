@@ -188,4 +188,115 @@ class Keuangan
         return $map[$angka] ?? $angka;
     }
 
+    public static function bukuBesar(array $data): array
+    {
+        $thn  = $data['tahun'];
+        $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
+
+        $tgl_awal_tahun  = "$thn-01-01";
+        $tgl_awal_bulan  = "$thn-$bln-01";
+        $tgl_akhir_bulan = "$thn-$bln-" . cal_days_in_month(CAL_GREGORIAN, (int) $bln, (int) $thn);
+
+        // Rekening
+        $rek = Rekening::where('kode_akun', $data['kode_akun'])->first();
+        if (!$rek) {
+            throw new \Exception("Rekening tidak ditemukan!");
+        }
+        $data['rek'] = $rek;
+
+        // Saldo Awal Tahun
+        $saldo_awal = Transaksi::where(fn($q) => $q
+                ->where('rekening_debit', $rek->id)
+                ->orWhere('rekening_kredit', $rek->id))
+            ->where('tanggal_transaksi', '<', $tgl_awal_tahun)
+            ->get()
+            ->reduce(fn($carry, $trx) => $carry + (
+                $trx->rekening_debit == $rek->id
+                    ? ($rek->jenis_mutasi == 'debet' ? $trx->jumlah : -$trx->jumlah)
+                    : ($rek->jenis_mutasi == 'debet' ? -$trx->jumlah : $trx->jumlah)
+            ), 0);
+        $data['saldo_awal'] = $saldo_awal;
+
+        // Kumulatif s/d Bulan Lalu
+        $transaksi_bulan_lalu = Transaksi::where(fn($q) => $q
+                ->where('rekening_debit', $rek->id)
+                ->orWhere('rekening_kredit', $rek->id))
+            ->whereBetween('tanggal_transaksi', [$tgl_awal_tahun, date('Y-m-d', strtotime("$tgl_awal_bulan -1 day"))])
+            ->get();
+
+        $komulatif_bulan_lalu = $transaksi_bulan_lalu->reduce(function ($carry, $trx) use ($rek) {
+            if ($trx->rekening_debit == $rek->id) {
+                $carry['debit'] += $trx->jumlah;
+                $carry['saldo'] += ($rek->jenis_mutasi == 'debet' ? $trx->jumlah : -$trx->jumlah);
+            } elseif ($trx->rekening_kredit == $rek->id) {
+                $carry['kredit'] += $trx->jumlah;
+                $carry['saldo'] += ($rek->jenis_mutasi == 'debet' ? -$trx->jumlah : $trx->jumlah);
+            }
+            return $carry;
+        }, ['debit' => 0, 'kredit' => 0, 'saldo' => $saldo_awal]);
+
+        $data['komulatif_bulan_lalu_debit']  = $komulatif_bulan_lalu['debit'];
+        $data['komulatif_bulan_lalu_kredit'] = $komulatif_bulan_lalu['kredit'];
+        $data['komulatif_bulan_lalu_saldo']  = $komulatif_bulan_lalu['saldo'];
+
+        // ---------------------------
+        // Transaksi Bulan Ini
+        // ---------------------------
+        $transaksi_bulan_ini = Transaksi::with('user')
+            ->where(fn($q) => $q
+                ->where('rekening_debit', $rek->id)
+                ->orWhere('rekening_kredit', $rek->id))
+            ->whereBetween('tanggal_transaksi', [$tgl_awal_bulan, $tgl_akhir_bulan])
+            ->orderBy('tanggal_transaksi')
+            ->get();
+        $data['transaksi'] = $transaksi_bulan_ini;
+
+        $total_bulan_ini = $transaksi_bulan_ini->reduce(function ($carry, $trx) use ($rek) {
+            if ($trx->rekening_debit == $rek->id) {
+                $carry['debit'] += $trx->jumlah;
+            } elseif ($trx->rekening_kredit == $rek->id) {
+                $carry['kredit'] += $trx->jumlah;
+            }
+            return $carry;
+        }, ['debit' => 0, 'kredit' => 0]);
+        $data['total_bulan_ini'] = $total_bulan_ini;
+
+        // Total s/d Bulan Ini
+        $data['total_sampai_bulan_ini'] = [
+            'debit'  => $komulatif_bulan_lalu['debit'] + $total_bulan_ini['debit'],
+            'kredit' => $komulatif_bulan_lalu['kredit'] + $total_bulan_ini['kredit'],
+            'saldo'  => $komulatif_bulan_lalu['saldo']
+                    + ($rek->jenis_mutasi == 'debet'
+                            ? $total_bulan_ini['debit'] - $total_bulan_ini['kredit']
+                            : $total_bulan_ini['kredit'] - $total_bulan_ini['debit']),
+        ];
+
+        // Total Tahun Ini (Jan-Des)
+        $transaksi_tahun_ini = Transaksi::where(fn($q) => $q
+                ->where('rekening_debit', $rek->id)
+                ->orWhere('rekening_kredit', $rek->id))
+            ->whereBetween('tanggal_transaksi', [$tgl_awal_tahun, "$thn-12-31"])
+            ->get();
+
+        $total_tahun_ini = $transaksi_tahun_ini->reduce(function ($carry, $trx) use ($rek) {
+            if ($trx->rekening_debit == $rek->id) {
+                $carry['debit'] += $trx->jumlah;
+            } elseif ($trx->rekening_kredit == $rek->id) {
+                $carry['kredit'] += $trx->jumlah;
+            }
+            return $carry;
+        }, ['debit' => 0, 'kredit' => 0]);
+        $data['total_tahun_ini'] = $total_tahun_ini;
+
+       
+        $data['sub_judul']       = 'Bulan ' . Tanggal::namaBulan($tgl_awal_bulan) . ' ' . $thn;
+        $data['tgl_awal_bulan']  = $tgl_awal_bulan;
+        $data['tgl_akhir_bulan'] = $tgl_akhir_bulan;
+        $data['tahun'] = $thn;
+        $data['bulan'] = $bln;
+
+        return $data;
+    }
+
+
 }

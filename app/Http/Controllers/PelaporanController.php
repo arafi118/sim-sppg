@@ -59,7 +59,7 @@ class PelaporanController extends Controller
 
         if ($laporan === 'buku_besar') {
             $data['kode_akun'] = $request->sub_laporan;
-            $data['laporan']   = 'buku_besar ' . $request->sub_laporan;
+            $data['laporan']   = 'buku_besar'; 
             return $this->buku_besar($data);
         }
 
@@ -67,8 +67,9 @@ class PelaporanController extends Controller
             return $this->$laporan($data);
         }
 
-        abort(404, 'Laporan tidak ditemukan');
+        abort(404, 'Laporan tidak ditemukan');
     }
+
     private function cover(array $data)
     {
         $thn  = $data['tahun'];
@@ -203,7 +204,6 @@ class PelaporanController extends Controller
 
         return $pdf->inline();
     }
-
 
     private function arus_kas(array $data)
     {
@@ -404,70 +404,121 @@ class PelaporanController extends Controller
         $thn  = $data['tahun'];
         $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
 
-        $tgl_awal  = "{$thn}-01-01";
-        $tgl_akhir = "{$thn}-{$bln}-" . cal_days_in_month(CAL_GREGORIAN, (int) $bln, (int) $thn);
+        $tgl_awal_tahun  = "$thn-01-01";
+        $tgl_awal_bulan  = "$thn-$bln-01";
+        $tgl_akhir_bulan = "$thn-$bln-" . cal_days_in_month(CAL_GREGORIAN, (int) $bln, (int) $thn);
 
-        $namaBulan = Tanggal::namaBulan("{$thn}-{$bln}-01");
-        $lastDay   = date('t', strtotime("{$thn}-{$bln}-01"));
 
-        $data['sub_judul'] = !empty($data['bulan'])
-            ? 'per ' . $lastDay . ' ' . $namaBulan . ' ' . $thn
-            : 'Tahun ' . $thn;
+        // Ambil rekening yang dipilih
+        $rek = Rekening::where('kode_akun', $data['kode_akun'])->first();
+        if (!$rek) {
+            return abort(404, 'Rekening tidak ditemukan!');
+        }
+        $data['rek'] = $rek;
+        $data['judul'] = "Buku Besar " . ($rek->kode_akun ?? '-') . " (" . Tanggal::namaBulan($tgl_awal_bulan) . " $thn)";
 
-        // 🔹 Cari akun berdasarkan kode_akun
-        $akun = Rekening::where('kode_akun', $data['kode_akun'])->first();
-        $data['akun'] = $akun;
+        // Saldo Awal Tahun
+        $saldo_awal = Transaksi::where(fn($q) => $q
+                ->where('rekening_debit', $rek->id)
+                ->orWhere('rekening_kredit', $rek->id))
+            ->where('tanggal_transaksi', '<', $tgl_awal_tahun)
+            ->get()
+            ->reduce(fn($carry, $trx) => $carry + (
+                $trx->rekening_debit == $rek->id
+                    ? ($rek->jenis_mutasi == 'debet' ? $trx->jumlah : -$trx->jumlah)
+                    : ($rek->jenis_mutasi == 'debet' ? -$trx->jumlah : $trx->jumlah)
+            ), 0);
+        $data['saldo_awal'] = $saldo_awal;
 
-        // 🔹 Tambahkan nama akun ke judul
-        $data['judul'] = 'Buku Besar - ' . $akun->kode_akun . ' ' . $akun->nama_akun;
+        // Kumulatif s/d Bulan Lalu
+        $transaksi_bulan_lalu = Transaksi::where(fn($q) => $q
+                ->where('rekening_debit', $rek->id)
+                ->orWhere('rekening_kredit', $rek->id))
+            ->whereBetween('tanggal_transaksi', [$tgl_awal_tahun, date('Y-m-d', strtotime("$tgl_awal_bulan -1 day"))])
+            ->get();
 
-        $data['title'] = !empty($data['bulan'])
-            ? $data['judul'] . ' (' . $namaBulan . ' ' . $thn . ')'
-            : $data['judul'] . ' Tahun ' . $thn;
-            // 🔹 Cari akun berdasarkan kode_akun
-            $akun = Rekening::where('kode_akun', $data['kode_akun'])->first();
-            $data['akun'] = $akun;
-
-            // 🔹 Ambil transaksi akun tersebut dalam periode
-            $data['transaksi'] = Transaksi::where(function ($q) use ($data) {
-                    $q->where('rekening_debit', $data['kode_akun'])
-                    ->orWhere('rekening_kredit', $data['kode_akun']);
-                })
-                ->whereBetween('tgl_transaksi', [$tgl_awal, $tgl_akhir])
-                ->orderBy('tgl_transaksi')
-                ->get();
-
-            // 🔹 Hitung saldo awal (manual, tanpa DB::raw)
-            $saldo_awal = 0;
-            $trx_awal = Transaksi::where(function ($q) use ($data) {
-                    $q->where('rekening_debit', $data['kode_akun'])
-                    ->orWhere('rekening_kredit', $data['kode_akun']);
-                })
-                ->where('tgl_transaksi', '<', $tgl_awal)
-                ->get();
-
-            foreach ($trx_awal as $trx) {
-                if ($trx->rekening_debit == $data['kode_akun']) {
-                    $saldo_awal += $trx->jumlah;
-                } else {
-                    $saldo_awal -= $trx->jumlah;
-                }
+        $komulatif_bulan_lalu = $transaksi_bulan_lalu->reduce(function ($carry, $trx) use ($rek) {
+            if ($trx->rekening_debit == $rek->id) {
+                $carry['debit'] += $trx->jumlah;
+                $carry['saldo'] += ($rek->jenis_mutasi == 'debet' ? $trx->jumlah : -$trx->jumlah);
+            } elseif ($trx->rekening_kredit == $rek->id) {
+                $carry['kredit'] += $trx->jumlah;
+                $carry['saldo'] += ($rek->jenis_mutasi == 'debet' ? -$trx->jumlah : $trx->jumlah);
             }
-            $data['saldo_awal'] = $saldo_awal;
+            return $carry;
+        }, ['debit' => 0, 'kredit' => 0, 'saldo' => $saldo_awal]);
 
-            // 🔹 Generate view + PDF
-            $view = view('app.pelaporan.views.buku_besar', $data)->render();
+        $data['komulatif_bulan_lalu_debit']  = $komulatif_bulan_lalu['debit'];
+        $data['komulatif_bulan_lalu_kredit'] = $komulatif_bulan_lalu['kredit'];
+        $data['komulatif_bulan_lalu_saldo']  = $komulatif_bulan_lalu['saldo'];
 
-            $pdf = PDF::loadHTML($view)->setOptions([
-                'margin-top'    => 30,
+        // Transaksi Bulan Ini
+        $transaksi_bulan_ini = Transaksi::with('user')
+            ->where(fn($q) => $q
+                ->where('rekening_debit', $rek->id)
+                ->orWhere('rekening_kredit', $rek->id))
+            ->whereBetween('tanggal_transaksi', [$tgl_awal_bulan, $tgl_akhir_bulan])
+            ->orderBy('tanggal_transaksi')
+            ->get();
+        $data['transaksi'] = $transaksi_bulan_ini;
+
+        $total_bulan_ini = $transaksi_bulan_ini->reduce(function ($carry, $trx) use ($rek) {
+            if ($trx->rekening_debit == $rek->id) {
+                $carry['debit'] += $trx->jumlah;
+            } elseif ($trx->rekening_kredit == $rek->id) {
+                $carry['kredit'] += $trx->jumlah;
+            }
+            return $carry;
+        }, ['debit' => 0, 'kredit' => 0]);
+        $data['total_bulan_ini'] = $total_bulan_ini;
+
+        // Total s/d Bulan Ini (Jan - Bulan Ini)
+        $data['total_sampai_bulan_ini'] = [
+            'debit'  => $komulatif_bulan_lalu['debit'] + $total_bulan_ini['debit'],
+            'kredit' => $komulatif_bulan_lalu['kredit'] + $total_bulan_ini['kredit'],
+            'saldo'  => $komulatif_bulan_lalu['saldo']
+                    + ($rek->jenis_mutasi == 'debet'
+                            ? $total_bulan_ini['debit'] - $total_bulan_ini['kredit']
+                            : $total_bulan_ini['kredit'] - $total_bulan_ini['debit']),
+        ];
+
+        // Total Kumulatif Tahun (sampai Desember)
+        $transaksi_tahun_ini = Transaksi::where(fn($q) => $q
+                ->where('rekening_debit', $rek->id)
+                ->orWhere('rekening_kredit', $rek->id))
+            ->whereBetween('tanggal_transaksi', [$tgl_awal_tahun, "$thn-12-31"])
+            ->get();
+
+        $total_tahun_ini = $transaksi_tahun_ini->reduce(function ($carry, $trx) use ($rek) {
+            if ($trx->rekening_debit == $rek->id) {
+                $carry['debit'] += $trx->jumlah;
+            } elseif ($trx->rekening_kredit == $rek->id) {
+                $carry['kredit'] += $trx->jumlah;
+            }
+            return $carry;
+        }, ['debit' => 0, 'kredit' => 0]);
+        $data['total_tahun_ini'] = $total_tahun_ini;
+
+        // Sub Judul + tanggal
+        $data['sub_judul'] = 'Bulan ' . Tanggal::namaBulan($tgl_awal_bulan) . ' ' . $thn;
+        $data['tgl_awal_bulan']  = $tgl_awal_bulan;
+        $data['tgl_akhir_bulan'] = $tgl_akhir_bulan;
+        $data['tahun'] = $thn;
+        $data['bulan'] = $bln;
+
+        // Render ke PDF
+        $view = view('app.pelaporan.views.buku_besar', $data)->render();
+
+        return Pdf::loadHTML($view)
+            ->setOptions([
+                'margin-top' => 30,
                 'margin-bottom' => 15,
-                'margin-left'   => 25,
-                'margin-right'  => 20,
-                'header-html'   => view('app.pelaporan.layout.header', $data)->render(),
+                'margin-left' => 25,
+                'margin-right' => 20,
+                'header-html' => view('app.pelaporan.layout.header', $data)->render(),
                 'enable-local-file-access' => true,
-            ]);
-
-            return $pdf->inline();
+            ])
+            ->inline('buku_besar.pdf');
     }
 
     private function berita_acara(array $data)
@@ -561,6 +612,7 @@ class PelaporanController extends Controller
         ]);
         return $pdf->inline();
     }
+
     private function pks(array $data)
     {
         $data['title'] = 'Perjangan Kerja Sama';
@@ -578,6 +630,7 @@ class PelaporanController extends Controller
         ]);
         return $pdf->inline();
     }
+
     private function bast(array $data)
     {
         $data['title'] = 'Berita Acara Serh Terima';
@@ -593,6 +646,7 @@ class PelaporanController extends Controller
         ]);
         return $pdf->inline();
     }
+
     private function bukti_setor_pajak(array $data)
     {
         $data['title'] = 'Bukti Setor Pajak';
@@ -608,6 +662,7 @@ class PelaporanController extends Controller
         ]);
         return $pdf->inline();
     }
+
     private function laporan_pelaksanaan(array $data)
     {
         $data['title'] = 'Laporan Pelaksanaan';
