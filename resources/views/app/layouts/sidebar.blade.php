@@ -79,7 +79,7 @@
                 @php
                     $menuActive = '';
                     $path = '/' . request()->path();
-                    if (str_starts_with($path, $menu['url'])) {
+                    if ($path == $menu['url']) {
                         $menuActive = 'active';
                     } elseif (isset($menu['children'])) {
                         foreach ($menu['children'] as $child) {
@@ -102,7 +102,7 @@
                             @foreach ($menu['children'] as $child)
                                 @php
                                     $childActive = '';
-                                    if (str_starts_with($path, $child['url'])) {
+                                    if ($path == $child['url']) {
                                         $childActive = 'active';
                                     }
                                 @endphp
