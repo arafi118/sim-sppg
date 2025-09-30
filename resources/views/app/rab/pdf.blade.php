@@ -1,7 +1,7 @@
 <style>
     * {
         font-family: 'Arial', sans-serif;
-        font-size: 12px;
+        font-size: 8px;
         line-height: 1.5;
     }
 
@@ -21,7 +21,7 @@
     .tb-border th,
     .tb-border td {
         border: 1px solid #000;
-        padding: 4px;
+        padding: 1px 4px;
     }
 
     .right {
@@ -55,43 +55,45 @@
 <table class="tb-border">
     <thead>
         <tr>
-            <th>No</th>
-            <th>Bahan Pangan</th>
-            <th>Satuan</th>
-            <th>Harga</th>
-            <th>Kebutuhan</th>
-            <th>Total Harga</th>
+            <th width="2%">No</th>
+            <th>Nama Bahan</th>
+            @foreach ($daftarTanggal as $tanggalPeriode)
+                <th width="3%">
+                    {{ $tanggalPeriode['nama_hari'] }} {{ $tanggalPeriode['hari'] }}
+                </th>
+            @endforeach
+            <th width="4%">Jumlah</th>
+            <th width="4%">Satuan</th>
+            <th width="8%">Harga</th>
+            <th width="10%">Total</th>
         </tr>
     </thead>
-    @php
-        $grandTotal = 0;
-    @endphp
+    <tbody>
+        @foreach ($dataBahanPangan as $bahanPangan)
+            @php
+                $jumlahKebutuhan = 0;
+            @endphp
+            <tr>
+                <td align="center">{{ $loop->iteration }}</td>
+                <td>{{ ucwords(strtolower($bahanPangan['nama'])) }}</td>
+                @foreach ($daftarTanggal as $tanggalPeriode)
+                    @php
+                        $kebutuhan = 0;
+                        if (isset($bahanPangan['jumlah'][$tanggalPeriode['tanggal']])) {
+                            $kebutuhan = $bahanPangan['jumlah'][$tanggalPeriode['tanggal']];
+                        }
 
-    @foreach ($dataBahanPangan as $index => $b)
-        @php
-            $nama_bahan = $b['nama'];
-            $satuan = $b['satuan'];
-            $harga = $b['harga'];
-            $jumlah = $b['jumlah'];
-
-            $total = $harga * $jumlah;
-            $grandTotal += $total;
-        @endphp
-
-        <tr>
-            <td class="center">{{ $loop->iteration }}</td>
-            <td>{{ $nama_bahan }}</td>
-            <td class="center">{{ $satuan }}</td>
-            <td class="right">{{ number_format($harga) }}</td>
-            <td class="right">{{ number_format($jumlah, 2) }}</td>
-            <td class="right">{{ number_format($total) }}</td>
-        </tr>
-    @endforeach
-
-    <tfoot>
-        <tr>
-            <th colspan="5" class="center">TOTAL</th>
-            <th class="right">{{ number_format($grandTotal) }}</th>
-        </tr>
-    </tfoot>
+                        $jumlahKebutuhan += $kebutuhan;
+                    @endphp
+                    <td align="center">
+                        {{ $kebutuhan != 0 ? number_format($kebutuhan, 2) : '' }}
+                    </td>
+                @endforeach
+                <td align="center">{{ $jumlahKebutuhan }}</td>
+                <td align="center">{{ $bahanPangan['satuan'] }}</td>
+                <td align="right">{{ number_format($bahanPangan['harga']) }}</td>
+                <td align="right">{{ number_format($jumlahKebutuhan * $bahanPangan['harga']) }}</td>
+            </tr>
+        @endforeach
+    </tbody>
 </table>

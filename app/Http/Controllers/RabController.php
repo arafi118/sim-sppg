@@ -9,8 +9,11 @@ use App\Models\PoDetail;
 use App\Models\BahanPangan;
 use App\Models\Mitra;
 use App\Models\PeriodeMasak;
+use App\Utils\Tanggal;
 use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 use Carbon\Carbon;
+use DateTime;
+use Illuminate\Support\Facades\Date;
 
 Carbon::setLocale('id');
 class RabController extends Controller
@@ -32,6 +35,21 @@ class RabController extends Controller
 
         if (count($tanggalParam) < 2) {
             $tanggalParam[1] = $tanggalParam[0];
+        }
+
+        $tanggal_awal = new DateTime($tanggalParam[0]);
+        $tanggal_akhir = new DateTime($tanggalParam[1]);
+        $selisih = $tanggal_awal->diff($tanggal_akhir);
+
+        $daftarTanggal = [];
+        for ($i = 0; $i <= $selisih->days; $i++) {
+            $TanggalPeriode = date('Y-m-d', strtotime('+ ' . $i . ' days', strtotime($tanggal_awal->format('Y-m-d'))));
+
+            $daftarTanggal[] = [
+                'hari' => date('d', strtotime($TanggalPeriode)),
+                'nama_hari' => Tanggal::namaHari($TanggalPeriode),
+                'tanggal' => $TanggalPeriode
+            ];
         }
 
         // Hanya ambil rancangan yang sudah approved
@@ -59,13 +77,19 @@ class RabController extends Controller
                         $bahanPangan = $resep->bahanPangan;
                         if ($bahanPangan) {
                             if (isset($dataBahanPangan[$bahanPangan->id])) {
-                                $dataBahanPangan[$bahanPangan->id]['jumlah'] += ($resep->gramasi * $jumlah);
+                                if (isset($dataBahanPangan[$bahanPangan->id]['jumlah'][$r->tanggal])) {
+                                    $dataBahanPangan[$bahanPangan->id]['jumlah'][$r->tanggal] += ($resep->gramasi * $jumlah);
+                                } else {
+                                    $dataBahanPangan[$bahanPangan->id]['jumlah'][$r->tanggal] = ($resep->gramasi * $jumlah);
+                                }
                             } else {
                                 $dataBahanPangan[$bahanPangan->id] = [
                                     'nama'   => $bahanPangan->nama,
                                     'satuan' => $bahanPangan->satuan,
                                     'harga'  => $bahanPangan->harga_jual,
-                                    'jumlah' => ($resep->gramasi * $jumlah),
+                                    'jumlah' => [
+                                        $r->tanggal => ($resep->gramasi * $jumlah)
+                                    ],
                                 ];
                             }
                         }
@@ -85,16 +109,18 @@ class RabController extends Controller
                 Carbon::parse($tanggalParam[1])->translatedFormat('d F Y');
         }
 
-        $view = view('app.rab.pdf', compact('dataBahanPangan', 'tanggalParam', 'jenis'))->render();
+        $view = view('app.rab.pdf', compact('dataBahanPangan', 'tanggalParam', 'daftarTanggal', 'jenis'))->render();
 
         return PDF::loadHTML($view)
             ->setOptions([
-                'margin-top'    => 20,
-                'margin-bottom' => 20,
-                'margin-left'   => 25,
-                'margin-right'  => 20,
+                'header-line' => true,
+                'margin-top'     => 20,
+                'margin-bottom'  => 16,
+                'margin-left'    => 12,
+                'margin-right'   => 10,
+                'enable-local-file-access' => true,
             ])
-            ->setPaper('A4', 'portrait')
+            ->setPaper('A4', 'landscape')
             ->setOption('title', $title)
             ->inline('RAB.pdf');
     }
@@ -211,7 +237,7 @@ class RabController extends Controller
                 'status' => 'warning',
                 'message' => 'Belum ada rancangan pada periode ini.'
             ]);
-        }   
+        }
         $dataBahanPangan = [];
 
         foreach ($rancangan as $r) {
@@ -230,7 +256,7 @@ class RabController extends Controller
                     if (!isset($dataBahanPangan[$bpId])) {
                         $mitraList = [];
                         foreach ($bp->mitra as $mitra) {
-                            $mitraList[] = $mitra; 
+                            $mitraList[] = $mitra;
                         }
 
                         $dataBahanPangan[$bpId] = [
@@ -266,31 +292,31 @@ class RabController extends Controller
         $totalKeseluruhan = 0;
 
         foreach ($jumlahs as $bpId => $jmlInput) {
-        $mitraId = $mitraIds[$bpId] ?? null;
+            $mitraId = $mitraIds[$bpId] ?? null;
 
-        // Abaikan jika input 0 atau mitra_id null
-        if ($jmlInput <= 0 || !$mitraId) continue;
+            // Abaikan jika input 0 atau mitra_id null
+            if ($jmlInput <= 0 || !$mitraId) continue;
 
-        $harga     = $hargaSatuan[$bpId] ?? 0;
-        $kebutuhan = $kebutuhans[$bpId] ?? 0;
-        $total     = $harga * $jmlInput;
+            $harga     = $hargaSatuan[$bpId] ?? 0;
+            $kebutuhan = $kebutuhans[$bpId] ?? 0;
+            $total     = $harga * $jmlInput;
 
-        $totalKeseluruhan += $total;
+            $totalKeseluruhan += $total;
 
-        PoDetail::updateOrCreate(
-            [
-                'po_id'           => $po->id,
-                'bahan_pangan_id' => $bpId,
-            ],
-            [
-                'harga_satuan' => $harga,
-                'jumlah'       => $kebutuhan,
-                'jumlah_input' => $jmlInput,
-                'total_harga'  => $total,
-                'status_bayar' => 'unpaid',
-                'mitra_id'     => $mitraId,
-            ]
-        );
+            PoDetail::updateOrCreate(
+                [
+                    'po_id'           => $po->id,
+                    'bahan_pangan_id' => $bpId,
+                ],
+                [
+                    'harga_satuan' => $harga,
+                    'jumlah'       => $kebutuhan,
+                    'jumlah_input' => $jmlInput,
+                    'total_harga'  => $total,
+                    'status_bayar' => 'unpaid',
+                    'mitra_id'     => $mitraId,
+                ]
+            );
         }
 
 
@@ -307,16 +333,16 @@ class RabController extends Controller
     {
         $title = 'Detail PO';
 
-        $po = Po::with(['poDetail' => function($q) {
+        $po = Po::with(['poDetail' => function ($q) {
             $q->where('jumlah_input', '>', 0)
-            ->with(['bahanPangan', 'mitra']);
+                ->with(['bahanPangan', 'mitra']);
         }])->findOrFail($id);
 
-        $referensiPOs = Po::with(['poDetail' => function($q) {
-                $q->where('jumlah_input', '>', 0)
+        $referensiPOs = Po::with(['poDetail' => function ($q) {
+            $q->where('jumlah_input', '>', 0)
                 ->with(['bahanPangan', 'mitra']);
-            }])
-            ->whereHas('poDetail', function($q) {
+        }])
+            ->whereHas('poDetail', function ($q) {
                 $q->where('jumlah_input', '>', 0);
             })
             ->orderBy('tanggal', 'asc')
@@ -364,7 +390,7 @@ class RabController extends Controller
         // Ambil PO master dari detail
         $po = Po::with('poDetail.bahanPangan')->findOrFail($detail->po->id);
         $title = 'Cetak Po';
-        return view('app.rab.po_cetak_detail', compact('po','title'));
+        return view('app.rab.po_cetak_detail', compact('po', 'title'));
     }
 
     public function bayar(Request $request)
@@ -441,14 +467,14 @@ class RabController extends Controller
     {
         $title = 'Cetak PO';
 
-        $pos = Po::with(['poDetail' => function($q) {
+        $pos = Po::with(['poDetail' => function ($q) {
             $q->where('jumlah_input', '>', 0)->with('bahanPangan');
         }])
-        ->whereHas('poDetail', function($q) {
-            $q->where('jumlah_input', '>', 0);
-        })
-        ->orderBy('tanggal', 'asc')
-        ->get();
+            ->whereHas('poDetail', function ($q) {
+                $q->where('jumlah_input', '>', 0);
+            })
+            ->orderBy('tanggal', 'asc')
+            ->get();
 
         $view = view('app.rab.po_cetak', compact('pos', 'title'))->render();
 
@@ -463,6 +489,4 @@ class RabController extends Controller
             ->setOption('title', $title)
             ->inline('RAB.pdf');
     }
-
-
 }
