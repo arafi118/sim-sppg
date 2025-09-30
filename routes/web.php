@@ -83,7 +83,7 @@ Route::get('/', function () {
     return view('welcome', compact('menus', 'levelImages', 'periode', 'dokumentasiChunks', 'karyawan', 'yesterday', 'today', 'tomorrow'));
 });
 
-Route::get('test', fn () => phpinfo());
+Route::get('test', fn() => phpinfo());
 
 
 Route::get('/auth', [AuthController::class, 'index']);
@@ -111,6 +111,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::post('/rancang-menu/approve', [RancanganController::class, 'approved']);
     Route::resource('/rancang-menu', RancanganController::class);
 
+    Route::get('/mitra/daftar-menu', [MitraController::class, 'daftarMenu']);
+    Route::get('/mitra/rab', [MitraController::class, 'rab']);
     Route::resource('/mitra', MitraController::class);
 
     //admin

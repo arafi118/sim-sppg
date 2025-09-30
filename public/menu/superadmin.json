@@ -9,6 +9,14 @@
     "icon": "bx-broadcast",
     "url": "/app/mitra"
 }, {
+    "nama": "Daftar Menu",
+    "icon": "bx-food-menu",
+    "url": "/app/mitra/daftar-menu"
+}, {
+    "nama": "RAB",
+    "icon": "bx-wallet-alt",
+    "url": "/app/mitra/rab"
+}, {
     "nama": "Master Admin"
 }, {
     "nama": "Pengguna",
@@ -77,7 +85,7 @@
     ]
 }, {
     "nama": "Rab",
-    "icon": "bx-group",
+    "icon": "bx-wallet-alt",
     "url": "/app/rab"
 }, {
     "nama": "Jurnal Transaksi",

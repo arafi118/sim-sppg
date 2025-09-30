@@ -179,4 +179,14 @@ class MitraController extends Controller
             'message' => $mitra->nama . ' berhasil dihapus!',
         ]);
     }
+
+    public function daftarMenu()
+    {
+        //
+    }
+
+    public function rab()
+    {
+        //
+    }
 }
