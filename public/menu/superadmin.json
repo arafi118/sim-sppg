@@ -17,6 +17,10 @@
     "icon": "bx-wallet-alt",
     "url": "/app/mitra/rab"
 }, {
+    "nama": "Generate Tagihan",
+    "icon": "bx-detail",
+    "url": "/app/generate-tagihan"
+}, {
     "nama": "Master Admin"
 }, {
     "nama": "Pengguna",

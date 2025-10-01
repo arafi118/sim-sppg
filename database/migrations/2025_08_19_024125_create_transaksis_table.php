@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Invoice;
 use App\Models\Mitra;
+use App\Models\Po;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,6 +19,8 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->foreignIdFor(User::class)->nullable();
             $table->foreignIdFor(Mitra::class)->nullable();
+            $table->foreignIdFor(Po::class)->nullable();
+            $table->foreignIdFor(Invoice::class)->nullable();
             $table->date('tanggal');
             $table->string('rekening_debit');
             $table->string('rekening_kredit');

@@ -21,6 +21,7 @@ use App\Http\Controllers\RancanganController;
 use App\Http\Controllers\PenyiapanController;
 use App\Http\Controllers\PelaksanaController;
 use App\Http\Controllers\DokumentasiKegiatanController;
+use App\Http\Controllers\TagihanController;
 use App\Http\Controllers\TahapanController;
 use App\Models\PeriodeMasak;
 use App\Models\Menu;
@@ -115,6 +116,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/mitra/rab', [MitraController::class, 'rab']);
     Route::get('/mitra/rab/generate', [MitraController::class, 'generate']);
     Route::resource('/mitra', MitraController::class);
+
+    Route::get('/generate-tagihan/tanggal/{tanggal}', [TagihanController::class, 'tanggal']);
+    Route::resource('/generate-tagihan', TagihanController::class);
 
     //admin
     Route::resource('/profile', ProfilController::class);
