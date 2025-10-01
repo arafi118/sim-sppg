@@ -7,6 +7,7 @@ use App\Models\Rancangan;
 use App\Models\Tagihan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
 
 class TagihanController extends Controller
 {
@@ -28,6 +29,15 @@ class TagihanController extends Controller
 
                     return "Rp. " . number_format($jumlah);
                 })
+                ->addColumn('action', function ($row) {
+
+                    $btn  = '<div class="d-inline-flex gap-1">';
+                    $btn .= '<button type="button" class="btn btn-sm btn-primary btn-invoice" data-id="' . $row->id . '">Invoice</button>';
+                    $btn .= '<button type="button" class="btn btn-sm btn-danger btn-hapus" data-id="' . $row->id . '">Hapus</button>';
+                    $btn .= '</div>';
+                    return $btn;
+                })
+                ->rawColumns(['action'])
                 ->make(true);
         }
 
@@ -139,14 +149,14 @@ class TagihanController extends Controller
         Tagihan::insert($tagihan);
         return response()->json([
             'success' => true,
-            'msg' => 'Tagihan berhasil disimpan'
+            'message' => 'Tagihan berhasil disimpan'
         ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Tagihan $tagihan)
+    public function show(Invoice $generate_tagihan)
     {
         //
     }
@@ -154,7 +164,7 @@ class TagihanController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Tagihan $tagihan)
+    public function edit(Invoice $generate_tagihan)
     {
         //
     }
@@ -162,7 +172,7 @@ class TagihanController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Tagihan $tagihan)
+    public function update(Request $request, Invoice $generate_tagihan)
     {
         //
     }
@@ -170,8 +180,34 @@ class TagihanController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Tagihan $tagihan)
+    public function destroy(Invoice $generate_tagihan)
     {
-        //
+        Invoice::where('id', $generate_tagihan->id)->delete();
+
+        Tagihan::where('invoice_id', $generate_tagihan->id)->get();
+        return response()->json([
+            'success' => true,
+            'message' => 'Tagihan berhasil dihapus'
+        ]);
+    }
+
+    public function invoice(Invoice $invoice)
+    {
+        $invoice = $invoice->load('tagihan.bahanPangan');
+
+        $view = view('app.tagihan.invoice', compact('invoice'))->render();
+
+        return PDF::loadHTML($view)
+            ->setOptions([
+                'header-line' => true,
+                'margin-top'     => 20,
+                'margin-bottom'  => 16,
+                'margin-left'    => 12,
+                'margin-right'   => 10,
+                'enable-local-file-access' => true,
+            ])
+            ->setPaper('A4', 'portrait')
+            ->setOption('title', "Invoice " . $invoice->no_invoice)
+            ->inline('RAB.pdf');
     }
 }

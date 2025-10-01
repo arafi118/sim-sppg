@@ -61,9 +61,12 @@
                 data: form.serialize(),
                 success: function(r) {
                     if (r.success) {
-                        Swal.fire("Berhasil!", r.msg, "success");
+                        Swal.fire("Berhasil!", r.message, "success").then(
+                            () => {
+                                window.location.href = '/app/generate-tagihan';
+                            });
                     } else {
-                        Swal.fire("Gagal!", r.msg, "error");
+                        Swal.fire("Gagal!", r.message, "error");
                     }
                 },
                 error: function() {

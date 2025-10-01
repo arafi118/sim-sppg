@@ -15,4 +15,9 @@ class Tagihan extends Model
     {
         return $this->belongsTo(Invoice::class);
     }
+
+    public function bahanPangan()
+    {
+        return $this->belongsTo(BahanPangan::class);
+    }
 }

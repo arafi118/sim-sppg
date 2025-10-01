@@ -13,6 +13,7 @@
                         <th>Tanggal</th>
                         <th>Jumlah</th>
                         <th>Status</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -56,7 +57,67 @@
                         }
                     }
                 },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                },
             ],
+        });
+
+        $(document).on('click', '.btn-invoice', function(e) {
+            e.preventDefault()
+
+            var id = $(this).attr('data-id');
+            window.open('/app/generate-tagihan/' + id + '/invoice', '_blank');
+        })
+
+        $(document).on('click', '.btn-hapus', function() {
+            const id = $(this).data('id');
+            Swal.fire({
+                title: 'Hapus Tagihan?',
+                text: "Tagihan akan dihapus.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Hapus!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/app/generate-tagihan/${id}`,
+                        type: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire(
+                                    'Berhasil!',
+                                    result.message ||
+                                    'Tagihan berhasil dihapus.',
+                                    'success'
+                                );
+                                table.ajax.reload();
+                            } else {
+                                Swal.fire(
+                                    'Gagal!',
+                                    response.message ||
+                                    'Terjadi kesalahan saat menghapus tagihan.',
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function(xhr) {
+                            Swal.fire(
+                                'Error!',
+                                xhr.responseJSON.error ||
+                                'Terjadi kesalahan saat menghapus tagihan.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
         });
     </script>
 @endsection
