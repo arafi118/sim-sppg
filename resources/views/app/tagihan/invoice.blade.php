@@ -109,6 +109,9 @@
         <td align="center">Total</td>
     </tr>
 
+    @php
+        $grandTotal = 0;
+    @endphp
     @foreach ($invoice->tagihan as $tagihan)
         <tr>
             <td align="center">{{ $loop->iteration }}</td>
@@ -117,7 +120,16 @@
             <td align="right">{{ $tagihan->kebutuhan }}</td>
             <td align="center">{{ $tagihan->bahanPangan->satuan }}</td>
             <td align="right">{{ number_format($tagihan->harga) }}</td>
-            <td align="right">{{ number_format($tagihan->kebutuhan * $tagihan->harga) }}</td>
+            <td align="right">{{ number_format($tagihan->total) }}</td>
         </tr>
+
+        @php
+            $grandTotal += $tagihan->total;
+        @endphp
     @endforeach
+
+    <tr>
+        <td colspan="6" height="30" align="center">Total</td>
+        <td align="right">{{ number_format($grandTotal) }}</td>
+    </tr>
 </table>
