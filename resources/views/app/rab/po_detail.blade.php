@@ -69,9 +69,9 @@
                         <table class="table table-bordered mt-1 mb-3">
                             <thead>
                                 <tr>
-                                    <th style="width:30px; text-align:center; vertical-align:middle;">
+                                    {{-- <th style="width:30px; text-align:center; vertical-align:middle;">
                                         <input type="checkbox" class="form-check-input checkAll">
-                                    </th>
+                                    </th> --}}
 
                                     <th style="width: 30px; text-align:center; vertical-align:middle;">No</th>
                                     {{-- No pindah setelah checkbox --}}
@@ -103,7 +103,7 @@
                                         }
                                     @endphp
                                     <tr>
-                                        <td style="text-align:center; vertical-align:middle;">
+                                        {{-- <td style="text-align:center; vertical-align:middle;">
                                             <input type="checkbox" class="form-check-input checkbox-detail"
                                                 value="{{ $detail->id }}" data-id="{{ $detail->id }}"
                                                 data-bahan="{{ $detail->bahanPangan->nama ?? '-' }}"
@@ -113,7 +113,7 @@
                                                 data-kebutuhan="{{ $detail->jumlah }}"
                                                 data-total="{{ $detail->total_harga }}"
                                                 data-sisa="{{ $detail->total_harga - $detail->jumlah_bayar }}" checked>
-                                        </td>
+                                        </td> --}}
                                         <td class="text-center">{{ $loop->iteration }}</td>
                                         <td>{{ $detail->bahanPangan->nama ?? '-' }}</td>
                                         <td>{{ $detail->mitra->nama ?? '-' }}</td>
@@ -156,7 +156,7 @@
                                     </tr>
                                 @endforeach
                                 <tr class="fw-bold">
-                                    <td colspan="7" class="text-center">Total</td>
+                                    <td colspan="6" class="text-center">Total</td>
                                     <td class="text-end">{{ number_format($totalHarga, 0, ',', '.') }}</td>
                                     <td colspan="2"></td>
                                 </tr>
@@ -167,7 +167,8 @@
             @endforeach
             <div class="mt-3 d-flex justify-content-end">
                 <!-- Tombol Bayar PO -->
-                <button class="btn btn-primary me-2" id="btnBayarPO" data-bs-toggle="modal" data-bs-target="#modalBayarPO">
+                <button class="btn btn-primary d-none me-2" id="btnBayarPO" data-bs-toggle="modal"
+                    data-bs-target="#modalBayarPO">
                     Bayar PO
                 </button>
 

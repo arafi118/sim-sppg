@@ -110,17 +110,12 @@
 
             // Loop tiap baris tabel
             $('#tableBahan tbody tr').each(function() {
-                const mitraId = $(this).find('.mitra-hidden').val();
-
-                // Hanya ambil baris yang punya mitra dipilih
-                if (mitraId) {
-                    $(this).find('input[name], select[name]').each(function() {
-                        formData.push({
-                            name: $(this).attr('name'),
-                            value: $(this).val()
-                        });
+                $(this).find('input[name], select[name]').each(function() {
+                    formData.push({
+                        name: $(this).attr('name'),
+                        value: $(this).val()
                     });
-                }
+                });
             });
 
             $.ajax({
