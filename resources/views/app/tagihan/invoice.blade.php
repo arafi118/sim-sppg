@@ -53,6 +53,11 @@
         margin-bottom: 20px;
     }
 
+    table tr td,
+    table tr th {
+        vertical-align: top;
+    }
+
     .border-table th,
     .border-table td {
         border: 1px solid black;
@@ -84,17 +89,17 @@
     <tr>
         <td>Tanggal</td>
         <td>:</td>
-        <td>{{ Tanggal::tglLatin($invoice->tanggal) }}</td>
+        <td>{{ Tanggal::tglLatin($invoice->tanggal_invoice) }}</td>
     </tr>
     <tr>
         <td>Customer</td>
         <td>:</td>
-        <td></td>
+        <td>{{ $profil->nama }}</td>
     </tr>
     <tr>
         <td>Alamat</td>
         <td>:</td>
-        <td></td>
+        <td>{{ $profil->alamat }}</td>
     </tr>
 </table>
 
@@ -115,7 +120,7 @@
     @foreach ($invoice->tagihan as $tagihan)
         <tr>
             <td align="center">{{ $loop->iteration }}</td>
-            <td align="center">{{ $invoice->tanggal }}</td>
+            <td align="center">{{ $invoice->tanggal_invoice }}</td>
             <td>{{ $tagihan->bahanPangan->nama }}</td>
             <td align="right">{{ $tagihan->kebutuhan }}</td>
             <td align="center">{{ $tagihan->bahanPangan->satuan }}</td>

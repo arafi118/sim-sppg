@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\Profil;
 use App\Models\Rancangan;
 use App\Models\Tagihan;
 use Illuminate\Http\Request;
@@ -211,9 +212,10 @@ class TagihanController extends Controller
 
     public function invoice(Invoice $invoice)
     {
+        $profil = Profil::first();
         $invoice = $invoice->load('tagihan.bahanPangan');
 
-        $view = view('app.tagihan.invoice', compact('invoice'))->render();
+        $view = view('app.tagihan.invoice', compact('profil', 'invoice'))->render();
 
         return PDF::loadHTML($view)
             ->setOptions([
