@@ -10,7 +10,8 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Tanggal</th>
+                        <th>Tanggal Invoice</th>
+                        <th>Tanggal Tagihan</th>
                         <th>Jumlah</th>
                         <th>Status</th>
                         <th>Aksi</th>
@@ -39,8 +40,12 @@
                     orderable: false
                 },
                 {
-                    data: 'tanggal',
-                    name: 'tanggal'
+                    data: 'tanggal_invoice',
+                    name: 'tanggal_invoice'
+                },
+                {
+                    data: 'tanggal_tagihan',
+                    name: 'tanggal_tagihan'
                 },
                 {
                     data: 'jumlah',

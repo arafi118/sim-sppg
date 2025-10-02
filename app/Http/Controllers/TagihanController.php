@@ -54,6 +54,20 @@ class TagihanController extends Controller
         return view('app.tagihan.create', compact('title'));
     }
 
+    public function no_invoice($tanggal)
+    {
+        $bulan = date('Y-m', strtotime($tanggal));
+        $invoice = Invoice::where('tanggal_invoice', 'LIKE', $bulan . '%')->orderBy('id', 'DESC')->first();
+        if ($invoice) {
+            $nomor = explode('/', $invoice->no_invoice);
+            $no_invoice = str_pad($nomor[0] + 1, 3, '0', STR_PAD_LEFT) . '/KOP.OJM/' . date('m.Y', strtotime($tanggal));
+        } else {
+            $no_invoice = '001/KOP.OJM/' . date('m.Y', strtotime($tanggal));
+        }
+
+        return response()->json(['no_invoice' => $no_invoice]);
+    }
+
     public function tanggal($tanggal)
     {
         $rancangan = Rancangan::with(['rancanganMenu.menu.resep.bahanPangan'])
@@ -106,12 +120,16 @@ class TagihanController extends Controller
     public function store(Request $request)
     {
         $data = $request->only([
-            'tanggal',
+            "tanggal_invoice",
+            "nomor_invoice",
+            "tanggal",
             'bahan_pangan',
             'grand_total',
         ]);
 
         $validate = Validator::make($data, [
+            'nomor_invoice' => 'required',
+            'tanggal_invoice' => 'required',
             'tanggal'      => 'required',
             'bahan_pangan' => 'required|array',
             'grand_total'  => 'required',
@@ -121,15 +139,15 @@ class TagihanController extends Controller
             return response()->json(['error' => $validate->errors()->first()]);
         }
 
-        $cekInvoice = Invoice::where('tanggal', $data['tanggal'])->first();
+        $cekInvoice = Invoice::where('tanggal_tagihan', $data['tanggal'])->first();
         if ($cekInvoice) {
             return response()->json(['msg' => 'Tagihan untuk tanggal ' . $data['tanggal'] . ' sudah ada.']);
         }
 
-        $jumlahInvoice = Invoice::where('tanggal', 'LIKE', date('Y-m', strtotime($data['tanggal'])) . '%')->count();
         $invoice = Invoice::create([
-            'no_invoice' => 'INV-' . date('ym') . '-' . str_pad($jumlahInvoice + 1, 3, '0', STR_PAD_LEFT),
-            'tanggal' => $data['tanggal'],
+            'no_invoice' => $data['nomor_invoice'],
+            'tanggal_invoice' => $data['tanggal_invoice'],
+            'tanggal_tagihan' => $data['tanggal'],
             'status' => 'UNPAID'
         ]);
 
@@ -184,7 +202,7 @@ class TagihanController extends Controller
     {
         Invoice::where('id', $generate_tagihan->id)->delete();
 
-        Tagihan::where('invoice_id', $generate_tagihan->id)->get();
+        Tagihan::where('invoice_id', $generate_tagihan->id)->delete();
         return response()->json([
             'success' => true,
             'message' => 'Tagihan berhasil dihapus'
@@ -200,10 +218,10 @@ class TagihanController extends Controller
         return PDF::loadHTML($view)
             ->setOptions([
                 'header-line' => true,
-                'margin-top'     => 20,
-                'margin-bottom'  => 16,
-                'margin-left'    => 12,
-                'margin-right'   => 10,
+                'margin-top'    => 30,
+                'margin-bottom' => 15,
+                'margin-left'   => 25,
+                'margin-right'  => 20,
                 'enable-local-file-access' => true,
             ])
             ->setPaper('A4', 'portrait')

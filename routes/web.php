@@ -118,6 +118,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::resource('/mitra', MitraController::class);
 
     Route::get('/generate-tagihan/tanggal/{tanggal}', [TagihanController::class, 'tanggal']);
+    Route::get('/generate-tagihan/no_invoice/{tanggal}', [TagihanController::class, 'no_invoice']);
     Route::get('/generate-tagihan/{invoice}/invoice', [TagihanController::class, 'invoice']);
     Route::resource('/generate-tagihan', TagihanController::class);
 
