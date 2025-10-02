@@ -53,8 +53,8 @@
         margin-bottom: 20px;
     }
 
-    table tr td,
-    table tr th {
+    table:not(.border-table) tr td,
+    table:not(.border-table) tr th {
         vertical-align: top;
     }
 
