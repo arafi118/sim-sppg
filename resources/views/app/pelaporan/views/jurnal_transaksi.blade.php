@@ -40,7 +40,6 @@
                 <th align="center" width="33%">Keterangan</th>
                 <th align="center" width="15%">Debit</th>
                 <th align="center" width="15%">Kredit</th>
-                <th align="center" width="5%">Ins</th>
             </tr>
         </thead>
         <tbody>
@@ -63,7 +62,6 @@
                     <td>{{ $trx->rekeningDebit->nama_akun ?? $trx->keterangan }}</td>
                     <td align="right">{{ number_format($trx->jumlah, 2, ',', '.') }}</td>
                     <td align="right">{{ number_format(0, 2, ',', '.') }}</td>
-                    <td align="center"></td>
                 </tr>
 
                 {{-- Baris KREDIT --}}
@@ -75,7 +73,6 @@
                     <td>{{ $trx->rekeningKredit->nama_akun ?? $trx->keterangan }}</td>
                     <td align="right">{{ number_format(0, 2, ',', '.') }}</td>
                     <td align="right">{{ number_format($trx->jumlah, 2, ',', '.') }}</td>
-                    <td>&nbsp;</td>
                 </tr>
 
                 @php
@@ -89,7 +86,6 @@
                 <td colspan="5" align="center"><strong>Total</strong></td>
                 <td align="right">{{ number_format($totalDebit, 2, ',', '.') }}</td>
                 <td align="right">{{ number_format($totalKredit, 2, ',', '.') }}</td>
-                <td></td>
             </tr>
         </tbody>
     </table>

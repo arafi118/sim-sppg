@@ -33,10 +33,13 @@
     <link rel="stylesheet" href="/assets/vendor/libs/datatables/datatables-bootstrap5.css" />
     <link rel="stylesheet" href="/assets/vendor/libs/datatables/responsive-bootstrap5.css" />
     <link rel="stylesheet" href="/assets/vendor/libs/tagify/tagify.css" />
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
     <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr@1.9.1/dist/pickr.min.js"></script>
     <script src="/assets/vendor/js/helpers.js"></script>
     <script src="/assets/js/config.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
 </head>
 
 <body>

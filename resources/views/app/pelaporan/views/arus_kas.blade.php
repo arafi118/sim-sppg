@@ -1,4 +1,5 @@
 @php
+
     $index = 1;
     $total_bulan_ini = 0;
     $saldo_bulan_lalu = $saldo_bulan_lalu ?? 0;
@@ -30,6 +31,7 @@
             <th colspan="2">Nama Akun</th>
             <th>Jumlah</th>
         </tr>
+
 
         @foreach ($arus_kas as $ak)
             @php
@@ -64,10 +66,20 @@
 
                         foreach ($akun3->rek as $rek) {
                             foreach ($rek->transaksiDebit as $trx) {
-                                $jumlah += $trx->jumlah;
+                                if (
+                                    $trx->tanggal_transaksi >= $tgl_awal_bulan &&
+                                    $trx->tanggal_transaksi <= $tgl_akhir_bulan
+                                ) {
+                                    $jumlah += $trx->jumlah;
+                                }
                             }
                             foreach ($rek->transaksiKredit as $trx) {
-                                $jumlah -= $trx->jumlah;
+                                if (
+                                    $trx->tanggal_transaksi >= $tgl_awal_bulan &&
+                                    $trx->tanggal_transaksi <= $tgl_akhir_bulan
+                                ) {
+                                    $jumlah -= $trx->jumlah;
+                                }
                             }
                         }
 

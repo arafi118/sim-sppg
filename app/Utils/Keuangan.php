@@ -150,42 +150,67 @@ class Keuangan
         return $rek->normal == 'D' ? $debit - $kredit : $kredit - $debit;
     }
     
-    public function saldoKas($tgl_akhir)
-    {
-        $tanggal = explode('-', $tgl_akhir);
-        $thn = $tanggal[0];
-        $bln = $tanggal[1];
+ public function saldoKas($tgl_akhir, $mode = 'akhir')
+{
+    $tanggal = explode('-', $tgl_akhir);
+    $thn = $tanggal[0];
 
-        $saldo = 0;
-
-        // Ambil rekening kas 1.1.01 dan 1.1.02
-        $rekening = Rekening::where('kode_akun', 'like', '1.1.01%')
-                    ->orWhere('kode_akun', 'like', '1.1.02%')
-                    ->with(['transaksiDebit' => function($q) use ($tgl_akhir) {
-                        $q->where('tanggal_transaksi', '<=', $tgl_akhir);
-                    }, 'transaksiKredit' => function($q) use ($tgl_akhir) {
-                        $q->where('tanggal_transaksi', '<=', $tgl_akhir);
-                    }])
-                    ->get();
-
-        foreach ($rekening as $rek) {
-            $total_debit = $rek->transaksiDebit->sum('jumlah');
-            $total_kredit = $rek->transaksiKredit->sum('jumlah');
-
-            if ($rek->lev1 < 2) {
-                $saldo += $total_debit - $total_kredit;
-            } else {
-                $saldo += $total_kredit - $total_debit;
-            }
-        }
-
-        return $saldo;
+    if ($mode == 'awal') {
+        $range_awal = "$thn-01-01";
+        $range_akhir = date('Y-m-d', strtotime($tgl_akhir . ' -1 day'));
+    } else {
+        $range_awal = "$thn-01-01";
+        $range_akhir = $tgl_akhir;
     }
+
+    // Ambil semua rekening kas (id)
+    $rekeningKas = Rekening::where('kode_akun', 'like', '1.1.01%')
+                    ->orWhere('kode_akun', 'like', '1.1.02%')
+                    ->pluck('id');
+
+    // Hitung total debit & kredit dari transaksi
+    $total_debit = Transaksi::whereIn('rekening_debit', $rekeningKas)
+                    ->whereBetween('tanggal_transaksi', [$range_awal, $range_akhir])
+                    ->sum('jumlah');
+
+    $total_kredit = Transaksi::whereIn('rekening_kredit', $rekeningKas)
+                    ->whereBetween('tanggal_transaksi', [$range_awal, $range_akhir])
+                    ->sum('jumlah');
+
+    // Karena kas = akun aktiva → normal debit
+    $saldo = $total_debit - $total_kredit;
+
+    return $saldo;
+}
+
+
 
     public function romawi($angka)
     {
         $map = [1=>'I',2=>'II',3=>'III',4=>'IV',5=>'V',6=>'VI',7=>'VII',8=>'VIII',9=>'IX',10=>'X'];
         return $map[$angka] ?? $angka;
+    }
+      public static function hitungSaldoCALK($rekening, $tgl_awal = null, $tgl_akhir = null)
+    {
+        $total_debit = $rekening->transaksiDebit()
+            ->when($tgl_awal && $tgl_akhir, fn($q) => $q->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir]))
+            ->sum('jumlah');
+
+        $total_kredit = $rekening->transaksiKredit()
+            ->when($tgl_awal && $tgl_akhir, fn($q) => $q->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir]))
+            ->sum('jumlah');
+
+        $saldo_rekening = $rekening->jenis_mutasi === 'debet'
+            ? $total_debit - $total_kredit
+            : $total_kredit - $total_debit;
+
+        return $saldo_rekening;
+    }
+
+    public static function formatSaldoCALK($nilai)
+    {
+        $formatted = number_format(abs($nilai), 2, ',', '.');
+        return $nilai < 0 ? '(' . $formatted . ')' : $formatted;
     }
 
 
