@@ -287,20 +287,14 @@ class RabController extends Controller
         $jumlahs     = $request->input('jumlah_input');
         $hargaSatuan = $request->input('harga_satuan');
         $kebutuhans  = $request->input('jumlah_kebutuhan');
-        $mitraIds    = $request->input('mitra_id');
 
         $totalKeseluruhan = 0;
-
         foreach ($jumlahs as $bpId => $jmlInput) {
-            $mitraId = $mitraIds[$bpId] ?? null;
-
-            // Abaikan jika input 0 atau mitra_id null
-            if ($jmlInput <= 0 || !$mitraId) continue;
+            if ($jmlInput <= 0) continue;
 
             $harga     = $hargaSatuan[$bpId] ?? 0;
             $kebutuhan = $kebutuhans[$bpId] ?? 0;
             $total     = $harga * $jmlInput;
-
             $totalKeseluruhan += $total;
 
             PoDetail::updateOrCreate(
@@ -314,14 +308,11 @@ class RabController extends Controller
                     'jumlah_input' => $jmlInput,
                     'total_harga'  => $total,
                     'status_bayar' => 'unpaid',
-                    'mitra_id'     => $mitraId,
                 ]
             );
         }
 
-
         $po->update(['total_harga' => $totalKeseluruhan]);
-
         return response()->json([
             'message' => 'PO berhasil disimpan.',
             'po_id'   => $po->id,

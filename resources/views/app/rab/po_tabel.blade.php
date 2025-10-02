@@ -32,8 +32,6 @@
                 <th style="width:18%;">Bahan Pangan</th>
                 <th style="width:10%;">Harga</th>
                 <th style="width:9%;">Kebutuhan</th>
-                <th style="width:16%;">Mitra</th>
-                <th style="width:15%;">Jumlah</th>
                 <th style="width:15%;">Total</th>
             </tr>
             <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -47,24 +45,14 @@
                         {{ $b['jumlah'] }}
                         <input type="hidden" name="jumlah_kebutuhan[{{ $b['bahan_pangan_id'] }}]"
                             value="{{ $b['jumlah'] }}"> ({{ $b['satuan'] }})
+                        <input type="hidden" name="jumlah_input[{{ $b['bahan_pangan_id'] }}]"
+                            value="{{ $b['jumlah'] }}" data-harga="{{ $b['harga'] }}"
+                            data-id="{{ $b['bahan_pangan_id'] }}">
                     </td>
 
-                    <td>
-                        <select class="form-select form-select-sm select2" style="width:100%">
-                            <option value="">-- Pilih Mitra --</option>
-                            @foreach ($b['mitra'] as $m)
-                                <option value="{{ $m->id }}">{{ $m->nama }}</option>
-                            @endforeach
-                        </select>
-                        <input type="hidden" name="mitra_id[{{ $b['bahan_pangan_id'] }}]" class="mitra-hidden">
-                    </td>
-                    <td class="text-end">
-                        <input type="number" name="jumlah_input[{{ $b['bahan_pangan_id'] }}]"
-                            value="{{ $b['jumlah'] }}" class="form-control form-control-sm jumlah-input"
-                            data-harga="{{ $b['harga'] }}" data-id="{{ $b['bahan_pangan_id'] }}" step="0.01">
-                    </td>
-                    <td>
-                        <input type="text" id="total_harga_{{ $b['bahan_pangan_id'] }}"
+                    <td align="right">
+                        {{ number_format($b['jumlah'] * $b['harga'], 2) }}
+                        <input type="hidden" id="total_harga_{{ $b['bahan_pangan_id'] }}"
                             class="form-control form-control-sm text-end"
                             value="{{ number_format($b['jumlah'] * $b['harga'], 2) }}" readonly>
                         <input type="hidden" name="harga_satuan[{{ $b['bahan_pangan_id'] }}]"
