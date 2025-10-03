@@ -33,6 +33,7 @@
 
     <!-- Garis di bawah -->
     <div class="footer-line"></div>
+    <div colspan="3" height="5"></div>
 </body>
 
 </html>

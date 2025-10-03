@@ -1,3 +1,23 @@
+@php
+
+    function formatRupiah($angka)
+    {
+        if ($angka === null || $angka === '') {
+            return '';
+        }
+
+        // tampilkan kurung jika negatif
+        if ($angka < 0) {
+            return '(' . number_format(abs($angka), 2, ',', '.') . ')';
+        }
+        return number_format($angka, 2, ',', '.');
+    }
+
+    $total_ns_debit = $total_ns_kredit = 0;
+    $total_rl_debit = $total_rl_kredit = 0;
+    $total_n_debit = $total_n_kredit = 0;
+    $total_pendapatan = $total_beban = 0;
+@endphp
 @extends('app.pelaporan.layout.base')
 
 @section('content')
@@ -16,26 +36,6 @@
             <td colspan="3" height="5"></td>
         </tr>
     </table>
-
-    @php
-        function formatRupiah($angka)
-        {
-            if ($angka === null || $angka === '') {
-                return '';
-            }
-
-            // tampilkan kurung jika negatif
-            if ($angka < 0) {
-                return '(' . number_format(abs($angka), 2, ',', '.') . ')';
-            }
-            return number_format($angka, 2, ',', '.');
-        }
-
-        $total_ns_debit = $total_ns_kredit = 0;
-        $total_rl_debit = $total_rl_kredit = 0;
-        $total_n_debit = $total_n_kredit = 0;
-        $total_pendapatan = $total_beban = 0;
-    @endphp
 
     <table width="100%" cellspacing="0" cellpadding="0"
         style="font-size: 11px; border-collapse: collapse; border: 1px solid #313131;">
@@ -104,18 +104,12 @@
                     <td style="border: 1px solid #313131; padding: 4px;">
                         {{ $rek->kode_akun }} - {{ $rek->nama_akun }}
                     </td>
-                    <td style="border: 1px solid #313131; text-align: right;">{{ $ns_debit ? formatRupiah($ns_debit) : '' }}
-                    </td>
-                    <td style="border: 1px solid #313131; text-align: right;">
-                        {{ $ns_kredit ? formatRupiah($ns_kredit) : '' }}</td>
-                    <td style="border: 1px solid #313131; text-align: right;">{{ $rl_debit ? formatRupiah($rl_debit) : '' }}
-                    </td>
-                    <td style="border: 1px solid #313131; text-align: right;">
-                        {{ $rl_kredit ? formatRupiah($rl_kredit) : '' }}</td>
-                    <td style="border: 1px solid #313131; text-align: right;">{{ $n_debit ? formatRupiah($n_debit) : '' }}
-                    </td>
-                    <td style="border: 1px solid #313131; text-align: right;">{{ $n_kredit ? formatRupiah($n_kredit) : '' }}
-                    </td>
+                    <td style="border: 1px solid #313131; text-align: right;">{{ formatRupiah($ns_debit) }}</td>
+                    <td style="border: 1px solid #313131; text-align: right;">{{ formatRupiah($ns_kredit) }}</td>
+                    <td style="border: 1px solid #313131; text-align: right;">{{ formatRupiah($rl_debit) }}</td>
+                    <td style="border: 1px solid #313131; text-align: right;">{{ formatRupiah($rl_kredit) }}</td>
+                    <td style="border: 1px solid #313131; text-align: right;">{{ formatRupiah($n_debit) }}</td>
+                    <td style="border: 1px solid #313131; text-align: right;">{{ formatRupiah($n_kredit) }}</td>
                 </tr>
             @endforeach
         </tbody>

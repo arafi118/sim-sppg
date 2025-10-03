@@ -8,6 +8,7 @@ use App\Models\KelompokPemanfaat;
 use App\Models\Rekening;
 use App\Models\User;
 use App\Models\AkunLevel1;
+use App\Models\Calk;
 use App\Models\MasterArusKas;
 use App\Utils\Tanggal;
 use App\Models\Transaksi;
@@ -30,10 +31,9 @@ class PelaporanController extends Controller
 
     public function subLaporan($file)
     {
-        $sub_laporan = [];
-
         if ($file == 'buku_besar') {
             $rekening = Rekening::orderBy('kode_akun', 'ASC')->get();
+            $sub_laporan = [];
 
             foreach ($rekening as $rek) {
                 $sub_laporan[] = [
@@ -41,15 +41,35 @@ class PelaporanController extends Controller
                     'title' => $rek->kode_akun . '. ' . $rek->nama_akun
                 ];
             }
-        } else {
-            // untuk laporan lain tetap ada placeholder
-            $sub_laporan[] = [
-                'value' => '',
-                'title' => '---'
-            ];
-        }
 
-        return view('app.pelaporan.partials.sub_laporan', compact('sub_laporan'));
+            return view('app.pelaporan.partials.sub_laporan', [
+                'type' => 'select',
+                'sub_laporan' => $sub_laporan
+            ]);
+        } elseif ($file == 'calk') {
+            $tahun = request()->get('tahun');
+            $bulan = str_pad(request()->get('bulan'), 2, '0', STR_PAD_LEFT);
+
+            $calk = Calk::where('tanggal', 'LIKE', "$tahun-$bulan%")->first();
+            $keterangan = $calk ? $calk->catatan : '';
+
+            return view('app.pelaporan.partials.sub_laporan', [
+                'type' => 'textarea',
+                'keterangan' => $keterangan
+            ]);
+        } else {
+            $sub_laporan = [
+                [
+                    'value' => '',
+                    'title' => '---'
+                ]
+            ];
+
+            return view('app.pelaporan.partials.sub_laporan', [
+                'type' => 'select',
+                'sub_laporan' => $sub_laporan
+            ]);
+        }
     }
 
     public function preview(Request $request)
@@ -61,6 +81,16 @@ class PelaporanController extends Controller
             $data['kode_akun'] = $request->sub_laporan;
             $data['laporan']   = 'buku_besar'; 
             return $this->buku_besar($data);
+        }
+         if ($data['laporan'] == 'calk' && strlen($data['sub_laporan']) > 22) {
+            Calk::where([
+                 ['tanggal', 'LIKE', $data['tahun'] . '-' . $data['bulan'] . '%']
+            ])->delete();
+
+            Calk::create([
+                 'tanggal' => $data['tahun'] . '-' . $data['bulan'] . '-01',
+                'catatan' => $data['sub_laporan'],
+            ]);
         }
 
         if (method_exists($this, $laporan)) {
@@ -206,60 +236,67 @@ class PelaporanController extends Controller
     }
 
     private function arus_kas(array $data)
-    {
-        $thn  = $data['tahun'];
-        $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
-        $hari = str_pad($data['hari'], 2, '0', STR_PAD_LEFT);
+{
+    $thn  = $data['tahun'];
+    $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
+    $hari = str_pad($data['hari'], 2, '0', STR_PAD_LEFT);
 
-        $tgl_awal  = "{$thn}-01-01";
-        $tgl_akhir = "{$thn}-{$bln}-" . cal_days_in_month(CAL_GREGORIAN, (int) $bln, (int) $thn);
+    // range tanggal tahun & bulan
+    $tgl_awal_tahun  = "{$thn}-01-01";
+    $tgl_awal_bulan  = "{$thn}-{$bln}-01";
+    $tgl_akhir_bulan = "{$thn}-{$bln}-" . cal_days_in_month(CAL_GREGORIAN, (int)$bln, (int)$thn);
 
-        $data['judul'] = 'Laporan Arus Kas';
+    // judul laporan
+    $data['judul'] = 'Laporan Arus Kas';
+    
+    $data['tgl_awal_bulan'] = $tgl_awal_bulan;
+    $data['tgl_akhir_bulan'] = $tgl_akhir_bulan;
 
-        $namaBulan = Tanggal::namaBulan("{$thn}-{$bln}-01");
-        $lastDay   = date('t', strtotime("{$thn}-{$bln}-01"));
+    $namaBulan = Tanggal::namaBulan("{$thn}-{$bln}-01");
+    $lastDay   = date('t', strtotime("{$thn}-{$bln}-01"));
 
-        $data['sub_judul'] = !empty($data['bulan'])
-            ? 'per ' . $lastDay . ' ' . $namaBulan . ' ' . $thn
-            : 'Tahun ' . $thn;
+    $data['sub_judul'] = !empty($data['bulan'])
+        ? 'bulan '  . ' ' . $namaBulan . ' ' . $thn
+        : 'Tahun ' . $thn;
 
-        $data['tgl'] = $data['sub_judul'];
-        $data['title'] = !empty($data['bulan'])
-            ? 'Arus Kas (' . $namaBulan . ' ' . $thn . ')'
-            : 'Arus Kas (Tahun ' . $thn . ')';
+    $data['tgl'] = $data['sub_judul'];
+    $data['title'] = !empty($data['bulan'])
+        ? 'Arus Kas (' . $namaBulan . ' ' . $thn . ')'
+        : 'Arus Kas (Tahun ' . $thn . ')';
 
-        $data['arus_kas'] = MasterArusKas::with([
-            'child',
-            'child.rek_debit.rek.transaksiDebit' => function ($q) use ($tgl_awal, $tgl_akhir) {
-                $q->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir])
-                    ->where('rekening_kredit', 'like', '1.1.01%');
-            },
-            'child.rek_kredit.rek.transaksiKredit' => function ($q) use ($tgl_awal, $tgl_akhir) {
-                $q->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir])
-                    ->where('rekening_debit', 'like', '1.1.01%');
-            }
-        ])->where('parent_id', 0)->get();
+    // ambil arus kas dengan transaksi bulan berjalan
+    $data['arus_kas'] = MasterArusKas::with([
+        'child',
+        'child.rek_debit.rek.transaksiDebit' => function ($q) use ($tgl_awal_bulan, $tgl_akhir_bulan) {
+            $q->whereBetween('tanggal_transaksi', [$tgl_awal_bulan, $tgl_akhir_bulan])
+              ->where('rekening_kredit', 'like', '1.1.01%');
+        },
+        'child.rek_kredit.rek.transaksiKredit' => function ($q) use ($tgl_awal_bulan, $tgl_akhir_bulan) {
+            $q->whereBetween('tanggal_transaksi', [$tgl_awal_bulan, $tgl_akhir_bulan])
+              ->where('rekening_debit', 'like', '1.1.01%');
+        }
+    ])->where('parent_id', 0)->get();
 
+    // hitung saldo kas sampai akhir bulan sebelumnya
+    $keuangan = new Keuangan;
+    $tgl_saldo_lalu = date('Y-m-d', strtotime("-1 day", strtotime($tgl_awal_bulan)));
+    $saldo_bulan_lalu = $keuangan->saldoKas($tgl_saldo_lalu);
+    $data['saldo_bulan_lalu'] = $saldo_bulan_lalu;
 
-        $keuangan = new Keuangan;
-        $tgl_saldo_lalu = date('Y-m-d', strtotime("-1 day", strtotime($tgl_awal)));
-        $saldo_bulan_lalu = $keuangan->saldoKas($tgl_saldo_lalu);
-        $data['saldo_bulan_lalu'] = $saldo_bulan_lalu;
+    // render view -> pdf
+    $view = view('app.pelaporan.views.arus_kas', $data)->render();
 
+    $pdf = PDF::loadHTML($view)->setOptions([
+        'margin-top'    => 30,
+        'margin-bottom' => 15,
+        'margin-left'   => 25,
+        'margin-right'  => 20,
+        'header-html'   => view('app.pelaporan.layout.header', $data)->render(),
+        'enable-local-file-access' => true,
+    ]);
 
-        $view = view('app.pelaporan.views.arus_kas', $data)->render();
-
-        $pdf = PDF::loadHTML($view)->setOptions([
-            'margin-top'    => 30,
-            'margin-bottom' => 15,
-            'margin-left'   => 25,
-            'margin-right'  => 20,
-            'header-html'   => view('app.pelaporan.layout.header', $data)->render(),
-            'enable-local-file-access' => true,
-        ]);
-
-        return $pdf->inline();
-    }
+    return $pdf->inline();
+}
 
     private function neraca(array $data)
     {
@@ -280,9 +317,13 @@ class PelaporanController extends Controller
         $data['title'] = !empty($data['bulan']) ? $data['judul'] . ' (' . $namaBulan . ' ' . $thn . ')' : $data['judul'] . ' Tahun ' . $thn;
 
         $data['akun1'] = AkunLevel1::where('lev1', '<=', 3)
-            ->with(['akun2.akun3.rek'])
-            ->orderBy('kode_akun', 'ASC')
-            ->get();
+        ->with(['akun2.akun3.rek' => function($q) use ($tgl_awal, $tgl_akhir) {
+            $q->whereHas('transaksiDebit', fn($q2) => $q2->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir]))
+            ->orWhereHas('transaksiKredit', fn($q2) => $q2->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir]));
+        }])
+        ->orderBy('kode_akun', 'ASC')
+        ->get();
+
 
         $data['tgl_awal']  = $tgl_awal;
         $data['tgl_akhir'] = $tgl_akhir;
@@ -355,6 +396,49 @@ class PelaporanController extends Controller
             ]);
 
         return $pdf->inline();
+    }
+
+    private function calk(array $data)
+    {
+        $thn  = $data['tahun'];
+        $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
+
+        // Tanggal awal & akhir periode
+        $tgl_awal  = "{$thn}-01-01";
+        $tgl_akhir = "{$thn}-{$bln}-" . cal_days_in_month(CAL_GREGORIAN, (int)$bln, (int)$thn);
+
+        $data['judul'] = 'CALK';
+        $namaBulan = Tanggal::namaBulan("{$thn}-{$bln}-01");
+        $lastDay   = date('t', strtotime("{$thn}-{$bln}-01"));
+
+        $data['sub_judul'] = !empty($data['bulan'])
+            ? 'per ' . $lastDay . ' ' . $namaBulan . ' ' . $thn
+            : 'Tahun ' . $thn;
+
+        $data['title'] = !empty($data['bulan'])
+            ? $data['judul'] . ' (' . $namaBulan . ' ' . $thn . ')'
+            : $data['judul'] . ' Tahun ' . $thn;
+
+        // Ambil akun level 1–3 beserta rekening
+        $data['akun1'] = AkunLevel1::where('lev1', '<=', 3)
+            ->with(['akun2.akun3.rek'])
+            ->orderBy('kode_akun', 'ASC')
+            ->get();
+
+        $data['tgl_awal']  = $tgl_awal;
+        $data['tgl_akhir'] = $tgl_akhir;
+
+        // Render view CALK
+        $view = view('app.pelaporan.views.calk', $data)->render();
+        $pdf = PDF::loadHTML($view)->setOptions([
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+            'header-html' => view('app.pelaporan.layout.header', $data)->render(),
+            'enable-local-file-access' => true,
+        ]);
+        return PDF::loadHTML($view)->inline();
     }
 
     private function laba_rugi(array $data)
