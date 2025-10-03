@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(Invoice::class);
             $table->integer('harga');
             $table->string('kebutuhan');
-            $table->float('total');
+            $table->float('total', 50, 2);
             $table->timestamps();
         });
     }
