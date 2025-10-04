@@ -19,12 +19,15 @@
             </td>
         </tr>
         <tr>
-            <td colspan="3" height="5"></td>
+            <td colspan="3" height="8"></td>
         </tr>
         <tr style="background:#000; color:#fff; font-weight:600;">
             <td width="10%" style="padding:4px;">Kode</td>
             <td width="70%" style="padding:4px;">Nama Akun</td>
             <td width="20%" style="padding:4px;" align="right">Saldo</td>
+        </tr>
+        <tr>
+            <td colspan="3" height="6"></td>
         </tr>
         @foreach ($akun1 as $lev1)
             @php $total_akun1 = 0; @endphp
@@ -59,7 +62,7 @@
                 <td align="right">{{ Keuangan::formatSaldo($total_akun1) }}</td>
             </tr>
             <tr>
-                <td colspan="3" height="2"></td>
+                <td colspan="3" height="6"></td>
             </tr>
         @endforeach
     </table>

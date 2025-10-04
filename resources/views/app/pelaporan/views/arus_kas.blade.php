@@ -4,7 +4,6 @@
     $total_bulan_ini = 0;
     $saldo_bulan_lalu = $saldo_bulan_lalu ?? 0;
 
-    // Fungsi format kas: jika negatif tampil dengan ()
     function formatKas($jumlah)
     {
         return $jumlah < 0 ? '(' . number_format(abs($jumlah), 2) . ')' : number_format($jumlah, 2);
@@ -31,7 +30,9 @@
             <th colspan="2">Nama Akun</th>
             <th>Jumlah</th>
         </tr>
-
+        <tr>
+            <td colspan="4" height="8"></td>
+        </tr>
 
         @foreach ($arus_kas as $ak)
             @php
@@ -100,6 +101,9 @@
                     <td>&nbsp;</td>
                     <td>Jumlah {{ substr(ucwords(strtolower($ak->nama_akun)), 3) }}</td>
                     <td align="right">{{ formatKas($sub_total) }}</td>
+                </tr>
+                <tr>
+                    <td colspan="4" height="8"></td>
                 </tr>
             @endif
 

@@ -4,7 +4,7 @@
 @endphp
 
 @extends('app.pelaporan.layout.base')
-
+<title>{{ $title }}</title>
 @section('content')
     <style>
         ol,
@@ -15,14 +15,19 @@
     <table border="0" width="100%" cellspacing="0" cellpadding="0">
         <tr>
             <td colspan="3" align="center">
-                <div style="font-size: 18px;">
-                    <b>CATATAN ATAS LAPORAN KEUANGAN</b>
+                <div>
+                    <span style="font-size:20px; font-weight:bold;">
+                        CATATAN ATAS LAPORAN KEUANGAN
+                    </span>
                 </div>
-                <div style="font-size: 18px; text-transform: uppercase;">
-                    <b>......</b>
+                <div>
+                    <span style="font-size:18px; font-weight:bold; text-transform:uppercase;">
+                    </span>
                 </div>
-                <div style="font-size: 16px;">
-                    <b> </b>
+                <div>
+                    <span style="font-size:16px; font-weight:bold;">
+                        {{ strtoupper($sub_judul) }}
+                    </span>
                 </div>
             </td>
         </tr>
@@ -35,7 +40,7 @@
         <li>
             <div style="text-transform: uppercase;">Gambaran Umum</div>
             <div style="text-align: justify">
-                ......adalah Badan Usaha yang didirikan oleh ......
+                {{ $profil->nama }} dalah Badan Usaha yang didirikan oleh ......
                 ......sebagai tindak lanjut dari amanat Pemerintahan Republik Indonesia yang antara
                 lain tertuang dalam UU nomer 6 Tahun 2014 Tentang Desa., Peraturan Menteri Desa Pembangunan Daerah
                 Tertinggal dan Transmigrasi Nomor 4 Tahun 2015 tentang Pendirian, Pengurusan dan Pengelolaan, dan
@@ -52,17 +57,17 @@
                 dukungan pengembangan dari pihak swasta dan pemerintah baik dilingkungan desa sendiri maupun luar desa.
             </p>
             <p style="text-align: justify">
-                ...... didirikan di ......
+                {{ $profil->nama }} didirikan di ......
                 berdasarkan PERATURAN KEPALA DESA NOMOR ...... dan mendapatkan Sertifikat Badan Hukum
                 dari Menteri Hukum dan Hak Asasi Manusia No. ....... Dalam perjalanan pengelolaan
-                manajeman dan bisnis ...... memiliki struktur kepengurusan pusat sebagai berikut :
+                manajeman dan bisnis {{ $profil->nama }} memiliki struktur kepengurusan pusat sebagai berikut :
             </p>
             <table style="margin-top: -10px; margin-left: 15px;">
                 <tr>
                     <td style="padding: 0px; 4px;" width="100">......</td>
                     <td style="padding: 0px; 4px;">:</td>
                     <td style="padding: 0px; 4px;">
-                        ...... : '......................................' }}
+                        ...... : '......................................'
                     </td>
                 </tr>
 
@@ -162,20 +167,18 @@
                 Informasi Tambahan Laporan Keuangan
             </div>
             <div>
-
                 <table border="0" width="100%" cellspacing="0" cellpadding="0" style="font-size: 11px;">
                     <tr>
-                        <td colspan="3" align="center">
-                            <b>{{ strtoupper($judul) }}</b><br>
-                            <b>{{ strtoupper($sub_judul) }}</b>
-                        </td>
+                        <td colspan="4" height="3"></td>
                     </tr>
-                    <tr>
+                    <tr style="background-color: #000; color: #fff; font-weight: bold;">
                         <td width="10%">Kode</td>
                         <td width="70%">Nama Akun</td>
                         <td width="20%" align="right">Saldo</td>
                     </tr>
-
+                    <tr>
+                        <td colspan="4" height="5"></td>
+                    </tr>
                     @foreach ($akun1 as $lev1)
                         @php $total_lev1 = 0; @endphp
                         <tr style="background:#4a4a4a; color:#fff;" align="center">

@@ -150,40 +150,38 @@ class Keuangan
         return $rek->normal == 'D' ? $debit - $kredit : $kredit - $debit;
     }
     
- public function saldoKas($tgl_akhir, $mode = 'akhir')
-{
-    $tanggal = explode('-', $tgl_akhir);
-    $thn = $tanggal[0];
+    public function saldoKas($tgl_akhir, $mode = 'akhir')
+    {
+        $tanggal = explode('-', $tgl_akhir);
+        $thn = $tanggal[0];
 
-    if ($mode == 'awal') {
-        $range_awal = "$thn-01-01";
-        $range_akhir = date('Y-m-d', strtotime($tgl_akhir . ' -1 day'));
-    } else {
-        $range_awal = "$thn-01-01";
-        $range_akhir = $tgl_akhir;
+        if ($mode == 'awal') {
+            $range_awal = "$thn-01-01";
+            $range_akhir = date('Y-m-d', strtotime($tgl_akhir . ' -1 day'));
+        } else {
+            $range_awal = "$thn-01-01";
+            $range_akhir = $tgl_akhir;
+        }
+
+        // Ambil semua rekening kas (id)
+        $rekeningKas = Rekening::where('kode_akun', 'like', '1.1.01%')
+                        ->orWhere('kode_akun', 'like', '1.1.02%')
+                        ->pluck('id');
+
+        // Hitung total debit & kredit dari transaksi
+        $total_debit = Transaksi::whereIn('rekening_debit', $rekeningKas)
+                        ->whereBetween('tanggal_transaksi', [$range_awal, $range_akhir])
+                        ->sum('jumlah');
+
+        $total_kredit = Transaksi::whereIn('rekening_kredit', $rekeningKas)
+                        ->whereBetween('tanggal_transaksi', [$range_awal, $range_akhir])
+                        ->sum('jumlah');
+
+        // Karena kas = akun aktiva → normal debit
+        $saldo = $total_debit - $total_kredit;
+
+        return $saldo;
     }
-
-    // Ambil semua rekening kas (id)
-    $rekeningKas = Rekening::where('kode_akun', 'like', '1.1.01%')
-                    ->orWhere('kode_akun', 'like', '1.1.02%')
-                    ->pluck('id');
-
-    // Hitung total debit & kredit dari transaksi
-    $total_debit = Transaksi::whereIn('rekening_debit', $rekeningKas)
-                    ->whereBetween('tanggal_transaksi', [$range_awal, $range_akhir])
-                    ->sum('jumlah');
-
-    $total_kredit = Transaksi::whereIn('rekening_kredit', $rekeningKas)
-                    ->whereBetween('tanggal_transaksi', [$range_awal, $range_akhir])
-                    ->sum('jumlah');
-
-    // Karena kas = akun aktiva → normal debit
-    $saldo = $total_debit - $total_kredit;
-
-    return $saldo;
-}
-
-
 
     public function romawi($angka)
     {

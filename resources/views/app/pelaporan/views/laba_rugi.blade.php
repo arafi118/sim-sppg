@@ -104,7 +104,7 @@
                     <td align="right">{{ formatAngka($total_sd) }}</td>
                 </tr>
                 <tr>
-                    <td colspan="4" height="2"></td>
+                    <td colspan="4" height="6"></td>
                 </tr>
             @endforeach
         </tbody>
