@@ -21,6 +21,10 @@
     "icon": "bx-detail",
     "url": "/app/generate-tagihan"
 }, {
+    "nama": "Daftar PO",
+    "icon": "bx-detail",
+    "url": "/app/daftar-po"
+}, {
     "nama": "Master Admin"
 }, {
     "nama": "Pengguna",

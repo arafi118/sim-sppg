@@ -12,7 +12,23 @@ class PoController extends Controller
      */
     public function index()
     {
-        //
+        if (request()->ajax()) {
+            $daftarPO = Po::latest()->get();
+            return datatables()->of($daftarPO)
+                ->addIndexColumn()
+                ->editColumn('total_harga', function ($row) {
+                    return "Rp. " . number_format($row->total_harga);
+                })
+                ->addColumn('action', function ($row) {
+                    $btn = '<button type="button" id="' . $row->id . '" class="btn btn-sm btn-primary btn-detail">Detail</button>';
+
+                    return $btn;
+                })
+                ->make(true);
+        }
+
+        $title = 'Daftar Po';
+        return view('app.po.index', compact('title'));
     }
 
     /**
@@ -36,7 +52,10 @@ class PoController extends Controller
      */
     public function show(Po $po)
     {
-        //
+        $po = $po->load('poDetail.bahanPangan');
+
+        $view = view('app.po.detail', compact('po'))->render();
+        return response()->json(['view' => $view, 'tanggal' => $po->tanggal]);
     }
 
     /**

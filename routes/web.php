@@ -21,6 +21,7 @@ use App\Http\Controllers\RancanganController;
 use App\Http\Controllers\PenyiapanController;
 use App\Http\Controllers\PelaksanaController;
 use App\Http\Controllers\DokumentasiKegiatanController;
+use App\Http\Controllers\PoController;
 use App\Http\Controllers\TagihanController;
 use App\Http\Controllers\TahapanController;
 use App\Models\PeriodeMasak;
@@ -121,6 +122,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/generate-tagihan/no_invoice/{tanggal}', [TagihanController::class, 'no_invoice']);
     Route::get('/generate-tagihan/{invoice}/invoice', [TagihanController::class, 'invoice']);
     Route::resource('/generate-tagihan', TagihanController::class);
+
+    Route::get('/daftar-po', [PoController::class, 'index']);
+    Route::get('/daftar-po/{po}', [PoController::class, 'show']);
 
     //admin
     Route::resource('/profile', ProfilController::class);
