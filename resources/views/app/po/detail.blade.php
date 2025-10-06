@@ -14,10 +14,16 @@
             <tr>
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $detail->bahanPangan->nama }}</td>
-                <td>{{ number_format($detail->harga_satuan) }}</td>
-                <td>{{ number_format($detail->jumlah) }}</td>
-                <td>{{ number_format($detail->total_harga) }}</td>
+                <td class="text-end">{{ number_format($detail->harga_satuan) }}</td>
+                <td>{{ number_format($detail->jumlah, 2) }} ({{ $detail->bahanPangan->satuan }})</td>
+                <td class="text-end">{{ number_format($detail->total_harga) }}</td>
             </tr>
         @endforeach
     </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="4">Total</th>
+            <th class="text-end">{{ number_format($po->total_harga) }}</th>
+        </tr>
+    </tfoot>
 </table>
