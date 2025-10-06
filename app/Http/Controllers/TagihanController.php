@@ -142,7 +142,7 @@ class TagihanController extends Controller
 
         $cekInvoice = Invoice::where('tanggal_tagihan', $data['tanggal'])->first();
         if ($cekInvoice) {
-            return response()->json(['msg' => 'Tagihan untuk tanggal ' . $data['tanggal'] . ' sudah ada.']);
+            return response()->json(['message' => 'Tagihan untuk tanggal ' . $data['tanggal'] . ' sudah ada.']);
         }
 
         $invoice = Invoice::create([
