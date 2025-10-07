@@ -21,7 +21,7 @@
                     </span>
                 </div>
                 <div>
-                    <span style="font-size:18px; font-weight:bold; text-transform:uppercase;">
+                    <span style="font-size:18px; font-weight:bold; text-transform:uppercase;">{{ $profil->nama }}
                     </span>
                 </div>
                 <div>
@@ -236,7 +236,7 @@
                 Ketentuan Pembagian Laba Usaha
             </div>
             <div style="text-align: justify">
-                Pembagian laba ...... ditentukan dalam rapat pertanggungjawaban pengurus dan RUPS.
+                Pembagian laba {{ $profil->nama }} ditentukan dalam rapat pertanggungjawaban pengurus dan RUPS.
                 Adapun hasil keputusan pembagian laba tahun buku ...... adalah sebagai berikut:
             </div>
             <ol>
@@ -244,22 +244,23 @@
                     Total Laba bersih Rp. .....................
                 </li>
                 <li>
-                    Alokasi penambahan modal ...... Rp. .................
+                    Alokasi penambahan modal {{ $profil->nama }} Rp. .................
                 </li>
                 <li>
-                    Alokasi PADes...... Rp. .................
+                    Alokasi PADes {{ $profil->nama }} Rp. .................
                 </li>
             </ol>
         </li>
 
         <li style="margin-top: 12px;">
             <div style="text-transform: uppercase;">
-                Lain Lain
+                Lain-lain
             </div>
             <div style="text-align: justify">
-
+                {!! $catatan ?? '' !!}
             </div>
         </li>
+
 
         <li style="margin-top: 12px;">
             <table border="0" width="100%" cellspacing="0" cellpadding="0" style="font-size: 11px;">
@@ -269,7 +270,7 @@
                             Penutup
                         </div>
                         <div style="text-align: justify">
-                            Laporan Keuangan ...... ini disajikan dengan berpedoman pada Keputusan
+                            Laporan Keuangan {{ $profil->nama }} ini disajikan dengan berpedoman pada Keputusan
                             Kementerian
                             Desa Nomor 136/2022 Tentang Panduan Penyusunan Pelaporan Bumdes. Catatan atas Laporan Keuangan
                             (CaLK) ini merupakan bagian tidak terpisahkan dari Laporan Keuangan Badan Usaha Milik Desa
@@ -277,7 +278,7 @@
                             Selanjutnya Catatan atas Laporan Keuangan ini diharapkan untuk dapat berguna bagi pihak-pihak
                             yang berkepentingan (stakeholders) serta memenuhi prinsip-prinsip transparansi, akuntabilitas,
                             pertanggungjawaban, independensi, dan fairness dalam pengelolaan keuangan
-                            ......
+                            {{ $profil->nama }}
                         </div>
 
                         <table border="0" width="100%" cellspacing="0" cellpadding="0" style="font-size: 11px;"
