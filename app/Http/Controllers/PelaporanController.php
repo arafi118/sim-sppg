@@ -406,8 +406,8 @@ class PelaporanController extends Controller
 
         $data['judul'] = 'Calk';
 
-        $namaBulanNormal = Tanggal::namaBulan("{$thn}-{$bln}-01"); // Oktober
-        $namaBulanCaps   = strtoupper($namaBulanNormal);           // OKTOBER
+        $namaBulanNormal = Tanggal::namaBulan("{$thn}-{$bln}-01"); // Contoh: Oktober
+        $namaBulanCaps   = strtoupper($namaBulanNormal);            // Contoh: OKTOBER
 
         $data['sub_judul'] = !empty($data['bulan'])
             ? 'BULAN ' . $namaBulanCaps . ' TAHUN ' . $thn
@@ -416,7 +416,7 @@ class PelaporanController extends Controller
         $data['title'] = !empty($data['bulan'])
             ? $data['judul'] . ' (' . $namaBulanNormal . ' ' . $thn . ')'
             : $data['judul'] . ' Tahun ' . $thn;
-            
+
         $data['profil'] = Profil::first();
 
         // Ambil akun level 1–3 beserta rekening
@@ -428,17 +428,24 @@ class PelaporanController extends Controller
         $data['tgl_awal']  = $tgl_awal;
         $data['tgl_akhir'] = $tgl_akhir;
 
+        // ✅ Ambil catatan CALK berdasarkan tahun dan bulan
+        $calk = Calk::where('tanggal', 'LIKE', "{$thn}-{$bln}%")->first();
+        $data['catatan'] = $calk ? $calk->catatan : '';
+
         // Render view CALK
         $view = view('app.pelaporan.views.calk', $data)->render();
+
+        // Generate PDF
         $pdf = PDF::loadHTML($view)->setOptions([
             'margin-top'    => 30,
             'margin-bottom' => 15,
             'margin-left'   => 25,
             'margin-right'  => 20,
-            'header-html' => view('app.pelaporan.layout.header', $data)->render(),
+            'header-html'   => view('app.pelaporan.layout.header', $data)->render(),
             'enable-local-file-access' => true,
         ]);
-        return PDF::loadHTML($view)->inline();
+
+        return $pdf->inline();
     }
 
     private function laba_rugi(array $data)
