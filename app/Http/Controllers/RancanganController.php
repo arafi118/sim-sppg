@@ -122,6 +122,9 @@ class RancanganController extends Controller
             ['tanggal_awal', '<=', $today],
             ['tanggal_akhir', '>=', $today]
         ])->first();
+        if (!$periode) {
+            $periode = PeriodeMasak::latest()->first();
+        }
 
         $dataPemanfaat = DataPemanfaat::orderBy('nama_lembaga', 'asc')->get();
         $menu = Menu::orderBy('nama', 'asc')->get();
