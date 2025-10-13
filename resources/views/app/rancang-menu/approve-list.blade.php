@@ -96,7 +96,7 @@
                                                                                 {{ $resep->gramasi }}
                                                                                 {{ $resep->bahanPangan->satuan }}
                                                                             </td>
-                                                                            <td>
+                                                                            <td class="text-end">
                                                                                 Rp.
                                                                                 {{ number_format($resep->bahanPangan->harga_jual * $resep->gramasi) }}
                                                                             </td>
@@ -112,7 +112,7 @@
                                                                 <tfoot>
                                                                     <tr>
                                                                         <td colspan="4">Total</td>
-                                                                        <td>
+                                                                        <td class="text-end">
                                                                             Rp.
                                                                             {{ number_format($total) }}
                                                                             @php
