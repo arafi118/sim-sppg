@@ -39,6 +39,7 @@ class RancanganController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $btn  = '<div class="d-inline-flex gap-1">';
+                    $btn .= '<button type="button" id="' . $row->id . '" class="btn btn-sm btn-warning btn-detail">Detail</button>';
                     $btn .= '<a href="/app/rancang-menu/' . $row->id . '/edit" class="btn btn-sm btn-primary">Edit</a>';
                     $btn .= '<button type="button" class="btn btn-sm btn-danger btn-hapus" data-id="' . $row->id . '">Hapus</button>';
                     $btn .= '</div>';
@@ -243,7 +244,9 @@ class RancanganController extends Controller
      */
     public function show(Rancangan $rancang_menu)
     {
-        //
+        $rancang_menu = $rancang_menu->load(['periode', 'dataPemanfaat', 'rancanganMenu.menu']);
+
+        return response()->json(['success' => true, 'view' => view('app.rancang-menu.show', compact('rancang_menu'))->render()]);
     }
 
     /**
