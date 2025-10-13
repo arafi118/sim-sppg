@@ -190,7 +190,6 @@ class MitraController extends Controller
     {
         $periode = PeriodeMasak::where('tanggal_awal', '<=', date('Y-m-d'))->where('tanggal_akhir', '>=', date('Y-m-d'))->first();
         $rancangan = Rancangan::with(['rancanganMenu.menu.resep.bahanPangan'])
-            ->whereBetween('tanggal', [$periode->tanggal_awal, $periode->tanggal_akhir])
             ->where('approved', 1)
             ->orderBy('tanggal', 'ASC')
             ->get();
