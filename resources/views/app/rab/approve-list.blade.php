@@ -4,12 +4,12 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>No</th>
+                    <th class="text-center">No</th>
                     <th>Bahan Pangan</th>
-                    <th>Satuan</th>
-                    <th>Harga</th>
-                    <th>Kebutuhan</th>
-                    <th>Total Harga</th>
+                    <th class="text-center">Satuan</th>
+                    <th class="text-end">Harga</th>
+                    <th class="text-end">Kebutuhan</th>
+                    <th class="text-end">Total Harga</th>
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
@@ -29,12 +29,12 @@
                     @endphp
 
                     <tr>
-                        <td align="center">{{ $loop->iteration }}</td>
+                        <td class="text-center">{{ $loop->iteration }}</td>
                         <td>{{ $nama_bahan }}</td>
-                        <td align="center">{{ strtoupper($satuan) }}</td>
-                        <td align="right">{{ number_format($harga) }}</td>
-                        <td align="right">{{ number_format($jumlah, 2) }}</td>
-                        <td align="right">{{ number_format($total) }}</td>
+                        <td class="text-center">{{ strtoupper($satuan) }}</td>
+                        <td class="text-end">{{ number_format($harga) }}</td>
+                        <td class="text-end">{{ number_format($jumlah, 2) }}</td>
+                        <td class="text-end">{{ number_format($total) }}</td>
                     </tr>
                 @endforeach
             </tbody>
