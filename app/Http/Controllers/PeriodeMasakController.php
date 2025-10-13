@@ -53,7 +53,6 @@ class PeriodeMasakController extends Controller
 
         $periode_ke = PeriodeMasak::max('periode_ke') + 1;
 
-        dd($periode_ke, $request->tanggal_akhir, $request->tanggal_awal);
         $periodeMasak = PeriodeMasak::create([
             'periode_ke'    => $periode_ke,
             'tanggal_awal'  => $request->tanggal_awal,
