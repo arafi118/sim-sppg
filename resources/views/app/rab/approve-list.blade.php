@@ -31,7 +31,7 @@
                     <tr>
                         <td aligb="center">{{ $loop->iteration }}</td>
                         <td>{{ $nama_bahan }}</td>
-                        <td aligb="center">{{ $satuan }}</td>
+                        <td aligb="center">{{ strtoupper($satuan) }}</td>
                         <td aligb="right">{{ number_format($harga) }}</td>
                         <td aligb="right">{{ number_format($jumlah, 2) }}</td>
                         <td aligb="right">{{ number_format($total) }}</td>
