@@ -6,9 +6,9 @@
                 <tr>
                     <th class="text-center">No</th>
                     <th>Bahan Pangan</th>
+                    <th class="text-end">Kebutuhan</th>
                     <th class="text-center">Satuan</th>
                     <th class="text-end">Harga</th>
-                    <th class="text-end">Kebutuhan</th>
                     <th class="text-end">Total Harga</th>
                 </tr>
             </thead>
@@ -31,9 +31,9 @@
                     <tr>
                         <td class="text-center">{{ $loop->iteration }}</td>
                         <td>{{ $nama_bahan }}</td>
+                        <td class="text-end">{{ number_format($jumlah, 2) }}</td>
                         <td class="text-center">{{ strtoupper($satuan) }}</td>
                         <td class="text-end">{{ number_format($harga) }}</td>
-                        <td class="text-end">{{ number_format($jumlah, 2) }}</td>
                         <td class="text-end">{{ number_format($total) }}</td>
                     </tr>
                 @endforeach
