@@ -29,12 +29,12 @@
                     @endphp
 
                     <tr>
-                        <td aligb="center">{{ $loop->iteration }}</td>
+                        <td align="center">{{ $loop->iteration }}</td>
                         <td>{{ $nama_bahan }}</td>
-                        <td aligb="center">{{ strtoupper($satuan) }}</td>
-                        <td aligb="right">{{ number_format($harga) }}</td>
-                        <td aligb="right">{{ number_format($jumlah, 2) }}</td>
-                        <td aligb="right">{{ number_format($total) }}</td>
+                        <td align="center">{{ strtoupper($satuan) }}</td>
+                        <td align="right">{{ number_format($harga) }}</td>
+                        <td align="right">{{ number_format($jumlah, 2) }}</td>
+                        <td align="right">{{ number_format($total) }}</td>
                     </tr>
                 @endforeach
             </tbody>
