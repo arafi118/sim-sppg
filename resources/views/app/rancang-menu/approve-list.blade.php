@@ -61,6 +61,9 @@
                                             </table>
 
                                             <ol class="list-group list-group-numbered">
+                                                @php
+                                                    $total_harga = 0;
+                                                @endphp
                                                 @foreach ($r->rancanganMenu as $rancangan)
                                                     <li class="list-group-item">
                                                         {{ $rancangan->menu->nama }}
@@ -112,6 +115,9 @@
                                                                         <td>
                                                                             Rp.
                                                                             {{ number_format($total) }}
+                                                                            @php
+                                                                                $total_harga += $total;
+                                                                            @endphp
                                                                         </td>
                                                                     </tr>
                                                                 </tfoot>
@@ -120,6 +126,11 @@
                                                     </li>
                                                 @endforeach
                                             </ol>
+
+                                            <div class="d-flex justify-content-end">
+                                                <i>ESTIMASI TOTAL HARGA PER PORSI Rp. {{ number_format($total_harga) }}
+                                                </i>
+                                            </div>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-label-secondary"
