@@ -74,8 +74,8 @@
                                                                     <tr>
                                                                         <th>#</th>
                                                                         <th>Bahan</th>
-                                                                        <th>Harga</th>
                                                                         <th>Gramasi</th>
+                                                                        <th>Harga</th>
                                                                         <th>Jumlah</th>
                                                                     </tr>
                                                                 </thead>
@@ -89,12 +89,12 @@
                                                                             <td>{{ $no++ }}</td>
                                                                             <td>{{ $resep->bahanPangan->nama }}</td>
                                                                             <td>
-                                                                                Rp.
-                                                                                {{ number_format($resep->bahanPangan->harga_jual) }}/{{ $resep->bahanPangan->satuan }}
-                                                                            </td>
-                                                                            <td>
                                                                                 {{ $resep->gramasi }}
                                                                                 {{ $resep->bahanPangan->satuan }}
+                                                                            </td>
+                                                                            <td>
+                                                                                Rp.
+                                                                                {{ number_format($resep->bahanPangan->harga_jual) }}/{{ $resep->bahanPangan->satuan }}
                                                                             </td>
                                                                             <td class="text-end">
                                                                                 Rp.
