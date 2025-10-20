@@ -1,13 +1,52 @@
 @php
-    $tanggal_awal = date('Y-m-d');
-    $tanggal_akhir = date('Y-m-d', strtotime('+14 days'));
-    if ($periode) {
-        $tanggal_awal = $periode->tanggal_awal;
-        $tanggal_akhir = $periode->tanggal_akhir;
-    }
+    use App\Utils\Tanggal;
 @endphp
 
 @extends('app.layouts.app')
+
+@section('style')
+    <style>
+        .show-entries select.form-control {
+            width: 60px;
+            margin: 0 5px;
+        }
+
+        .table-filter .filter-group {
+            float: right;
+            margin-left: 15px;
+        }
+
+        .table-filter label {
+            font-weight: normal;
+            margin-left: 10px;
+        }
+
+        .table-filter select,
+        .table-filter input {
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        .table-filter input {
+            width: 200px;
+            display: inline-block;
+        }
+
+        .filter-group select.form-control {
+            width: 110px;
+        }
+
+        .filter-icon {
+            float: right;
+            margin-top: 7px;
+        }
+
+        .filter-icon i {
+            font-size: 18px;
+            opacity: 0.7;
+        }
+    </style>
+@endsection
 
 @section('content')
     <div class="card">
@@ -26,6 +65,46 @@
             </div>
         </div>
         <div class="card-datatable">
+            <div class="mx-6 mt-6">
+                <div class="row">
+                    <div class="col-lg-1 col-md-2">
+                        <div class="mb-6">
+                            <span>Show</span>
+                            <select class="form-control select2" id="entriesSelect">
+                                <option>5</option>
+                                <option selected>10</option>
+                                <option>15</option>
+                                <option>20</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-11 col-md-10">
+                        <div class="row justify-content-end">
+                            <div class="col-lg-4 col-md-6">
+                                <div class="mb-6">
+                                    <label>Periode</label>
+                                    <select class="form-control select2" id="periodeSelect">
+                                        @foreach ($periode as $p)
+                                            <option value="{{ $p->id }}">
+                                                {{ Tanggal::tglLatin($p->tanggal_awal) }}
+                                                -
+                                                {{ Tanggal::tglLatin($p->tanggal_akhir) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4">
+                                <div class="mb-6">
+                                    <label>Search</label>
+                                    <input type="text" class="form-control" id="searchInput"
+                                        placeholder="Cari Disini...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <table class="table table-bordered" id="table-rancang-menu">
                 <thead>
                     <tr>
@@ -66,7 +145,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: '/app/rancang-menu?tanggal_awal={{ $tanggal_awal }}&tanggal_akhir={{ $tanggal_akhir }}',
+                url: '/app/rancang-menu',
                 type: 'GET',
             },
 
@@ -105,6 +184,19 @@
                     orderable: false
                 }
             ],
+        }, false, false);
+
+        $('#entriesSelect').on('change', function() {
+            const value = $(this).val();
+            table.page.len(value).draw();
+        });
+
+        $('#periodeSelect').on('change', function() {
+            table.ajax.url('/app/rancang-menu?periode_id=' + $(this).val()).load();
+        });
+
+        $('#searchInput').on('keyup', function() {
+            table.search(this.value).draw();
         });
 
         $(document).on('click', '.btn-hapus', function() {

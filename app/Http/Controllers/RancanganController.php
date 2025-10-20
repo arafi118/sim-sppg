@@ -21,9 +21,6 @@ class RancanganController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $tanggal_awal = request()->get('tanggal_awal', date('Y-m-d'));
-            $tanggal_akhir = request()->get('tanggal_akhir', date('Y-m-d', strtotime('+14 days')));
-
             $rancanganMenu = Rancangan::select(
                 'rancangans.*',
                 'periode_masaks.periode_ke',
@@ -31,8 +28,13 @@ class RancanganController extends Controller
                 'periode_masaks.tanggal_akhir'
             )
                 ->join('periode_masaks', 'rancangans.periode_masak_id', '=', 'periode_masaks.id')
-                ->with(['rancanganMenu.menu.resep.bahanPangan'])
-                ->orderBy('tanggal', 'desc')
+                ->with(['rancanganMenu.menu.resep.bahanPangan']);
+
+            if (request()->get('periode_id')) {
+                $rancanganMenu = $rancanganMenu->where('rancangans.periode_masak_id', request()->get('periode_id'));
+            }
+
+            $rancanganMenu = $rancanganMenu->orderBy('tanggal', 'desc')
                 ->get();
 
             return datatables()->of($rancanganMenu)
@@ -64,10 +66,7 @@ class RancanganController extends Controller
         }
 
 
-        $periode = PeriodeMasak::where([
-            ['tanggal_awal', '<=', date('Y-m-d')],
-            ['tanggal_akhir', '>=', date('Y-m-d')]
-        ])->first();
+        $periode = PeriodeMasak::latest()->get();
 
         $title = 'Rancangan Menu';
         return view('app.rancang-menu.index', compact('title', 'periode'));

@@ -40,6 +40,7 @@
     <script src="/assets/js/config.js"></script>
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 
+    @yield('style')
 </head>
 
 <body>
@@ -161,11 +162,11 @@
             precision: 2,
         });
 
-        function setDataTable(target, options = {}) {
+        function setDataTable(target, options = {}, topStart = true, topEnd = true) {
             return new DataTable(target, {
                 ...options,
                 layout: {
-                    topStart: {
+                    topStart: (topStart) ? {
                         rowClass: "row mx-3 my-0 justify-content-between",
                         features: [{
                             pageLength: {
@@ -173,12 +174,12 @@
                                 text: "Show_MENU_entries"
                             }
                         }]
-                    },
-                    topEnd: {
+                    } : null,
+                    topEnd: (topEnd) ? {
                         search: {
                             placeholder: "Cari disini..."
                         }
-                    },
+                    } : null,
                     bottomStart: {
                         rowClass: "row mx-3 justify-content-between",
                         features: ["info"]
