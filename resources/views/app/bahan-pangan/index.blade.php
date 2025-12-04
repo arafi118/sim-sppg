@@ -76,6 +76,7 @@
                                 data-harga_jual="${data.harga_jual}"
                                 data-satuan="${data.satuan}"
                                 data-kelompok_pangan_id="${data.kelompok_pangan_id}"
+                                data-default_value="${data.default_value}"
                                 data-kelompok_pangan_nama="${data.kelompok_pangan?.nama ?? ''}">
                                 Edit
                             </button>
@@ -131,6 +132,7 @@
             $('#id_BP').val(d.id);
             $('#nama').val(d.nama);
             $('#harga_jual').val(d.harga_jual);
+            $('#default').val(d.default_value);
 
             // set satuan
             $('#satuan').val(d.satuan).trigger('change');

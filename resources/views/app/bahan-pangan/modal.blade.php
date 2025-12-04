@@ -28,7 +28,7 @@
                             </div>
                         </div>
                         <div class="row mt-2">
-                            <div class="col-12 col-md-6 mb-3">
+                            <div class="col-12 col-md-4 mb-3">
                                 <div class="form-group">
                                     <label class="form-label" for="satuan">Satuan</label>
                                     <select id="satuan" name="satuan" class="form-control select2">
@@ -48,11 +48,17 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 col-md-6">
+                            <div class="col-12 col-md-4">
                                 <label class="form-label" for="harga_jual">Harga</label>
                                 <input type="text" id="harga_jual" name="harga_jual" class="form-control"
                                     placeholder="Harga Jual" />
                                 <small id="msg_harga_jual" class="text-danger"></small>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label" for="default">Default Penggunaan per Porsi</label>
+                                <input type="text" id="default" name="default" class="form-control"
+                                    placeholder="Default Penggunaan per Porsi" />
+                                <small id="msg_default" class="text-danger"></small>
                             </div>
                         </div>
                         <div class="d-flex justify-content-end gap-2 mt-4">

@@ -148,6 +148,7 @@
 
             var inputGroup = $(this).closest('.bahan').next('.jumlah');
             inputGroup.find('span.input-group-text').text(bahanData.satuan);
+            inputGroup.find('input').val(bahanData.default_value);
         });
 
         $(document).on('click', '#SimpanMekanisme', function() {

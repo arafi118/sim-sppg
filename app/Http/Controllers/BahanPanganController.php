@@ -5,12 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\BahanPangan;
 use App\Models\KelompokPangan;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
-
-
+use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\DataTables;
 
 class BahanPanganController extends Controller
 {
@@ -43,8 +41,8 @@ class BahanPanganController extends Controller
 
         return response()->json(
             $query->get()->map(fn ($item) => [
-                'id'    => $item->id,
-                'nama'  => $item->nama
+                'id' => $item->id,
+                'nama' => $item->nama,
             ])
         );
     }
@@ -66,14 +64,16 @@ class BahanPanganController extends Controller
             'kelompok_pangan_id',
             'nama',
             'satuan',
-            'harga_jual'
+            'harga_jual',
+            'default',
         ]);
 
         $rules = [
-            'kelompok_pangan_id'    => 'required',
-            'nama'                  => 'required',
-            'satuan'                => 'required',
-            'harga_jual'            => 'required'
+            'kelompok_pangan_id' => 'required',
+            'nama' => 'required',
+            'satuan' => 'required',
+            'harga_jual' => 'required',
+            'default' => 'required',
         ];
 
         $harga_jual = floatval(str_replace(',', '', str_replace('.', '', $data['harga_jual'])));
@@ -86,14 +86,15 @@ class BahanPanganController extends Controller
 
         BahanPangan::create([
             'kelompok_pangan_id' => $data['kelompok_pangan_id'],
-            'nama'               => $data['nama'],
-            'satuan'             => $data['satuan'],
-            'harga_jual'         => $harga_jual
+            'nama' => $data['nama'],
+            'satuan' => $data['satuan'],
+            'harga_jual' => $harga_jual,
+            'default_value' => $data['default'],
         ]);
 
         return response()->json([
             'success' => true,
-            'msg' => 'Data berhasil disimpan!'
+            'msg' => 'Data berhasil disimpan!',
         ], Response::HTTP_CREATED);
     }
 
@@ -122,14 +123,16 @@ class BahanPanganController extends Controller
             'kelompok_pangan_id',
             'nama',
             'satuan',
-            'harga_jual'
+            'harga_jual',
+            'default',
         ]);
 
         $rules = [
-            'kelompok_pangan_id'    => 'required',
-            'nama'                  => 'required',
-            'satuan'                => 'required',
-            'harga_jual'            => 'required'
+            'kelompok_pangan_id' => 'required',
+            'nama' => 'required',
+            'satuan' => 'required',
+            'harga_jual' => 'required',
+            'default' => 'required',
         ];
 
         $haarga_jual = floatval(str_replace(',', '', str_replace('.', '', $data['harga_jual'])));
@@ -142,24 +145,26 @@ class BahanPanganController extends Controller
 
         $bahanPangan->update([
             'kelompok_pangan_id' => $data['kelompok_pangan_id'],
-            'nama'               => $data['nama'],
-            'satuan'             => $data['satuan'],
-            'harga_jual'         => $haarga_jual
+            'nama' => $data['nama'],
+            'satuan' => $data['satuan'],
+            'harga_jual' => $haarga_jual,
+            'default_value' => $data['default'],
         ]);
 
         $bahanPangan->load('kelompokPangan');
 
         return response()->json([
             'success' => true,
-            'msg'     => 'Data berhasil diperbarui.',
-            'data'    => [
-                'id'                   => $bahanPangan->id,
-                'nama'                 => $bahanPangan->nama,
-                'satuan'               => $bahanPangan->satuan,
-                'harga_jual'           => $bahanPangan->harga_jual,
-                'kelompok_pangan_id'   => $bahanPangan->kelompok_pangan_id,
+            'msg' => 'Data berhasil diperbarui.',
+            'data' => [
+                'id' => $bahanPangan->id,
+                'nama' => $bahanPangan->nama,
+                'satuan' => $bahanPangan->satuan,
+                'harga_jual' => $bahanPangan->harga_jual,
+                'kelompok_pangan_id' => $bahanPangan->kelompok_pangan_id,
                 'kelompok_pangan_nama' => $bahanPangan->kelompokPangan->nama ?? '',
-            ]
+                'default' => $bahanPangan->default_value,
+            ],
         ], Response::HTTP_OK);
     }
 
@@ -172,7 +177,7 @@ class BahanPanganController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Bahan Pangan berhasil dihapus.'
+            'message' => 'Bahan Pangan berhasil dihapus.',
         ], Response::HTTP_OK);
     }
 }
