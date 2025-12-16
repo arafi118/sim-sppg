@@ -428,7 +428,6 @@ class PelaporanController extends Controller
         $data['tgl_awal']  = $tgl_awal;
         $data['tgl_akhir'] = $tgl_akhir;
 
-        // ✅ Ambil catatan CALK berdasarkan tahun dan bulan
         $calk = Calk::where('tanggal', 'LIKE', "{$thn}-{$bln}%")->first();
         $data['catatan'] = $calk ? $calk->catatan : '';
 
