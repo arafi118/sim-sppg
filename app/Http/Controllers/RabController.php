@@ -281,8 +281,9 @@ class RabController extends Controller
     {
         $po = Po::firstOrCreate(
             ['tanggal' => now()->toDateString()],
-            ['total_harga' => 0, 'status_bayar' => 'unpaid']
+            ['total_harga' => 0, 'status' => 'DIBUAT']
         );
+
 
         $jumlahs     = $request->input('jumlah_input');
         $hargaSatuan = $request->input('harga_satuan');
@@ -307,8 +308,8 @@ class RabController extends Controller
                     'jumlah'       => $kebutuhan,
                     'jumlah_input' => $jmlInput,
                     'total_harga'  => $total,
-                    'status_bayar' => 'unpaid',
                 ]
+
             );
         }
 
@@ -397,14 +398,12 @@ class RabController extends Controller
         $detail->jumlah_bayar = ($detail->jumlah_bayar ?? 0) + $request->jumlah_bayar;
 
         // Batasi supaya tidak lebih dari total tagihan
+        // we can still track jumlah_bayar but status_bayar column is gone.
+        // if fully paid, we might want to automatically update PO status to DITERIMA if appropriate.
         if ($detail->jumlah_bayar >= $detail->total_harga) {
             $detail->jumlah_bayar = $detail->total_harga;
-            $detail->status_bayar = 'PAID';
-        } elseif ($detail->jumlah_bayar > 0) {
-            $detail->status_bayar = 'PARTIAL';
-        } else {
-            $detail->status_bayar = 'UNPAID';
         }
+
 
         $detail->save();
 
@@ -412,9 +411,9 @@ class RabController extends Controller
             'status' => 'success',
             'message' => 'Pembayaran berhasil disimpan',
             'detail_id' => $detail->id,
-            'status_bayar' => $detail->status_bayar,
             'jumlah_bayar' => $detail->jumlah_bayar,
         ]);
+
     }
 
     public function bayarPO(Request $request)
@@ -440,16 +439,10 @@ class RabController extends Controller
             $detail->jumlah_bayar = ($detail->jumlah_bayar ?? 0) + $bayarSekarang;
 
             // update status
-            if ($detail->jumlah_bayar >= $detail->total_harga) {
-                $detail->status_bayar = 'PAID';
-            } elseif ($detail->jumlah_bayar > 0) {
-                $detail->status_bayar = 'PARTIAL';
-            } else {
-                $detail->status_bayar = 'UNPAID';
-            }
-
+            // update status as needed (removed status_bayar from detail)
             $detail->save();
         }
+
 
         return redirect()->back()->with('success', 'Pembayaran PO berhasil disimpan.');
     }

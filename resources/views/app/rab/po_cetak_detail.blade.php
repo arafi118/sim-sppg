@@ -63,7 +63,8 @@
     <div class="struk-box">
         <div class="header text-center" style="font-size: 14px; font-weight: bold; margin-bottom: 15px;">
             <p>NO PO: {{ str_pad($po->id, 2, '0', STR_PAD_LEFT) }} /
-                {{ strtoupper($po->status_bayar) }}</p>
+                {{ strtoupper($po->status) }}</p>
+
             <p style="text-transform: uppercase;">
                 Tanggal {{ \Carbon\Carbon::parse($po->tanggal)->isoFormat('D MMMM Y') }}
             </p>
