@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Menu;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rancangan_menus', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->foreignIdFor(Menu::class);
-            $table->string('rancangan_id', 10);
-            $table->timestamps();
+        Schema::create('master_arus_kas', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama_akun', 255)->nullable();
+            $table->string('debit', 50)->nullable();
+            $table->string('kredit', 50)->nullable();
+            $table->integer('parent_id')->nullable();
         });
     }
 
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rancangan_menus');
+        Schema::dropIfExists('master_arus_kas');
     }
 };

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('rekenings', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('parent_id');
+            $table->string('parent_id', 50)->nullable();
             $table->integer('lev1');
             $table->integer('lev2');
             $table->integer('lev3');

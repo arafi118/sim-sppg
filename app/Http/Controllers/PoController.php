@@ -20,12 +20,22 @@ class PoController extends Controller
                     return "Rp. " . number_format($row->total_harga);
                 })
                 ->addColumn('action', function ($row) {
-                    $btn = '<button type="button" id="' . $row->id . '" class="btn btn-sm btn-primary btn-detail">Detail</button>';
+                    $btn = '<div class="btn-group">';
+                    $btn .= '<button type="button" id="' . $row->id . '" class="btn btn-sm btn-primary btn-detail">Detail</button>';
 
+                    if ($row->status === 'DIBUAT') {
+                        $btn .= '<button type="button" id="' . $row->id . '" class="btn btn-sm btn-info btn-kirim">Kirim</button>';
+                        $btn .= '<button type="button" id="' . $row->id . '" class="btn btn-sm btn-danger btn-batal">Batal</button>';
+                    } elseif ($row->status === 'DIKIRIM') {
+                        $btn .= '<button type="button" id="' . $row->id . '" class="btn btn-sm btn-success btn-terima">Terima</button>';
+                    }
+
+                    $btn .= '</div>';
                     return $btn;
                 })
                 ->make(true);
         }
+
 
         $title = 'Daftar Po';
         return view('app.po.index', compact('title'));
@@ -81,4 +91,43 @@ class PoController extends Controller
     {
         //
     }
+
+    public function kirim(Po $po)
+    {
+        if ($po->status !== 'DIBUAT') {
+            return response()->json(['success' => false, 'message' => 'Status PO tidak valid untuk dikirim.'], 400);
+        }
+
+        $po->update(['status' => 'DIKIRIM']);
+        return response()->json(['success' => true, 'message' => 'PO berhasil dikirim.']);
+    }
+
+    public function terima(Po $po)
+    {
+        if ($po->status !== 'DIKIRIM') {
+            return response()->json(['success' => false, 'message' => 'Status PO tidak valid untuk diterima.'], 400);
+        }
+
+        $po->update(['status' => 'DITERIMA']);
+        return response()->json(['success' => true, 'message' => 'PO berhasil diterima.']);
+    }
+
+    public function batal(Request $request, Po $po)
+    {
+        if ($po->status !== 'DIBUAT') {
+            return response()->json(['success' => false, 'message' => 'Status PO tidak valid untuk dibatalkan.'], 400);
+        }
+
+        $request->validate([
+            'alasan_batal' => 'required|string|max:255',
+        ]);
+
+        $po->update([
+            'status' => 'DIBATALKAN',
+            'alasan_batal' => $request->alasan_batal,
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'PO berhasil dibatalkan.']);
+    }
 }
+

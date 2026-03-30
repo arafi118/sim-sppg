@@ -125,6 +125,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
 
     Route::get('/daftar-po', [PoController::class, 'index']);
     Route::get('/daftar-po/{po}', [PoController::class, 'show']);
+    Route::post('/daftar-po/{po}/kirim', [PoController::class, 'kirim']);
+    Route::post('/daftar-po/{po}/terima', [PoController::class, 'terima']);
+    Route::post('/daftar-po/{po}/batal', [PoController::class, 'batal']);
+
 
     //admin
     Route::resource('/profile', ProfilController::class);

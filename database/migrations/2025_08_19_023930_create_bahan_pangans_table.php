@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('nama');
             $table->string('satuan');
             $table->integer('harga_jual');
+            $table->string('default_value', 10)->default('0');
             $table->timestamps();
         });
     }

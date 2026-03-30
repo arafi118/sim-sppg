@@ -21,12 +21,12 @@ return new class extends Migration
             $table->foreignIdFor(Mitra::class)->nullable();
             $table->foreignIdFor(Po::class)->nullable();
             $table->foreignIdFor(Invoice::class)->nullable();
-            $table->date('tanggal');
+            $table->date('tanggal_transaksi');
             $table->string('rekening_debit');
             $table->string('rekening_kredit');
             $table->string('keterangan');
             $table->integer('jumlah');
-            $table->integer('urutan')->default(0);
+            $table->bigInteger('urutan')->default(0);
             $table->timestamps();
         });
     }
